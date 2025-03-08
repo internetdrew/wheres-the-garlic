@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className='max-w-screen-lg mx-4 lg:mx-auto'>
+    <div className='max-w-screen-lg mx-4 h-screen lg:mx-auto'>
       <nav className='flex justify-between items-center py-3 sticky top-0 bg-neutral-950'>
         <Link href='/' className='font-bold lg:text-xl'>
           Where&apos;s the Garlic?!
@@ -16,8 +16,8 @@ export default function Home() {
           Get Started
         </Link>
       </nav>
-      <main>
-        <header className='flex flex-col gap-4 max-w-screen-sm mx-auto text-center mt-16'>
+      <main className='mt-24'>
+        <header className='flex flex-col gap-4 max-w-screen-sm mx-auto text-center'>
           <h1 className='text-3xl font-semibold lg:text-5xl'>
             A Simple Home Grocery Inventory App
           </h1>
