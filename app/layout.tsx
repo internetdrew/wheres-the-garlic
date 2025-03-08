@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Geist } from 'next/font/google';
 import './globals.css';
 
 const geistSans = Geist({
@@ -7,15 +7,10 @@ const geistSans = Geist({
   subsets: ['latin'],
 });
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
-
 export const metadata: Metadata = {
   title: "Where's the garlic?!",
   description:
-    'Simple app for home grocery inventory—track item status (full, halfway, almost done, out) at a glance, no counting needed.',
+    'Know what’s in your kitchen at a glance—full, halfway, almost done, or out.',
 };
 
 export default function RootLayout({
@@ -26,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} antialiased bg-neutral-950 text-neutral-200`}
       >
         {children}
       </body>
