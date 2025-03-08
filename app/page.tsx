@@ -11,7 +11,7 @@ export default function Home() {
         </Link>
         <Link
           href='/login'
-          className='text-sm ring-1 ring-neutral-800 px-4 py-2 rounded-full cursor-pointer bg-neutral-200 text-neutral-950 hover:bg-neutral-300'
+          className='text-sm ring-1 ring-neutral-800 px-4 py-2 rounded-full cursor-pointer font-medium bg-neutral-200 text-neutral-950 hover:bg-neutral-300'
         >
           Get Started
         </Link>
