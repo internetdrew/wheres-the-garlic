@@ -1,8 +1,13 @@
-'use client';
+import { createClient } from '@/utils/supabase/server';
+import SignInButton from './components/SignInButton';
 
-import Link from 'next/link';
+export default async function Home() {
+  const supabase = await createClient();
 
-export default function Home() {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   return (
     <div className='max-w-screen-lg mx-4 lg:mx-auto'>
       <main className='mt-24'>
@@ -14,12 +19,7 @@ export default function Home() {
             See what’s in your kitchen at a glance—full, halfway, almost done,
             or out.
           </p>
-          <Link
-            href='/login'
-            className='bg-neutral-200 mx-auto text-neutral-950 px-4 py-2 rounded-full mt-4 cursor-pointer font-medium hover:bg-neutral-300'
-          >
-            Get Started
-          </Link>
+          {!user && <SignInButton />}
         </header>
       </main>
     </div>
