@@ -39,4 +39,21 @@ npm run dev
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Running Local Dev Environment
+
+Open Docker and run:
+
+```bash
+ npx supabase start
+```
+
+To stop all running Docker containers:
+
+```bash
+docker stop $(docker ps -q)  # graceful shutdown
+# or
+docker kill $(docker ps -q)  # force shutdown
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
+Open [http://localhost:54323](http://localhost:54323) with your browser to see the the local instance.
