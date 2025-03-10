@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Geist } from 'next/font/google';
-import './globals.css';
+import '@/app/globals.css';
+import Script from 'next/script';
+import Navbar from './components/Navbar';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -20,9 +22,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
+      <head>
+        <Script
+          src='https://accounts.google.com/gsi/client'
+          strategy='beforeInteractive'
+        />
+      </head>
       <body
         className={`${geistSans.className} antialiased bg-neutral-950 text-neutral-200`}
       >
+        <Navbar />
         {children}
       </body>
     </html>
