@@ -19,7 +19,11 @@ export default async function Home() {
             See what’s in your kitchen at a glance—full, halfway, almost done,
             or out.
           </p>
-          {!user && <SignInButton />}
+          {!user && (
+            <div className='mt-6 mx-auto'>
+              <SignInButton />
+            </div>
+          )}
         </header>
       </main>
     </div>

@@ -4,8 +4,18 @@ import React from 'react';
 import Image from 'next/image';
 import { createClient } from '@/utils/supabase/client';
 
-const SignInButton = () => {
+interface SignInButtonProps {
+  size?: 'sm' | 'md' | 'lg';
+  caption?: string;
+}
+
+const SignInButton = ({
+  size = 'md',
+  caption = 'Sign in with Google',
+}: SignInButtonProps) => {
   const supabase = createClient();
+
+  const imageSize = size === 'sm' ? 20 : size === 'md' ? 24 : 28;
 
   const handleSignInWithGoogle = async () => {
     const { data, error } = await supabase.auth.signInWithOAuth({
@@ -20,15 +30,23 @@ const SignInButton = () => {
       console.log(data);
     }
   };
+
   return (
     <button
-      className='bg-neutral-200 text-neutral-950 font-medium px-4 py-2 rounded-full mt-6 flex items-center gap-2 cursor-pointer w-fit mx-auto hover:bg-neutral-300'
+      className={`bg-neutral-200 text-neutral-950 font-medium px-4 py-2 rounded-full flex items-center gap-2 cursor-pointer w-fit  hover:bg-neutral-300 ${
+        size === 'sm' && 'text-sm'
+      } ${size === 'md' && 'text-base'} ${size === 'lg' && 'text-lg'}`}
       onClick={handleSignInWithGoogle}
     >
       <span>
-        <Image src='/google.svg' width={24} height={24} alt='Google' />
+        <Image
+          src='/google.svg'
+          width={imageSize}
+          height={imageSize}
+          alt='Google'
+        />
       </span>
-      Sign in with Google
+      {caption}
     </button>
   );
 };

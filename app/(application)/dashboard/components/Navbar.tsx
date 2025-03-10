@@ -19,7 +19,7 @@ const Navbar = () => {
       </Link>
 
       <button
-        className='bg-neutral-200 text-neutral-950 text-sm font-medium px-4 py-2 rounded-full'
+        className='bg-neutral-200 text-neutral-950 text-sm font-medium px-4 py-2 rounded-full cursor-pointer hover:bg-neutral-300'
         onClick={handleSignOut}
       >
         Sign Out
