@@ -10,6 +10,8 @@ Create a `.env.local` file in the root directory with the following variables:
 # Supabase Configuration
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_AUTH_GOOGLE_CLIENT_ID=your_google_client_id
+SUPABASE_AUTH_GOOGLE_CLIENT_SECRET=your_google_client_secret
 ```
 
 ### Where to get these values:
@@ -20,6 +22,8 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
    - Navigate to Project Settings > API
    - Copy the "Project URL" for `NEXT_PUBLIC_SUPABASE_URL`
    - Copy the "anon public" key for `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+
+2. **Google Credentials**
 
 ## Getting Started
 
