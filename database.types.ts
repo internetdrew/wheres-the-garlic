@@ -7,9 +7,127 @@ export type Json =
   | Json[]
 
 export type Database = {
-  public: {
+  graphql_public: {
     Tables: {
       [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          operationName?: string
+          query?: string
+          variables?: Json
+          extensions?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
+  public: {
+    Tables: {
+      household_items: {
+        Row: {
+          created_at: string
+          household_id: string
+          id: string | null
+          last_updated_at: string
+          last_updated_by: string
+          name: string
+          notes: string | null
+          status: Database["public"]["Enums"]["ITEM_STATUS"]
+        }
+        Insert: {
+          created_at?: string
+          household_id: string
+          id?: string | null
+          last_updated_at?: string
+          last_updated_by: string
+          name: string
+          notes?: string | null
+          status: Database["public"]["Enums"]["ITEM_STATUS"]
+        }
+        Update: {
+          created_at?: string
+          household_id?: string
+          id?: string | null
+          last_updated_at?: string
+          last_updated_by?: string
+          name?: string
+          notes?: string | null
+          status?: Database["public"]["Enums"]["ITEM_STATUS"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "household_items_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      household_members: {
+        Row: {
+          created_at: string
+          household_id: string
+          id: string | null
+          member_id: string
+          role: Database["public"]["Enums"]["MEMBER_ROLE"]
+        }
+        Insert: {
+          created_at?: string
+          household_id: string
+          id?: string | null
+          member_id: string
+          role: Database["public"]["Enums"]["MEMBER_ROLE"]
+        }
+        Update: {
+          created_at?: string
+          household_id?: string
+          id?: string | null
+          member_id?: string
+          role?: Database["public"]["Enums"]["MEMBER_ROLE"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "household_members_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      households: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -18,7 +136,8 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      ITEM_STATUS: "FULL" | "HALFWAY" | "LOW" | "OUT"
+      MEMBER_ROLE: "Owner" | "Admin" | "Member"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -122,3 +241,4 @@ export type CompositeTypes<
   : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
     ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
+
