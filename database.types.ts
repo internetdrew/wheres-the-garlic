@@ -38,32 +38,32 @@ export type Database = {
         Row: {
           created_at: string
           household_id: string
-          id: string | null
+          id: number
           last_updated_at: string
           last_updated_by: string
-          name: string
           notes: string | null
           status: Database["public"]["Enums"]["ITEM_STATUS"]
+          title: string
         }
         Insert: {
           created_at?: string
           household_id: string
-          id?: string | null
+          id?: number
           last_updated_at?: string
           last_updated_by: string
-          name: string
           notes?: string | null
           status: Database["public"]["Enums"]["ITEM_STATUS"]
+          title: string
         }
         Update: {
           created_at?: string
           household_id?: string
-          id?: string | null
+          id?: number
           last_updated_at?: string
           last_updated_by?: string
-          name?: string
           notes?: string | null
           status?: Database["public"]["Enums"]["ITEM_STATUS"]
+          title?: string
         }
         Relationships: [
           {
@@ -73,29 +73,36 @@ export type Database = {
             referencedRelation: "households"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "household_items_last_updated_by_fkey"
+            columns: ["last_updated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       household_members: {
         Row: {
-          created_at: string
           household_id: string
-          id: string | null
+          id: number
+          joined_at: string
           member_id: string
-          role: Database["public"]["Enums"]["MEMBER_ROLE"]
+          member_role: Database["public"]["Enums"]["MEMBER_ROLE"]
         }
         Insert: {
-          created_at?: string
           household_id: string
-          id?: string | null
+          id?: number
+          joined_at?: string
           member_id: string
-          role: Database["public"]["Enums"]["MEMBER_ROLE"]
+          member_role: Database["public"]["Enums"]["MEMBER_ROLE"]
         }
         Update: {
-          created_at?: string
           household_id?: string
-          id?: string | null
+          id?: number
+          joined_at?: string
           member_id?: string
-          role?: Database["public"]["Enums"]["MEMBER_ROLE"]
+          member_role?: Database["public"]["Enums"]["MEMBER_ROLE"]
         }
         Relationships: [
           {
@@ -105,26 +112,68 @@ export type Database = {
             referencedRelation: "households"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "household_members_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       households: {
         Row: {
           created_at: string
+          creator_id: string
           id: string
-          name: string
+          title: string
           updated_at: string
         }
         Insert: {
           created_at?: string
+          creator_id: string
           id?: string
-          name: string
+          title: string
           updated_at?: string
         }
         Update: {
           created_at?: string
+          creator_id?: string
           id?: string
-          name?: string
+          title?: string
           updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "households_creator_id_fkey"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string
+          created_at: string
+          email_address: string
+          full_name: string
+          id: string
+        }
+        Insert: {
+          avatar_url: string
+          created_at?: string
+          email_address: string
+          full_name: string
+          id: string
+        }
+        Update: {
+          avatar_url?: string
+          created_at?: string
+          email_address?: string
+          full_name?: string
+          id?: string
         }
         Relationships: []
       }
@@ -137,7 +186,7 @@ export type Database = {
     }
     Enums: {
       ITEM_STATUS: "FULL" | "HALFWAY" | "LOW" | "OUT"
-      MEMBER_ROLE: "Owner" | "Admin" | "Member"
+      MEMBER_ROLE: "CREATOR" | "MEMBER"
     }
     CompositeTypes: {
       [_ in never]: never
