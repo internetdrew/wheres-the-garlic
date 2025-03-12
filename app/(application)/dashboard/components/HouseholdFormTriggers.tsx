@@ -35,13 +35,11 @@ const HouseholdFormTriggers = () => {
       <CreateHouseholdFormDialog
         dialogRef={createDialogRef}
         onCloseBtnClick={() => createDialogRef.current?.close()}
-        onSubmit={() => {}}
       />
 
       <JoinHouseholdForm
         dialogRef={joinDialogRef}
         onCloseBtnClick={() => joinDialogRef.current?.close()}
-        onSubmit={() => {}}
       />
     </>
   );
