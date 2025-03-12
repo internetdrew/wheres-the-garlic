@@ -17,9 +17,9 @@ const HouseholdFormTriggers = ({
     createDialogRef.current?.showModal();
   };
 
-  const triggerJoinHouseholdModal = () => {
-    joinDialogRef.current?.showModal();
-  };
+  // const triggerJoinHouseholdModal = () => {
+  //   joinDialogRef.current?.showModal();
+  // };
 
   return (
     <>
@@ -46,12 +46,12 @@ const HouseholdFormTriggers = ({
         >
           Create a household
         </button>
-        <button
+        {/* <button
           onClick={triggerJoinHouseholdModal}
           className='bg-neutral-200 text-neutral-800 rounded-md p-2 font-medium hover:bg-neutral-300 transition-colors cursor-pointer'
         >
           Join a household
-        </button>
+        </button> */}
       </div>
 
       <CreateHouseholdFormDialog
