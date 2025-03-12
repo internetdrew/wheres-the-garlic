@@ -3,6 +3,8 @@ import { createClient } from '@/utils/supabase/server';
 import HouseholdFormTriggers from './components/HouseholdFormTriggers';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
+import { formatDistance } from 'date-fns';
 
 const Dashboard = async () => {
   const supabase = await createClient();
@@ -22,7 +24,10 @@ const Dashboard = async () => {
       household:household_id(
         id,
         title,
-        creator_id,
+        creator:creator_id(
+          full_name,
+          avatar_url
+        ),
         created_at,
         updated_at
       ),
@@ -52,18 +57,43 @@ const Dashboard = async () => {
           )}
         </div>
       </div>
-      <ul className='mt-4 flex flex-col gap-4 border border-gray-800 border-dashed rounded-md p-6 md:grid md:grid-cols-3'>
+      <ul
+        className={`my-4 flex flex-col gap-4  ${
+          memberships?.length === 0
+            ? 'border border-neutral-800 border-dashed rounded-md p-6'
+            : ''
+        } sm:grid sm:grid-cols-2 md:grid-cols-3`}
+      >
         {memberships?.map(membership => (
           <li
             key={membership.id}
-            className='relative bg-gray-900 rounded-md p-4'
+            className='relative bg-neutral-200 text-neutral-900 rounded-xl p-4 hover:bg-neutral-300 transition-colors'
           >
-            <Link href={`/households/${membership.household.id}`}>
+            <Link
+              href={`/households/${membership.household.id}`}
+              className='font-medium'
+            >
               <span className='absolute inset-0' />
               {membership.household.title}
             </Link>
-            <p>Household: {membership.id}</p>
-            <p>Role: {membership.member_role}</p>
+            <p className='text-sm text-neutral-600'>
+              Last updated{' '}
+              {formatDistance(membership.household.updated_at, new Date(), {
+                addSuffix: true,
+                includeSeconds: true,
+              })}
+            </p>
+            <p className='text-sm text-neutral-600 mt-8'>Created by:</p>
+            <div className='flex items-center gap-2 mt-1'>
+              <Image
+                src={membership.household.creator.avatar_url}
+                alt={membership.household.creator.full_name}
+                width={20}
+                height={20}
+                className='rounded-full'
+              />
+              <span>{membership.household.creator.full_name}</span>
+            </div>
           </li>
         ))}
       </ul>
