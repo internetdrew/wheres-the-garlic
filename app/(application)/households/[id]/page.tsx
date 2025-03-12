@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import PageHeader from './components/PageHeader';
 import { createClient } from '@/utils/supabase/server';
-import { QueryData } from '@supabase/supabase-js';
+import { getHouseholdByIdQuery } from '@/utils/supabase/queries';
 
 const HouseholdPage = async ({
   params,
@@ -11,38 +11,16 @@ const HouseholdPage = async ({
   const { id } = await params;
   const supabase = await createClient();
 
-  console.log(id);
-
-  const householdsQuery = supabase
-    .from('households')
-    .select(
-      `
-      id,
-      title,
-      creator:creator_id(
-        full_name,
-        avatar_url
-      ),
-      created_at,
-      updated_at
-      `
-    )
-    .eq('id', id)
-    .single();
-
-  type Household = QueryData<typeof householdsQuery>;
-
-  const { data, error: householdError } = await householdsQuery;
+  const householdsQuery = getHouseholdByIdQuery(supabase, id);
+  const { data: household, error: householdError } = await householdsQuery;
 
   if (householdError) {
     console.error(householdError);
   }
 
-  if (!data) {
+  if (!household) {
     redirect('/dashboard');
   }
-
-  const household: Household = data;
 
   return (
     <main className='max-w-screen-md mx-4 mt-10 lg:mx-auto'>
