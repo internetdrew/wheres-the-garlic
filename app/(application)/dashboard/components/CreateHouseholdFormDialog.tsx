@@ -1,23 +1,54 @@
 'use client';
-import React from 'react';
+
+import { createHousehold } from '@/app/actions/households';
+import React, { useActionState } from 'react';
+import { useFormStatus } from 'react-dom';
 
 interface CreateHouseholdFormDialogProps {
   dialogRef: React.RefObject<HTMLDialogElement | null>;
   onCloseBtnClick: () => void;
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }
+
+export const initialState = {
+  message: '',
+  success: false,
+};
+
+const CreateButton = () => {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      type='submit'
+      className='bg-neutral-900 text-neutral-200 rounded-md py-2 px-4 font-medium transition-colors cursor-pointer w-fit ml-auto hover:bg-neutral-950'
+      aria-disabled={pending}
+    >
+      Create
+    </button>
+  );
+};
 
 const CreateHouseholdFormDialog = ({
   dialogRef,
   onCloseBtnClick,
-  onSubmit,
 }: CreateHouseholdFormDialogProps) => {
+  const [state, formAction] = useActionState(
+    async (_state: typeof initialState, formData: FormData) => {
+      const result = await createHousehold(formData);
+      if (result?.success) {
+        dialogRef.current?.close();
+      }
+      return result;
+    },
+    initialState
+  );
+
   return (
     <dialog
       ref={dialogRef}
       className='mx-auto my-auto max-w-sm rounded-xl backdrop:bg-black/50 backdrop:opacity-50'
     >
-      <form className='flex flex-col p-6' onSubmit={onSubmit}>
+      <form action={formAction} className='flex flex-col p-6'>
         <header className='flex justify-between items-center'>
           <svg
             xmlns='http://www.w3.org/2000/svg'
@@ -69,18 +100,17 @@ const CreateHouseholdFormDialog = ({
               name='household-name'
               type='text'
               id='household-name'
-              className='block rounded-md p-2 ring-1 ring-neutral-300'
+              className='block rounded-md py-2 px-3 ring-1 ring-neutral-300'
               placeholder='Ex: Our House'
+              maxLength={25}
+              required
             />
+            <p aria-live='polite' className='sr-only' role='status'>
+              {state?.message}
+            </p>
           </div>
         </div>
-
-        <button
-          type='submit'
-          className='bg-neutral-900 text-neutral-200 rounded-md py-2 px-4 font-medium transition-colors cursor-pointer w-fit ml-auto hover:bg-neutral-950'
-        >
-          Create
-        </button>
+        <CreateButton />
       </form>
     </dialog>
   );
