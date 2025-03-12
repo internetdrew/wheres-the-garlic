@@ -6,7 +6,6 @@ import { useFormStatus } from 'react-dom';
 
 interface CreateHouseholdFormDialogProps {
   dialogRef: React.RefObject<HTMLDialogElement | null>;
-  onCloseBtnClick: () => void;
 }
 
 export const initialState = {
@@ -30,7 +29,6 @@ const CreateButton = () => {
 
 const CreateHouseholdFormDialog = ({
   dialogRef,
-  onCloseBtnClick,
 }: CreateHouseholdFormDialogProps) => {
   const [state, formAction] = useActionState(
     async (_state: typeof initialState, formData: FormData) => {
@@ -42,6 +40,10 @@ const CreateHouseholdFormDialog = ({
     },
     initialState
   );
+
+  const handleClose = () => {
+    dialogRef.current?.close();
+  };
 
   return (
     <dialog
@@ -66,7 +68,7 @@ const CreateHouseholdFormDialog = ({
           <button
             type='button'
             className='text-sm text-neutral-700 cursor-pointer'
-            onClick={onCloseBtnClick}
+            onClick={handleClose}
           >
             <svg
               xmlns='http://www.w3.org/2000/svg'
