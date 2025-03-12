@@ -8,7 +8,7 @@ interface CreateHouseholdFormDialogProps {
   dialogRef: React.RefObject<HTMLDialogElement | null>;
 }
 
-export const initialState = {
+const initialState = {
   message: '',
   success: false,
 };
