@@ -85,21 +85,21 @@ export type Database = {
       household_members: {
         Row: {
           household_id: string
-          id: number
+          id: string
           joined_at: string
           member_id: string
           member_role: Database["public"]["Enums"]["MEMBER_ROLE"]
         }
         Insert: {
           household_id: string
-          id?: number
+          id?: string
           joined_at?: string
           member_id: string
           member_role: Database["public"]["Enums"]["MEMBER_ROLE"]
         }
         Update: {
           household_id?: string
-          id?: number
+          id?: string
           joined_at?: string
           member_id?: string
           member_role?: Database["public"]["Enums"]["MEMBER_ROLE"]
