@@ -42,6 +42,7 @@ const PageHeader = ({ household }: PageHeaderProps) => {
       >
         Add Item
       </button>
+
       <AddItemFormDialog
         householdId={household.id}
         dialogRef={addItemDialogRef}
