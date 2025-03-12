@@ -46,7 +46,7 @@ const Dashboard = async () => {
       <p className='text-sm text-gray-400'>
         You can create up to 3 households.
       </p>
-      <HouseholdFormTriggers />
+      <HouseholdFormTriggers householdCount={memberships?.length || 0} />
       <div className='mt-6'>
         <h2 className='text-lg font-bold'>Households</h2>
         <div>
