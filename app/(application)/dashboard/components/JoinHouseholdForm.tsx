@@ -2,21 +2,19 @@ import React from 'react';
 
 interface JoinHouseholdFormProps {
   dialogRef: React.RefObject<HTMLDialogElement | null>;
-  onCloseBtnClick: () => void;
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }
 
-const JoinHouseholdForm = ({
-  dialogRef,
-  onCloseBtnClick,
-  onSubmit,
-}: JoinHouseholdFormProps) => {
+const JoinHouseholdForm = ({ dialogRef }: JoinHouseholdFormProps) => {
+  const handleClose = () => {
+    dialogRef.current?.close();
+  };
+
   return (
     <dialog
       ref={dialogRef}
       className='mx-auto my-auto max-w-sm rounded-xl backdrop:bg-black/50 backdrop:opacity-50'
     >
-      <form className='flex flex-col p-6' onSubmit={onSubmit}>
+      <form className='flex flex-col p-6'>
         <header className='flex justify-between items-center'>
           <svg
             xmlns='http://www.w3.org/2000/svg'
@@ -35,7 +33,7 @@ const JoinHouseholdForm = ({
           <button
             type='button'
             className='text-sm text-neutral-700 cursor-pointer'
-            onClick={onCloseBtnClick}
+            onClick={handleClose}
           >
             <svg
               xmlns='http://www.w3.org/2000/svg'
