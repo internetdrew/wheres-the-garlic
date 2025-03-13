@@ -1,10 +1,26 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, useRef } from 'react';
 import { addItem } from '@/app/actions/items';
 import { Enums } from '@/database.types';
+import { useFormStatus } from 'react-dom';
 
 type ItemStatus = Enums<'ITEM_STATUS'>;
+
+const getStatusClasses = (value: ItemStatus) => {
+  const baseClasses =
+    'flex items-center justify-center p-3 rounded-lg cursor-pointer transition-colors font-medium ring-1 ring-neutral-300 focus-within:ring-2 focus-within:ring-blue-500';
+
+  const colorClasses = {
+    FULL: '[&:has(input:checked)]:bg-green-500 [&:has(input:checked)]:border-green-600',
+    HALFWAY:
+      '[&:has(input:checked)]:bg-yellow-500 [&:has(input:checked)]:border-yellow-600',
+    LOW: '[&:has(input:checked)]:bg-rose-400 [&:has(input:checked)]:border-rose-600',
+    OUT: '[&:has(input:checked)]:bg-red-500 [&:has(input:checked)]:border-red-600',
+  };
+
+  return `${baseClasses} ${colorClasses[value]} hover:bg-neutral-100`;
+};
 
 const statusLabels: Record<ItemStatus, string> = {
   FULL: 'Full',
@@ -23,12 +39,27 @@ const initialState = {
   success: false,
 };
 
+const AddItemButton = () => {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      type='submit'
+      className='bg-neutral-900 text-neutral-200 rounded-md py-2 px-4 font-medium transition-colors cursor-pointer w-fit ml-auto hover:bg-neutral-950'
+      aria-disabled={pending}
+    >
+      Add
+    </button>
+  );
+};
+
 const AddItemFormDialog = ({
   householdId,
   dialogRef,
 }: AddItemFormDialogProps) => {
+  const formRef = useRef<HTMLFormElement>(null);
   const [state, formAction] = useActionState(
-    async (state: typeof initialState, formData: FormData) => {
+    async (_state: typeof initialState, formData: FormData) => {
       const result = await addItem(householdId, formData);
       return result;
     },
@@ -37,6 +68,7 @@ const AddItemFormDialog = ({
 
   const handleClose = () => {
     dialogRef.current?.close();
+    formRef.current?.reset();
   };
 
   return (
@@ -44,7 +76,7 @@ const AddItemFormDialog = ({
       ref={dialogRef}
       className='mx-auto my-auto max-w-sm rounded-xl backdrop:bg-black/50 backdrop:opacity-50'
     >
-      <form action={formAction} className='flex flex-col p-6'>
+      <form ref={formRef} action={formAction} className='flex flex-col p-6'>
         <header className='flex justify-between items-center'>
           <svg
             xmlns='http://www.w3.org/2000/svg'
@@ -82,8 +114,7 @@ const AddItemFormDialog = ({
           <h2 className='text-lg font-semibold'>Add an item</h2>
         </div>
         <p className='text-neutral-700'>
-          Add an item to your household. You and everyone in your household will
-          be able to see it.
+          You and everyone in your household will be able to see it.
         </p>
         <div className='flex flex-col my-7 gap-2'>
           <div className='flex flex-col gap-1'>
@@ -91,40 +122,44 @@ const AddItemFormDialog = ({
               Item name
             </label>
             <input
-              name='item-name'
+              name='name'
               type='text'
-              id='item-name'
+              id='name'
               className='block rounded-md py-2 px-3 ring-1 ring-neutral-300'
               placeholder='Ex: Toilet paper'
               maxLength={25}
               required
+              autoFocus
             />
             <p aria-live='polite' className='sr-only' role='status'>
               {state?.message}
             </p>
           </div>
-          <div className='flex flex-col gap-1'>
-            <label htmlFor='status' className='font-medium'>
-              Item Status
-            </label>
-            <select
-              name='status'
-              id='status'
-              className='block rounded-md py-2 px-3 ring-1 ring-neutral-300'
-              required
-            >
-              <option value=''>Select a status</option>
+          <fieldset className='mt-8'>
+            <legend className='font-medium'>Current status</legend>
+            <div className='grid grid-cols-2 gap-2 mt-1'>
               {Object.entries(statusLabels).map(([value, label]) => (
-                <option key={value} value={value}>
+                <label
+                  key={value}
+                  className={getStatusClasses(value as ItemStatus)}
+                >
+                  <input
+                    type='radio'
+                    name='status'
+                    value={value}
+                    className='sr-only'
+                    required
+                  />
                   {label}
-                </option>
+                </label>
               ))}
-            </select>
-            <p aria-live='polite' className='sr-only' role='status'>
-              {state?.message}
-            </p>
-          </div>
+              <p aria-live='polite' className='sr-only' role='status'>
+                {state?.message}
+              </p>
+            </div>
+          </fieldset>
         </div>
+        <AddItemButton />
       </form>
     </dialog>
   );
