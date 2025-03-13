@@ -22,7 +22,7 @@ const SubmitButton = ({ mode }: { mode: 'create' | 'edit' }) => {
   return (
     <button
       type='submit'
-      className='bg-neutral-900 text-neutral-200 rounded-md py-2 px-4 font-medium transition-colors cursor-pointer w-fit ml-auto hover:bg-neutral-950'
+      className='bg-neutral-900 text-neutral-200 rounded-md py-2 px-4 font-medium transition-colors cursor-pointer w-fit ml-auto hover:bg-neutral-950 aria-disabled:opacity-50 aria-disabled:cursor-not-allowed'
       aria-disabled={pending}
     >
       {mode === 'create' ? 'Create' : 'Update'}

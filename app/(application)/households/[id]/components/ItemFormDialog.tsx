@@ -1,7 +1,7 @@
 'use client';
 
-import { useActionState, useRef } from 'react';
-import { addItem } from '@/app/actions/items';
+import { useActionState, useEffect, useRef, useState } from 'react';
+import { addItem, editItem } from '@/app/actions/items';
 import { Enums } from '@/database.types';
 import { useFormStatus } from 'react-dom';
 
@@ -29,9 +29,16 @@ const statusLabels: Record<ItemStatus, string> = {
   OUT: 'Out',
 };
 
-interface AddItemFormDialogProps {
+interface ItemFormDialogProps {
   householdId: string;
   dialogRef: React.RefObject<HTMLDialogElement | null>;
+  mode: 'create' | 'edit';
+  item?: {
+    id: string;
+    name: string;
+    status: ItemStatus;
+    notes?: string | null;
+  };
 }
 
 const initialState = {
@@ -39,28 +46,45 @@ const initialState = {
   success: false,
 };
 
-const AddItemButton = () => {
+const SubmitButton = ({ mode }: { mode: 'create' | 'edit' }) => {
   const { pending } = useFormStatus();
 
   return (
     <button
       type='submit'
-      className='bg-neutral-900 text-neutral-200 rounded-md py-2 px-4 font-medium transition-colors cursor-pointer w-fit ml-auto hover:bg-neutral-950'
+      className='bg-neutral-900 text-neutral-200 rounded-md py-2 px-4 font-medium transition-colors cursor-pointer w-fit ml-auto hover:bg-neutral-950 aria-disabled:opacity-50 aria-disabled:cursor-not-allowed'
       aria-disabled={pending}
     >
-      Add
+      {mode === 'create' ? 'Add' : 'Update'}
     </button>
   );
 };
 
-const AddItemFormDialog = ({
+const ItemFormDialog = ({
   householdId,
   dialogRef,
-}: AddItemFormDialogProps) => {
+  mode,
+  item,
+}: ItemFormDialogProps) => {
   const formRef = useRef<HTMLFormElement>(null);
+  const [selectedStatus, setSelectedStatus] = useState<ItemStatus>(
+    item?.status ?? 'FULL'
+  );
+
+  useEffect(() => {
+    setSelectedStatus(item?.status ?? 'FULL');
+  }, [item]);
+
   const [state, formAction] = useActionState(
     async (_state: typeof initialState, formData: FormData) => {
-      const result = await addItem(householdId, formData);
+      const result =
+        mode === 'create'
+          ? await addItem(householdId, formData)
+          : await editItem(item!.id, formData);
+
+      if (result?.success) {
+        dialogRef.current?.close();
+      }
       return result;
     },
     initialState
@@ -111,10 +135,14 @@ const AddItemFormDialog = ({
         </header>
 
         <div className='flex justify-between items-center mt-6'>
-          <h2 className='text-lg font-semibold'>Add an item</h2>
+          <h2 className='text-lg font-semibold'>
+            {mode === 'create' ? 'Add an item' : 'Edit item'}
+          </h2>
         </div>
         <p className='text-neutral-700'>
-          You and everyone in your household will be able to see it.
+          {mode === 'create'
+            ? 'You and everyone in your household will be able to see it.'
+            : 'Update your item details below. This will help keep everyone in the know.'}
         </p>
         <div className='flex flex-col my-7 gap-2'>
           <div className='flex flex-col gap-1'>
@@ -129,7 +157,7 @@ const AddItemFormDialog = ({
               placeholder='Ex: Toilet paper'
               maxLength={25}
               required
-              autoFocus
+              defaultValue={item?.name ?? ''}
             />
             <p aria-live='polite' className='sr-only' role='status'>
               {state?.message}
@@ -149,6 +177,10 @@ const AddItemFormDialog = ({
                     value={value}
                     className='sr-only'
                     required
+                    checked={selectedStatus === value}
+                    onChange={e =>
+                      setSelectedStatus(e.target.value as ItemStatus)
+                    }
                   />
                   {label}
                 </label>
@@ -159,10 +191,10 @@ const AddItemFormDialog = ({
             </div>
           </fieldset>
         </div>
-        <AddItemButton />
+        <SubmitButton mode={mode} />
       </form>
     </dialog>
   );
 };
 
-export default AddItemFormDialog;
+export default ItemFormDialog;
