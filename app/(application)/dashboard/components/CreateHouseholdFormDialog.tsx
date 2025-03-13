@@ -1,7 +1,7 @@
 'use client';
 
 import { createHousehold } from '@/app/actions/households';
-import React, { useActionState } from 'react';
+import React, { useActionState, useRef } from 'react';
 import { useFormStatus } from 'react-dom';
 
 interface CreateHouseholdFormDialogProps {
@@ -30,6 +30,7 @@ const CreateButton = () => {
 const CreateHouseholdFormDialog = ({
   dialogRef,
 }: CreateHouseholdFormDialogProps) => {
+  const formRef = useRef<HTMLFormElement>(null);
   const [state, formAction] = useActionState(
     async (_state: typeof initialState, formData: FormData) => {
       const result = await createHousehold(formData);
@@ -43,6 +44,7 @@ const CreateHouseholdFormDialog = ({
 
   const handleClose = () => {
     dialogRef.current?.close();
+    formRef.current?.reset();
   };
 
   return (
@@ -50,7 +52,7 @@ const CreateHouseholdFormDialog = ({
       ref={dialogRef}
       className='mx-auto my-auto max-w-sm rounded-xl backdrop:bg-black/50 backdrop:opacity-50'
     >
-      <form action={formAction} className='flex flex-col p-6'>
+      <form ref={formRef} action={formAction} className='flex flex-col p-6'>
         <header className='flex justify-between items-center'>
           <svg
             xmlns='http://www.w3.org/2000/svg'
