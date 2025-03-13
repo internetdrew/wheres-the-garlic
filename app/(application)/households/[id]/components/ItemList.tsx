@@ -2,7 +2,7 @@
 
 import { formatDistance } from 'date-fns';
 import { Enums } from '@/database.types';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import ItemFormDialog from './ItemFormDialog';
 
 type ItemStatus = Enums<'ITEM_STATUS'>;
@@ -48,6 +48,23 @@ interface ItemListProps {
 const ItemList = ({ items, householdId }: ItemListProps) => {
   const editDialogRef = useRef<HTMLDialogElement>(null);
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+  const [formattedDates, setFormattedDates] = useState<Record<number, string>>(
+    {}
+  );
+
+  useEffect(() => {
+    const now = new Date();
+    const formatted: Record<number, string> = {};
+
+    items.forEach(item => {
+      formatted[item.id] = formatDistance(new Date(item.last_updated_at), now, {
+        addSuffix: true,
+        includeSeconds: true,
+      });
+    });
+
+    setFormattedDates(formatted);
+  }, [items]);
 
   const handleUpdateItem = (item: Item) => {
     setSelectedItem(item);
@@ -64,32 +81,33 @@ const ItemList = ({ items, householdId }: ItemListProps) => {
           {items.map(item => (
             <li
               key={item.id}
-              className='flex flex-col gap-2 bg-neutral-100 p-6 rounded-xl text-neutral-900'
+              className='flex flex-col bg-neutral-100 p-6 rounded-xl text-neutral-900'
             >
-              <div className='flex items-center justify-between'>
-                <span className='text-lg font-medium'>{item.name}</span>
+              <header className='flex items-start justify-between mb-6'>
+                <div>
+                  <span className='text-lg font-medium'>{item.name}</span>
+                  <span className='text-neutral-600 flex items-center gap-2'>
+                    <span
+                      className={`inline-block w-2 h-2 rounded-full ${
+                        statusColors[item.status]
+                      } ${statusAnimations[item.status]}`}
+                    />
+                    {statusDisplay[item.status]}
+                  </span>
+                </div>
                 <button
                   className='text-sm text-neutral-600 ring-1 ring-neutral-300 rounded-md py-2 px-4 cursor-pointer hover:ring-neutral-400 transition-colors'
                   onClick={() => handleUpdateItem(item)}
                 >
                   Update
                 </button>
-              </div>
-              <span className='text-neutral-600 flex items-center gap-2'>
-                <span
-                  className={`inline-block w-2 h-2 rounded-full ${
-                    statusColors[item.status]
-                  } ${statusAnimations[item.status]}`}
-                />
-                {statusDisplay[item.status]}
-              </span>
-              <div className='flex mt-4 text-sm text-neutral-600'>
+              </header>
+
+              <div className='flex mt-auto text-sm text-neutral-600'>
                 <span>
-                  {` Updated
-                  ${formatDistance(item.last_updated_at, new Date(), {
-                    addSuffix: true,
-                    includeSeconds: true,
-                  })} by ${item.last_updated_by.full_name}`}
+                  {` Updated ${formattedDates[item.id] ?? 'just now'} by ${
+                    item.last_updated_by.full_name
+                  }`}
                 </span>
               </div>
             </li>
