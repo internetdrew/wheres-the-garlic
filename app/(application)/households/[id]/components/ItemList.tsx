@@ -64,7 +64,7 @@ const ItemList = ({ items, householdId }: ItemListProps) => {
           {items.map(item => (
             <li
               key={item.id}
-              className='flex flex-col gap-2 bg-neutral-200 p-6 rounded-lg text-neutral-900'
+              className='flex flex-col gap-2 bg-neutral-100 p-6 rounded-xl text-neutral-900'
             >
               <div className='flex items-center justify-between'>
                 <span className='text-lg font-medium'>{item.name}</span>
@@ -83,14 +83,13 @@ const ItemList = ({ items, householdId }: ItemListProps) => {
                 />
                 {statusDisplay[item.status]}
               </span>
-              <div className='flex flex-col mt-2 text-sm text-neutral-600'>
-                <span>Last updated by:</span>
+              <div className='flex mt-4 text-sm text-neutral-600'>
                 <span>
-                  {item.last_updated_by.full_name}{' '}
-                  {formatDistance(item.last_updated_at, new Date(), {
+                  {` Updated
+                  ${formatDistance(item.last_updated_at, new Date(), {
                     addSuffix: true,
                     includeSeconds: true,
-                  })}
+                  })} by ${item.last_updated_by.full_name}`}
                 </span>
               </div>
             </li>
