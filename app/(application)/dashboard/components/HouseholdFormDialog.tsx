@@ -1,7 +1,7 @@
 'use client';
 
 import { createHousehold, editHousehold } from '@/app/actions/households';
-import React, { useActionState, useRef, useEffect } from 'react';
+import React, { useActionState, useRef } from 'react';
 import { useFormStatus } from 'react-dom';
 import { Household } from '@/utils/supabase/queries';
 
@@ -55,20 +55,6 @@ const HouseholdFormDialog = ({
     dialogRef.current?.close();
     formRef.current?.reset();
   };
-
-  useEffect(() => {
-    if (household && mode === 'edit') {
-      const form = formRef.current;
-      if (form) {
-        const nameInput = form.querySelector(
-          'input[name="household-name"]'
-        ) as HTMLInputElement;
-        if (nameInput) {
-          nameInput.value = household.title;
-        }
-      }
-    }
-  }, [household, mode]);
 
   return (
     <dialog
@@ -135,6 +121,8 @@ const HouseholdFormDialog = ({
               placeholder='Ex: Our House'
               maxLength={25}
               required
+              autoFocus
+              defaultValue={household?.title ?? ''}
             />
             <p aria-live='polite' className='sr-only' role='status'>
               {state?.message}
