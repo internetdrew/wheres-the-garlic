@@ -17,7 +17,7 @@ const PageHeader = ({ household }: PageHeaderProps) => {
   };
 
   return (
-    <header>
+    <header className='sticky top-12 pt-6 pb-4 z-10 bg-neutral-950'>
       <div className='flex items-start justify-between'>
         <div>
           <h1 className='text-xl font-bold lg:text-2xl'>
