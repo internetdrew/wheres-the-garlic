@@ -41,9 +41,9 @@ export type Database = {
           id: number
           last_updated_at: string
           last_updated_by: string
+          name: string
           notes: string | null
           status: Database["public"]["Enums"]["ITEM_STATUS"]
-          title: string
         }
         Insert: {
           created_at?: string
@@ -51,9 +51,9 @@ export type Database = {
           id?: number
           last_updated_at?: string
           last_updated_by: string
+          name: string
           notes?: string | null
           status: Database["public"]["Enums"]["ITEM_STATUS"]
-          title: string
         }
         Update: {
           created_at?: string
@@ -61,9 +61,9 @@ export type Database = {
           id?: number
           last_updated_at?: string
           last_updated_by?: string
+          name?: string
           notes?: string | null
           status?: Database["public"]["Enums"]["ITEM_STATUS"]
-          title?: string
         }
         Relationships: [
           {
