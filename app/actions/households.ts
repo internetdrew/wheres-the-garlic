@@ -46,3 +46,35 @@ export async function createHousehold(formData: FormData) {
     return { message: 'Failed to create household', success: false };
   }
 }
+
+export async function editHousehold(householdId: string, formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    throw new Error('You must be signed in to edit a household');
+  }
+
+  const supabaseAdmin = createAdminClient();
+
+  const householdName = formData.get('household-name') as string;
+  if (!householdName) {
+    throw new Error('Household name is required');
+  }
+
+  try {
+    const { error } = await supabaseAdmin
+      .from('households')
+      .update({ title: householdName })
+      .eq('id', householdId);
+
+    if (error) throw error;
+
+    revalidatePath(`/households/${householdId}`);
+    return { message: 'Household updated successfully', success: true };
+  } catch (error) {
+    console.error('Error updating household:', error);
+    return { message: 'Failed to update household', success: false };
+  }
+}
