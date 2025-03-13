@@ -68,8 +68,6 @@ const HouseholdPage = async ({
     console.error(itemsError);
   }
 
-  console.log(items);
-
   return (
     <main className='max-w-screen-md mx-4 mt-10 md:mx-auto'>
       <PageHeader household={household} />

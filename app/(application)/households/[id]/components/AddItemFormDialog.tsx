@@ -12,11 +12,11 @@ const getStatusClasses = (value: ItemStatus) => {
     'flex items-center justify-center p-3 rounded-lg cursor-pointer transition-colors font-medium ring-1 ring-neutral-300 focus-within:ring-2 focus-within:ring-blue-500';
 
   const colorClasses = {
-    FULL: '[&:has(input:checked)]:bg-green-500 [&:has(input:checked)]:border-green-600',
+    FULL: '[&:has(input:checked)]:bg-emerald-500 [&:has(input:checked)]:border-emerald-600',
     HALFWAY:
-      '[&:has(input:checked)]:bg-yellow-500 [&:has(input:checked)]:border-yellow-600',
-    LOW: '[&:has(input:checked)]:bg-rose-400 [&:has(input:checked)]:border-rose-600',
-    OUT: '[&:has(input:checked)]:bg-red-500 [&:has(input:checked)]:border-red-600',
+      '[&:has(input:checked)]:bg-amber-500 [&:has(input:checked)]:border-amber-600',
+    LOW: '[&:has(input:checked)]:bg-orange-400 [&:has(input:checked)]:border-orange-600',
+    OUT: '[&:has(input:checked)]:bg-rose-500 [&:has(input:checked)]:border-rose-600',
   };
 
   return `${baseClasses} ${colorClasses[value]} hover:bg-neutral-100`;
