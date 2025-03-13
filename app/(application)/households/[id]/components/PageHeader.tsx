@@ -12,7 +12,6 @@ interface PageHeaderProps {
 
 const PageHeader = ({ household }: PageHeaderProps) => {
   const addItemDialogRef = useRef<HTMLDialogElement>(null);
-
   const triggerAddItemFormDialog = () => {
     addItemDialogRef.current?.showModal();
   };
@@ -39,9 +38,7 @@ const PageHeader = ({ household }: PageHeaderProps) => {
       </div>
       <div className='flex items-start justify-between mt-4'>
         <div>
-          <h1 className='text-xl font-bold lg:text-2xl'>
-            {household?.title} List
-          </h1>
+          <h1 className='text-xl font-bold lg:text-2xl'>{household?.title}</h1>
           <div className='flex flex-col mt-1 text-neutral-500 sm:flex-row sm:items-center sm:gap-2'>
             <span>Created by</span>
             <span className='flex items-center gap-1'>
