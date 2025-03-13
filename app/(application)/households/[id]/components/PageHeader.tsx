@@ -5,6 +5,7 @@ import Image from 'next/image';
 import AddItemFormDialog from './AddItemFormDialog';
 import { Household } from '@/utils/supabase/queries';
 import Link from 'next/link';
+import HouseholdFormDialog from '@/app/(application)/dashboard/components/HouseholdFormDialog';
 
 interface PageHeaderProps {
   household: Household;
@@ -12,9 +13,13 @@ interface PageHeaderProps {
 
 const PageHeader = ({ household }: PageHeaderProps) => {
   const addItemDialogRef = useRef<HTMLDialogElement>(null);
-
+  const editDialogRef = useRef<HTMLDialogElement>(null);
   const triggerAddItemFormDialog = () => {
     addItemDialogRef.current?.showModal();
+  };
+
+  const triggerEditDialog = () => {
+    editDialogRef.current?.showModal();
   };
 
   return (
@@ -39,9 +44,17 @@ const PageHeader = ({ household }: PageHeaderProps) => {
       </div>
       <div className='flex items-start justify-between mt-4'>
         <div>
-          <h1 className='text-xl font-bold lg:text-2xl'>
-            {household?.title} List
-          </h1>
+          <div className='flex items-center gap-2'>
+            <h1 className='text-xl font-bold lg:text-2xl'>
+              {household?.title}
+            </h1>
+            <button
+              className='text-xs px-4 py-1 rounded-md font-medium ring-1 ring-neutral-700 cursor-pointer'
+              onClick={triggerEditDialog}
+            >
+              Edit
+            </button>
+          </div>
           <div className='flex flex-col mt-1 text-neutral-500 sm:flex-row sm:items-center sm:gap-2'>
             <span>Created by</span>
             <span className='flex items-center gap-1'>
@@ -68,6 +81,11 @@ const PageHeader = ({ household }: PageHeaderProps) => {
       <AddItemFormDialog
         householdId={household.id}
         dialogRef={addItemDialogRef}
+      />
+      <HouseholdFormDialog
+        dialogRef={editDialogRef}
+        mode='edit'
+        household={household}
       />
     </header>
   );

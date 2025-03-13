@@ -1,11 +1,14 @@
 'use client';
 
-import { createHousehold } from '@/app/actions/households';
-import React, { useActionState, useRef } from 'react';
+import { createHousehold, editHousehold } from '@/app/actions/households';
+import React, { useActionState, useRef, useEffect } from 'react';
 import { useFormStatus } from 'react-dom';
+import { Household } from '@/utils/supabase/queries';
 
-interface CreateHouseholdFormDialogProps {
+interface HouseholdFormDialogProps {
   dialogRef: React.RefObject<HTMLDialogElement | null>;
+  household?: Household;
+  mode: 'create' | 'edit';
 }
 
 const initialState = {
@@ -13,7 +16,7 @@ const initialState = {
   success: false,
 };
 
-const CreateButton = () => {
+const SubmitButton = ({ mode }: { mode: 'create' | 'edit' }) => {
   const { pending } = useFormStatus();
 
   return (
@@ -22,18 +25,24 @@ const CreateButton = () => {
       className='bg-neutral-900 text-neutral-200 rounded-md py-2 px-4 font-medium transition-colors cursor-pointer w-fit ml-auto hover:bg-neutral-950'
       aria-disabled={pending}
     >
-      Create
+      {mode === 'create' ? 'Create' : 'Update'}
     </button>
   );
 };
 
-const CreateHouseholdFormDialog = ({
+const HouseholdFormDialog = ({
   dialogRef,
-}: CreateHouseholdFormDialogProps) => {
+  household,
+  mode,
+}: HouseholdFormDialogProps) => {
   const formRef = useRef<HTMLFormElement>(null);
   const [state, formAction] = useActionState(
     async (_state: typeof initialState, formData: FormData) => {
-      const result = await createHousehold(formData);
+      const result =
+        mode === 'create'
+          ? await createHousehold(formData)
+          : await editHousehold(household!.id, formData);
+
       if (result?.success) {
         dialogRef.current?.close();
       }
@@ -46,6 +55,20 @@ const CreateHouseholdFormDialog = ({
     dialogRef.current?.close();
     formRef.current?.reset();
   };
+
+  useEffect(() => {
+    if (household && mode === 'edit') {
+      const form = formRef.current;
+      if (form) {
+        const nameInput = form.querySelector(
+          'input[name="household-name"]'
+        ) as HTMLInputElement;
+        if (nameInput) {
+          nameInput.value = household.title;
+        }
+      }
+    }
+  }, [household, mode]);
 
   return (
     <dialog
@@ -90,10 +113,14 @@ const CreateHouseholdFormDialog = ({
         </header>
 
         <div className='flex justify-between items-center mt-6'>
-          <h2 className='text-lg font-semibold'>Create a household</h2>
+          <h2 className='text-lg font-semibold'>
+            {mode === 'create' ? 'Create a household' : 'Edit household'}
+          </h2>
         </div>
         <p className='text-neutral-700'>
-          Create a household to get started. You can add members later.
+          {mode === 'create'
+            ? 'Create a household to get started. You can add members later.'
+            : 'Update your household details below.'}
         </p>
         <div className='flex flex-col my-7 gap-2'>
           <div className='flex flex-col gap-1'>
@@ -114,10 +141,10 @@ const CreateHouseholdFormDialog = ({
             </p>
           </div>
         </div>
-        <CreateButton />
+        <SubmitButton mode={mode} />
       </form>
     </dialog>
   );
 };
 
-export default CreateHouseholdFormDialog;
+export default HouseholdFormDialog;
