@@ -52,7 +52,7 @@ const SubmitButton = ({ mode }: { mode: 'create' | 'edit' }) => {
   return (
     <button
       type='submit'
-      className='bg-neutral-900 text-neutral-200 rounded-md py-2 px-4 font-medium transition-colors cursor-pointer w-fit ml-auto hover:bg-neutral-950'
+      className='bg-neutral-900 text-neutral-200 rounded-md py-2 px-4 font-medium transition-colors cursor-pointer w-fit ml-auto hover:bg-neutral-950 aria-disabled:opacity-50 aria-disabled:cursor-not-allowed'
       aria-disabled={pending}
     >
       {mode === 'create' ? 'Add' : 'Update'}
@@ -134,7 +134,7 @@ const ItemFormDialog = ({
         <p className='text-neutral-700'>
           {mode === 'create'
             ? 'You and everyone in your household will be able to see it.'
-            : 'Update your item details below.'}
+            : 'Update your item details below. This will help keep everyone in the know.'}
         </p>
         <div className='flex flex-col my-7 gap-2'>
           <div className='flex flex-col gap-1'>
