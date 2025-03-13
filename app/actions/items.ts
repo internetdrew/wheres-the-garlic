@@ -42,3 +42,42 @@ export async function addItem(householdId: string, formData: FormData) {
     return { message: 'Failed to create household', success: false };
   }
 }
+
+export async function editItem(itemId: string, formData: FormData) {
+  const name = formData.get('name') as string;
+  const notes = formData.get('notes') as string;
+  const status = formData.get('status') as ItemStatus;
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error('You must be signed in to edit an item');
+  }
+
+  try {
+    const supabaseAdmin = createAdminClient();
+
+    const { error } = await supabaseAdmin
+      .from('household_items')
+      .update({
+        name,
+        notes,
+        status,
+        last_updated_by: user.id,
+        last_updated_at: new Date().toISOString(),
+      })
+      .eq('id', parseInt(itemId, 10));
+
+    if (error) throw error;
+
+    revalidatePath(`/households/${itemId}`);
+
+    return { message: 'Item updated successfully', success: true };
+  } catch (error) {
+    console.error('Error updating item:', error);
+    return { message: 'Failed to update item', success: false };
+  }
+}
