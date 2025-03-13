@@ -2,7 +2,7 @@
 
 import React, { useRef } from 'react';
 import Image from 'next/image';
-import AddItemFormDialog from './AddItemFormDialog';
+import ItemFormDialog from './ItemFormDialog';
 import { Household } from '@/utils/supabase/queries';
 import Link from 'next/link';
 import HouseholdFormDialog from '@/app/(application)/dashboard/components/HouseholdFormDialog';
@@ -78,9 +78,10 @@ const PageHeader = ({ household }: PageHeaderProps) => {
         </button>
       </div>
 
-      <AddItemFormDialog
+      <ItemFormDialog
         householdId={household.id}
         dialogRef={addItemDialogRef}
+        mode='create'
       />
       <HouseholdFormDialog
         dialogRef={editDialogRef}
