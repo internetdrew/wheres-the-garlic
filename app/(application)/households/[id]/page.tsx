@@ -69,7 +69,7 @@ const HouseholdPage = async ({
   }
 
   return (
-    <main className='max-w-screen-md mx-4 mt-10 md:mx-auto'>
+    <main className='max-w-screen-md px-4 mt-10 md:mx-auto lg:px-0'>
       <PageHeader household={household} />
       <section className='mt-10'>
         <p className=' text-neutral-500'>
