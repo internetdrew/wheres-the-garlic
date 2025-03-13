@@ -22,8 +22,8 @@ const PageHeader = ({ household }: PageHeaderProps) => {
         <h1 className='text-xl font-bold lg:text-2xl'>
           {household?.title} List
         </h1>
-        <div className='flex items-center gap-2 text-neutral-500'>
-          Created by{' '}
+        <div className='flex flex-col mt-1 text-neutral-500 sm:flex-row sm:items-center sm:gap-2'>
+          <span>Created by</span>
           <span className='flex items-center gap-1'>
             <Image
               src={household.creator.avatar_url}
