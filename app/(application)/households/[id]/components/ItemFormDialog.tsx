@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState, useRef } from 'react';
+import { useActionState, useEffect, useRef, useState } from 'react';
 import { addItem, editItem } from '@/app/actions/items';
 import { Enums } from '@/database.types';
 import { useFormStatus } from 'react-dom';
@@ -67,6 +67,14 @@ const ItemFormDialog = ({
   item,
 }: ItemFormDialogProps) => {
   const formRef = useRef<HTMLFormElement>(null);
+  const [selectedStatus, setSelectedStatus] = useState<ItemStatus>(
+    item?.status ?? 'FULL'
+  );
+
+  useEffect(() => {
+    setSelectedStatus(item?.status ?? 'FULL');
+  }, [item]);
+
   const [state, formAction] = useActionState(
     async (_state: typeof initialState, formData: FormData) => {
       const result =
@@ -149,7 +157,6 @@ const ItemFormDialog = ({
               placeholder='Ex: Toilet paper'
               maxLength={25}
               required
-              autoFocus
               defaultValue={item?.name ?? ''}
             />
             <p aria-live='polite' className='sr-only' role='status'>
@@ -170,7 +177,10 @@ const ItemFormDialog = ({
                     value={value}
                     className='sr-only'
                     required
-                    defaultChecked={item?.status === value}
+                    checked={selectedStatus === value}
+                    onChange={e =>
+                      setSelectedStatus(e.target.value as ItemStatus)
+                    }
                   />
                   {label}
                 </label>

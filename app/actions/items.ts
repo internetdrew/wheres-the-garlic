@@ -60,6 +60,14 @@ export async function editItem(itemId: string, formData: FormData) {
   try {
     const supabaseAdmin = createAdminClient();
 
+    const { data: item, error: fetchError } = await supabaseAdmin
+      .from('household_items')
+      .select('household_id')
+      .eq('id', parseInt(itemId, 10))
+      .single();
+
+    if (fetchError) throw fetchError;
+
     const { error } = await supabaseAdmin
       .from('household_items')
       .update({
@@ -73,8 +81,7 @@ export async function editItem(itemId: string, formData: FormData) {
 
     if (error) throw error;
 
-    revalidatePath(`/households/${itemId}`);
-
+    revalidatePath(`/households/${item.household_id}`);
     return { message: 'Item updated successfully', success: true };
   } catch (error) {
     console.error('Error updating item:', error);
