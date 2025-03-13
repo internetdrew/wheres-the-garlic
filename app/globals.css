@@ -1,14 +1,26 @@
 @import 'tailwindcss';
 
-@keyframes pulse-animation {
+@keyframes pulse-low-animation {
   0% {
-    box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 0 0px oklch(0.705 0.213 47.604);
   }
   100% {
-    box-shadow: 0 0 0 8px rgba(0, 0, 0, 0);
+    box-shadow: 0 0 0 7px rgba(0, 0, 0, 0);
+  }
+}
+@keyframes pulse-out-animation {
+  0% {
+    box-shadow: 0 0 0 0px oklch(0.645 0.246 16.439);
+  }
+  100% {
+    box-shadow: 0 0 0 7px rgba(0, 0, 0, 0);
   }
 }
 
-.pulse {
-  animation: pulse-animation 2s infinite;
+.pulse-low {
+  animation: pulse-low-animation 1.5s infinite;
+}
+
+.pulse-out {
+  animation: pulse-out-animation 1.5s infinite;
 }

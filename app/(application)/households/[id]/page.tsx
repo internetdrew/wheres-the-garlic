@@ -24,8 +24,8 @@ const statusColors: Record<ItemStatus, string> = {
 const statusAnimations: Record<ItemStatus, string> = {
   FULL: '',
   HALFWAY: '',
-  LOW: 'pulse',
-  OUT: 'pulse',
+  LOW: 'pulse-low',
+  OUT: 'pulse-out',
 };
 
 const HouseholdPage = async ({
@@ -77,7 +77,7 @@ const HouseholdPage = async ({
         <p className=' text-neutral-500'>
           There are {items?.length} items being tracked in this household.
         </p>
-        <ul className='mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 '>
+        <ul className='mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 '>
           {items?.map(item => (
             <li
               key={item.id}
@@ -89,7 +89,7 @@ const HouseholdPage = async ({
                   Update
                 </button>
               </div>
-              <span className='text-sm text-neutral-600 flex items-center gap-2'>
+              <span className=' text-neutral-600 flex items-center gap-2'>
                 <span
                   className={`inline-block w-2 h-2 rounded-full ${
                     statusColors[item.status]
