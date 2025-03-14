@@ -15,7 +15,7 @@ export default async function Home() {
           <h1 className='text-3xl font-semibold lg:text-5xl'>
             A Status-Based Home Grocery Inventory App
           </h1>
-          <p className='px-8 text-lg text-neutral-400 lg:px-4 lg:text-xl'>
+          <p className='px-8 text-lg text-gray-400 lg:px-4 lg:text-xl'>
             See what’s in your kitchen at a glance—full, halfway, almost done,
             or out.
           </p>
