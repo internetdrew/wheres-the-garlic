@@ -9,14 +9,17 @@ import HouseholdFormDialog from '@/app/(application)/dashboard/components/Househ
 
 interface PageHeaderProps {
   household: Household;
+  itemsCount: number;
 }
 
-const PageHeader = ({ household }: PageHeaderProps) => {
+const PageHeader = ({ household, itemsCount }: PageHeaderProps) => {
   const addItemDialogRef = useRef<HTMLDialogElement>(null);
   const editDialogRef = useRef<HTMLDialogElement>(null);
   const triggerAddItemFormDialog = () => {
     addItemDialogRef.current?.showModal();
   };
+
+  console.log(household);
 
   const triggerEditDialog = () => {
     editDialogRef.current?.showModal();
@@ -77,6 +80,11 @@ const PageHeader = ({ household }: PageHeaderProps) => {
           Add Item
         </button>
       </div>
+      <p className='text-neutral-500 mt-4'>
+        {itemsCount > 0
+          ? `There are ${itemsCount} items on this list.`
+          : 'Add an item to get started.'}
+      </p>
 
       <ItemFormDialog
         householdId={household.id}

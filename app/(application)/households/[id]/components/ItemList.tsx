@@ -4,8 +4,10 @@ import { formatDistance } from 'date-fns';
 import { Enums } from '@/database.types';
 import { useRef, useState, useEffect } from 'react';
 import ItemFormDialog from './ItemFormDialog';
+import { Household } from '@/utils/supabase/queries';
 
 type ItemStatus = Enums<'ITEM_STATUS'>;
+type Item = Household['items'][number];
 
 const statusDisplay: Record<ItemStatus, string> = {
   FULL: 'Full',
@@ -27,18 +29,6 @@ const statusAnimations: Record<ItemStatus, string> = {
   LOW: 'pulse-low',
   OUT: 'pulse-out',
 };
-
-interface Item {
-  id: number;
-  name: string;
-  status: ItemStatus;
-  notes: string | null;
-  last_updated_at: string;
-  last_updated_by: {
-    full_name: string;
-    avatar_url: string;
-  };
-}
 
 interface ItemListProps {
   items: Item[];
@@ -74,9 +64,6 @@ const ItemList = ({ items, householdId }: ItemListProps) => {
   return (
     <>
       <section className='mt-10'>
-        <p className='text-neutral-500'>
-          There are {items.length} items being tracked in this household.
-        </p>
         <ul className='mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2'>
           {items.map(item => (
             <li

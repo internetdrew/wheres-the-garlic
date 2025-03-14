@@ -25,13 +25,13 @@ const Dashboard = async () => {
       <h1 className='text-xl font-bold'>
         Hi, {user?.user_metadata.full_name}!
       </h1>
-      <p className='text-sm text-gray-400'>
+      <p className='text-sm text-neutral-500'>
         You can create up to 3 households.
       </p>
       <HouseholdFormTriggers householdCount={memberships?.length || 0} />
       <div className='mt-6'>
         <h2 className='text-lg font-bold'>Households</h2>
-        <div className='text-gray-400'>
+        <div className='text-neutral-500'>
           {memberships?.length === 0 ? (
             <p>You&apos;re not part of any households yet!</p>
           ) : (
