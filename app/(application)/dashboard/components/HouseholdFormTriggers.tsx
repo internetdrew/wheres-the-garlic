@@ -1,6 +1,6 @@
 'use client';
 import React, { useRef } from 'react';
-import HouseholdFormDialog from './HouseholdFormDialog';
+import CreateHouseholdFormDialog from './CreateHouseholdFormDialog';
 import JoinHouseholdForm from './JoinHouseholdForm';
 
 type HouseholdFormTriggersProps = {
@@ -54,7 +54,7 @@ const HouseholdFormTriggers = ({
         </button> */}
       </div>
 
-      <HouseholdFormDialog dialogRef={createDialogRef} mode='create' />
+      <CreateHouseholdFormDialog dialogRef={createDialogRef} />
 
       <JoinHouseholdForm dialogRef={joinDialogRef} />
     </>

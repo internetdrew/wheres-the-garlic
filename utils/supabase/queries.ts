@@ -11,18 +11,66 @@ export const getHouseholdByIdQuery = (
     .from('households')
     .select(
       `
+        id,
+        title,
+        creator:creator_id(
+          full_name,
+          avatar_url
+        ),
+        created_at,
+        updated_at,
+        items:household_items(
           id,
-          title,
-          creator:creator_id(
+          name,
+          status,
+          notes,
+          last_updated_at,
+          last_updated_by(
             full_name,
             avatar_url
-          ),
-          created_at,
-          updated_at
-          `
+          )
+        )
+        `
     )
     .eq('id', id)
+    .order('last_updated_at', { referencedTable: 'items', ascending: false })
     .single();
 };
 
 export type Household = QueryData<ReturnType<typeof getHouseholdByIdQuery>>;
+
+export const getHouseholdsByUserIdQuery = (
+  supabaseClient: SupabaseServerClientType,
+  userId: string
+) => {
+  return supabaseClient
+    .from('household_members')
+    .select(
+      `
+      id,
+      household:household_id(
+        id,
+        title,
+        creator:creator_id(
+          full_name,
+          avatar_url
+        ),
+        created_at,
+        latest_item:household_items(
+          last_updated_at
+        )
+      ),
+      member_role
+      `
+    )
+    .eq('member_id', userId)
+    .order('last_updated_at', {
+      referencedTable: 'household.household_items',
+      ascending: false,
+    })
+    .limit(1, { referencedTable: 'household.household_items' });
+};
+
+export type HouseholdsByUserId = QueryData<
+  ReturnType<typeof getHouseholdsByUserIdQuery>
+>;

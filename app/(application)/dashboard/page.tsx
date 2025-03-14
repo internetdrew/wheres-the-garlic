@@ -2,9 +2,8 @@ import React from 'react';
 import { createClient } from '@/utils/supabase/server';
 import HouseholdFormTriggers from './components/HouseholdFormTriggers';
 import { redirect } from 'next/navigation';
-import Link from 'next/link';
-import Image from 'next/image';
-import { formatDistance } from 'date-fns';
+import { getHouseholdsByUserIdQuery } from '@/utils/supabase/queries';
+import HouseholdCard from './components/HouseholdCard';
 
 const Dashboard = async () => {
   const supabase = await createClient();
@@ -16,40 +15,23 @@ const Dashboard = async () => {
     redirect('/');
   }
 
-  const { data: memberships } = await supabase
-    .from('household_members')
-    .select(
-      `
-      id,
-      household:household_id(
-        id,
-        title,
-        creator:creator_id(
-          full_name,
-          avatar_url
-        ),
-        created_at,
-        updated_at
-      ),
-      member_role
-      `
-    )
-    .eq('member_id', user.id);
-
-  console.log(memberships);
+  const { data: memberships } = await getHouseholdsByUserIdQuery(
+    supabase,
+    user.id
+  );
 
   return (
     <main className='max-w-screen-lg mx-4 mt-10 lg:mx-auto'>
       <h1 className='text-xl font-bold'>
         Hi, {user?.user_metadata.full_name}!
       </h1>
-      <p className='text-sm text-gray-400'>
+      <p className='text-sm text-neutral-500'>
         You can create up to 3 households.
       </p>
       <HouseholdFormTriggers householdCount={memberships?.length || 0} />
       <div className='mt-6'>
         <h2 className='text-lg font-bold'>Households</h2>
-        <div>
+        <div className='text-neutral-500'>
           {memberships?.length === 0 ? (
             <p>You&apos;re not part of any households yet!</p>
           ) : (
@@ -65,36 +47,7 @@ const Dashboard = async () => {
         } sm:grid sm:grid-cols-2 md:grid-cols-3`}
       >
         {memberships?.map(membership => (
-          <li
-            key={membership.id}
-            className='relative bg-neutral-200 text-neutral-900 rounded-xl p-4 hover:bg-neutral-300 transition-colors'
-          >
-            <Link
-              href={`/households/${membership.household.id}`}
-              className='font-medium'
-            >
-              <span className='absolute inset-0' />
-              {membership.household.title}
-            </Link>
-            <p className='text-sm text-neutral-600'>
-              Last updated{' '}
-              {formatDistance(membership.household.updated_at, new Date(), {
-                addSuffix: true,
-                includeSeconds: true,
-              })}
-            </p>
-            <p className='text-sm text-neutral-600 mt-8'>Created by:</p>
-            <div className='flex items-center gap-2 mt-1'>
-              <Image
-                src={membership.household.creator.avatar_url}
-                alt={membership.household.creator.full_name}
-                width={20}
-                height={20}
-                className='rounded-full'
-              />
-              <span>{membership.household.creator.full_name}</span>
-            </div>
-          </li>
+          <HouseholdCard key={membership.id} household={membership.household} />
         ))}
       </ul>
     </main>

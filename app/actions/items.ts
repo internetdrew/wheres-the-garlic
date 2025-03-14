@@ -7,6 +7,12 @@ import { Enums } from '@/database.types';
 
 type ItemStatus = Enums<'ITEM_STATUS'>;
 
+interface UpdateItemStatusParams {
+  itemId: number;
+  status: ItemStatus;
+  householdId: string;
+}
+
 export async function addItem(householdId: string, formData: FormData) {
   const name = formData.get('name') as string;
   const notes = formData.get('notes') as string;
@@ -86,5 +92,81 @@ export async function editItem(itemId: string, formData: FormData) {
   } catch (error) {
     console.error('Error updating item:', error);
     return { message: 'Failed to update item', success: false };
+  }
+}
+
+export async function updateItemStatus({
+  itemId,
+  status,
+  householdId,
+}: UpdateItemStatusParams) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error('You must be signed in to update an item');
+  }
+
+  try {
+    const supabaseAdmin = createAdminClient();
+
+    const { error } = await supabaseAdmin
+      .from('household_items')
+      .update({
+        status,
+        last_updated_at: new Date().toISOString(),
+        last_updated_by: user.id,
+      })
+      .eq('id', itemId);
+
+    if (error) throw error;
+
+    revalidatePath(`/households/${householdId}`);
+    revalidatePath('/dashboard');
+
+    return { message: 'Item status updated successfully', success: true };
+  } catch (error) {
+    console.error('Error updating item status:', error);
+    return { message: 'Failed to update item status', success: false };
+  }
+}
+
+export async function updateItemName(itemId: number, formData: FormData) {
+  const name = formData.get('name') as string;
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error('You must be signed in to update an item');
+  }
+
+  try {
+    const supabaseAdmin = createAdminClient();
+
+    const { data: item, error } = await supabaseAdmin
+      .from('household_items')
+      .update({
+        name,
+        last_updated_at: new Date().toISOString(),
+        last_updated_by: user.id,
+      })
+      .eq('id', itemId)
+      .select('household_id')
+      .single();
+
+    if (error) throw error;
+
+    revalidatePath(`/households/${item?.household_id}`);
+    revalidatePath('/dashboard');
+
+    return { message: 'Item name updated successfully', success: true };
+  } catch (error) {
+    console.error('Error updating item name:', error);
+    return { message: 'Failed to update item name', success: false };
   }
 }

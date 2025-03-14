@@ -1,14 +1,11 @@
 'use client';
 
-import { createHousehold, editHousehold } from '@/app/actions/households';
 import React, { useActionState, useRef } from 'react';
 import { useFormStatus } from 'react-dom';
-import { Household } from '@/utils/supabase/queries';
+import { createHousehold } from '@/app/actions/households';
 
 interface HouseholdFormDialogProps {
   dialogRef: React.RefObject<HTMLDialogElement | null>;
-  household?: Household;
-  mode: 'create' | 'edit';
 }
 
 const initialState = {
@@ -16,7 +13,7 @@ const initialState = {
   success: false,
 };
 
-const SubmitButton = ({ mode }: { mode: 'create' | 'edit' }) => {
+const SubmitButton = () => {
   const { pending } = useFormStatus();
 
   return (
@@ -25,23 +22,16 @@ const SubmitButton = ({ mode }: { mode: 'create' | 'edit' }) => {
       className='bg-neutral-900 text-neutral-200 rounded-md py-2 px-4 font-medium transition-colors cursor-pointer w-fit ml-auto hover:bg-neutral-950 aria-disabled:opacity-50 aria-disabled:cursor-not-allowed'
       aria-disabled={pending}
     >
-      {mode === 'create' ? 'Create' : 'Update'}
+      {pending ? 'Creating...' : 'Create'}
     </button>
   );
 };
 
-const HouseholdFormDialog = ({
-  dialogRef,
-  household,
-  mode,
-}: HouseholdFormDialogProps) => {
+const CreateHouseholdFormDialog = ({ dialogRef }: HouseholdFormDialogProps) => {
   const formRef = useRef<HTMLFormElement>(null);
   const [state, formAction] = useActionState(
     async (_state: typeof initialState, formData: FormData) => {
-      const result =
-        mode === 'create'
-          ? await createHousehold(formData)
-          : await editHousehold(household!.id, formData);
+      const result = await createHousehold(formData);
 
       if (result?.success) {
         dialogRef.current?.close();
@@ -99,14 +89,10 @@ const HouseholdFormDialog = ({
         </header>
 
         <div className='flex justify-between items-center mt-6'>
-          <h2 className='text-lg font-semibold'>
-            {mode === 'create' ? 'Create a household' : 'Edit household'}
-          </h2>
+          <h2 className='text-lg font-semibold'>Create a household</h2>
         </div>
         <p className='text-neutral-700'>
-          {mode === 'create'
-            ? 'Create a household to get started. You can add members later.'
-            : 'Update your household details below.'}
+          Create a household to get started. You can add members later.
         </p>
         <div className='flex flex-col my-7 gap-2'>
           <div className='flex flex-col gap-1'>
@@ -122,17 +108,16 @@ const HouseholdFormDialog = ({
               maxLength={25}
               required
               autoFocus
-              defaultValue={household?.title ?? ''}
             />
             <p aria-live='polite' className='sr-only' role='status'>
               {state?.message}
             </p>
           </div>
         </div>
-        <SubmitButton mode={mode} />
+        <SubmitButton />
       </form>
     </dialog>
   );
 };
 
-export default HouseholdFormDialog;
+export default CreateHouseholdFormDialog;
