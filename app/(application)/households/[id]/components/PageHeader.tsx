@@ -5,7 +5,7 @@ import Image from 'next/image';
 import ItemFormDialog from './ItemFormDialog';
 import { Household } from '@/utils/supabase/queries';
 import Link from 'next/link';
-import HouseholdFormDialog from '@/app/(application)/dashboard/components/HouseholdFormDialog';
+import HouseholdNamePopover from './HouseholdNamePopover';
 
 interface PageHeaderProps {
   household: Household;
@@ -14,16 +14,11 @@ interface PageHeaderProps {
 
 const PageHeader = ({ household, itemsCount }: PageHeaderProps) => {
   const addItemDialogRef = useRef<HTMLDialogElement>(null);
-  const editDialogRef = useRef<HTMLDialogElement>(null);
   const triggerAddItemFormDialog = () => {
     addItemDialogRef.current?.showModal();
   };
 
   console.log(household);
-
-  const triggerEditDialog = () => {
-    editDialogRef.current?.showModal();
-  };
 
   return (
     <header className='sticky top-12 pt-6 pb-4 z-10 bg-neutral-950'>
@@ -51,12 +46,7 @@ const PageHeader = ({ household, itemsCount }: PageHeaderProps) => {
             <h1 className='text-xl font-bold lg:text-2xl'>
               {household?.title}
             </h1>
-            <button
-              className='text-xs px-4 py-1 rounded-md font-medium ring-1 ring-neutral-700 cursor-pointer'
-              onClick={triggerEditDialog}
-            >
-              Edit
-            </button>
+            <HouseholdNamePopover household={household} />
           </div>
           <div className='flex flex-col mt-1 text-neutral-500 sm:flex-row sm:items-center sm:gap-2'>
             <span>Created by</span>
@@ -90,11 +80,6 @@ const PageHeader = ({ household, itemsCount }: PageHeaderProps) => {
         householdId={household.id}
         dialogRef={addItemDialogRef}
         mode='create'
-      />
-      <HouseholdFormDialog
-        dialogRef={editDialogRef}
-        mode='edit'
-        household={household}
       />
     </header>
   );
