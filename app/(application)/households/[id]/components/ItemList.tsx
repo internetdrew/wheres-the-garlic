@@ -2,11 +2,11 @@
 
 import { formatDistance } from 'date-fns';
 import { Enums } from '@/database.types';
-import { useRef, useState, useEffect } from 'react';
-import ItemFormDialog from './ItemFormDialog';
+import { useState, useEffect } from 'react';
 import { Household } from '@/utils/supabase/queries';
 import { updateItemStatus } from '@/app/actions/items';
 import ItemCardStatusSelect from './ItemCardStatusSelect';
+import ItemNamePopover from './ItemNamePopover';
 
 type ItemStatus = Enums<'ITEM_STATUS'>;
 type Item = Household['items'][number];
@@ -17,8 +17,6 @@ interface ItemListProps {
 }
 
 const ItemList = ({ items, householdId }: ItemListProps) => {
-  const editDialogRef = useRef<HTMLDialogElement>(null);
-  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [formattedDates, setFormattedDates] = useState<Record<number, string>>(
     {}
   );
@@ -36,11 +34,6 @@ const ItemList = ({ items, householdId }: ItemListProps) => {
 
     setFormattedDates(formatted);
   }, [items]);
-
-  const handleUpdateItem = (item: Item) => {
-    setSelectedItem(item);
-    editDialogRef.current?.showModal();
-  };
 
   const handleStatusChange = async (item: Item, newStatus: ItemStatus) => {
     try {
@@ -70,7 +63,10 @@ const ItemList = ({ items, householdId }: ItemListProps) => {
             >
               <header className='flex items-start justify-between mb-6'>
                 <div>
-                  <span className='text-lg font-medium'>{item.name}</span>
+                  <div className='flex items-center gap-2'>
+                    <span className='text-lg font-medium'>{item.name}</span>
+                    <ItemNamePopover item={item} />
+                  </div>
                   <ItemCardStatusSelect
                     value={item.status}
                     onChange={newStatus =>
@@ -78,12 +74,6 @@ const ItemList = ({ items, householdId }: ItemListProps) => {
                     }
                   />
                 </div>
-                <button
-                  className='text-sm text-neutral-600 ring-1 ring-neutral-300 rounded-md py-2 px-4 cursor-pointer hover:ring-neutral-400 transition-colors'
-                  onClick={() => handleUpdateItem(item)}
-                >
-                  Update
-                </button>
               </header>
 
               <div className='flex mt-auto text-sm text-neutral-600'>
@@ -97,22 +87,6 @@ const ItemList = ({ items, householdId }: ItemListProps) => {
           ))}
         </ul>
       </section>
-
-      <ItemFormDialog
-        householdId={householdId}
-        dialogRef={editDialogRef}
-        mode='edit'
-        item={
-          selectedItem
-            ? {
-                id: selectedItem.id.toString(),
-                name: selectedItem.name,
-                status: selectedItem.status,
-                notes: selectedItem.notes,
-              }
-            : undefined
-        }
-      />
     </>
   );
 };
