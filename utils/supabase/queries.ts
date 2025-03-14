@@ -11,17 +11,29 @@ export const getHouseholdByIdQuery = (
     .from('households')
     .select(
       `
+        id,
+        title,
+        creator:creator_id(
+          full_name,
+          avatar_url
+        ),
+        created_at,
+        updated_at,
+        items:household_items(
           id,
-          title,
-          creator:creator_id(
+          name,
+          status,
+          notes,
+          last_updated_at,
+          last_updated_by(
             full_name,
             avatar_url
-          ),
-          created_at,
-          updated_at
-          `
+          )
+        )
+        `
     )
     .eq('id', id)
+    .order('last_updated_at', { referencedTable: 'items', ascending: false })
     .single();
 };
 
@@ -61,31 +73,4 @@ export const getHouseholdsByUserIdQuery = (
 
 export type HouseholdsByUserId = QueryData<
   ReturnType<typeof getHouseholdsByUserIdQuery>
->;
-
-export const getHouseholdItemsByHouseholdIdQuery = (
-  supabaseClient: SupabaseServerClientType,
-  householdId: string
-) => {
-  return supabaseClient
-    .from('household_items')
-    .select(
-      `
-      id,
-      name,
-      status,
-      notes,
-      last_updated_at,
-      last_updated_by(
-        full_name,
-        avatar_url
-      )
-      `
-    )
-    .eq('household_id', householdId)
-    .order('last_updated_at', { ascending: false });
-};
-
-export type HouseholdItemsByHouseholdId = QueryData<
-  ReturnType<typeof getHouseholdItemsByHouseholdIdQuery>
 >;
