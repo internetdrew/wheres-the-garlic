@@ -5,30 +5,11 @@ import { Enums } from '@/database.types';
 import { useRef, useState, useEffect } from 'react';
 import ItemFormDialog from './ItemFormDialog';
 import { Household } from '@/utils/supabase/queries';
+import { updateItemStatus } from '@/app/actions/items';
+import ItemCardStatusSelect from './ItemCardStatusSelect';
 
 type ItemStatus = Enums<'ITEM_STATUS'>;
 type Item = Household['items'][number];
-
-const statusDisplay: Record<ItemStatus, string> = {
-  FULL: 'Full',
-  HALFWAY: 'Halfway',
-  LOW: 'Low',
-  OUT: 'Out',
-};
-
-const statusColors: Record<ItemStatus, string> = {
-  FULL: 'bg-emerald-500',
-  HALFWAY: 'bg-amber-500',
-  LOW: 'bg-orange-500',
-  OUT: 'bg-rose-500',
-};
-
-const statusAnimations: Record<ItemStatus, string> = {
-  FULL: '',
-  HALFWAY: '',
-  LOW: 'pulse-low',
-  OUT: 'pulse-out',
-};
 
 interface ItemListProps {
   items: Item[];
@@ -61,6 +42,23 @@ const ItemList = ({ items, householdId }: ItemListProps) => {
     editDialogRef.current?.showModal();
   };
 
+  const handleStatusChange = async (item: Item, newStatus: ItemStatus) => {
+    try {
+      const result = await updateItemStatus({
+        itemId: item.id,
+        status: newStatus,
+        householdId: householdId,
+      });
+
+      if (result.success) {
+        console.log(result.message);
+        // Toast will go here.
+      }
+    } catch (error) {
+      console.error('Failed to update status:', error);
+    }
+  };
+
   return (
     <>
       <section className='mt-10'>
@@ -73,14 +71,12 @@ const ItemList = ({ items, householdId }: ItemListProps) => {
               <header className='flex items-start justify-between mb-6'>
                 <div>
                   <span className='text-lg font-medium'>{item.name}</span>
-                  <span className='text-neutral-600 flex items-center gap-2'>
-                    <span
-                      className={`inline-block w-2 h-2 rounded-full ${
-                        statusColors[item.status]
-                      } ${statusAnimations[item.status]}`}
-                    />
-                    {statusDisplay[item.status]}
-                  </span>
+                  <ItemCardStatusSelect
+                    value={item.status}
+                    onChange={newStatus =>
+                      handleStatusChange(item, newStatus as ItemStatus)
+                    }
+                  />
                 </div>
                 <button
                   className='text-sm text-neutral-600 ring-1 ring-neutral-300 rounded-md py-2 px-4 cursor-pointer hover:ring-neutral-400 transition-colors'
