@@ -32,7 +32,7 @@ const HouseholdNamePopover = ({ household }: { household: Household }) => {
           viewBox='0 0 24 24'
           strokeWidth={1.5}
           stroke='currentColor'
-          className='size-5'
+          className='size-6'
         >
           <path
             strokeLinecap='round'
@@ -42,7 +42,7 @@ const HouseholdNamePopover = ({ household }: { household: Household }) => {
         </svg>
       </PopoverButton>
 
-      <PopoverPanel className='absolute z-10 mt-2 -translate-x-1/2 left-1/2'>
+      <PopoverPanel className='absolute z-10 mt-2 left-1/2'>
         {({ close }) => (
           <form
             ref={formRef}
