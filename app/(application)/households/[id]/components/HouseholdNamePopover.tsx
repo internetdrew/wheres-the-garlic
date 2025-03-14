@@ -12,7 +12,7 @@ const SubmitButton = () => {
   return (
     <button
       type='submit'
-      className=' bg-neutral-900 text-neutral-50 font-medium cursor-pointer px-2 py-1 rounded-md hover:bg-neutral-800 aria-disabled:opacity-50 aria-disabled:cursor-not-allowed'
+      className=' bg-neutral-900 text-neutral-50 font-medium cursor-pointer px-4 py-1 rounded-md hover:bg-neutral-800 aria-disabled:opacity-50 aria-disabled:cursor-not-allowed'
       aria-disabled={pending}
     >
       Save
@@ -42,7 +42,7 @@ const HouseholdNamePopover = ({ household }: { household: Household }) => {
         </svg>
       </PopoverButton>
 
-      <PopoverPanel className='absolute z-10 mt-2 left-1/2'>
+      <PopoverPanel className='absolute z-10'>
         {({ close }) => (
           <form
             ref={formRef}
@@ -56,12 +56,12 @@ const HouseholdNamePopover = ({ household }: { household: Household }) => {
             className='bg-neutral-100 p-6 rounded-md text-neutral-900 shadow-lg ring-1 ring-neutral-950/5'
           >
             <div className='flex flex-col gap-2'>
-              <label htmlFor='name' className='font-medium'>
+              <label htmlFor='household-name' className='font-medium'>
                 Edit household name
               </label>
               <input
                 type='text'
-                name='name'
+                name='household-name'
                 defaultValue={household.title}
                 className='rounded-sm px-2 py-1 ring-1 ring-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-400'
                 placeholder='Household name'
