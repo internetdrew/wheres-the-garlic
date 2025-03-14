@@ -14,7 +14,7 @@ const SubmitButton = () => {
   return (
     <button
       type='submit'
-      className='text-sm bg-neutral-900 text-neutral-50 font-medium px-2 py-1 rounded-md hover:bg-neutral-800 aria-disabled:opacity-50 aria-disabled:cursor-not-allowed'
+      className='bg-neutral-900 text-neutral-50 font-medium px-2 py-1 rounded-md cursor-pointer hover:bg-neutral-800 aria-disabled:opacity-50 aria-disabled:cursor-not-allowed'
       aria-disabled={pending}
     >
       Save
@@ -77,7 +77,7 @@ const ItemNamePopover = ({ item }: ItemNamePopoverProps) => {
               />
               <div className='flex justify-end mt-4 gap-2'>
                 <PopoverButton
-                  className='text-sm px-2 py-1 text-neutral-600 hover:text-neutral-900'
+                  className='px-2 py-1 text-neutral-600 hover:text-neutral-900 cursor-pointer'
                   onClick={() => close()}
                 >
                   Cancel
