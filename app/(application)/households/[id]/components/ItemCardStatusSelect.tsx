@@ -66,7 +66,7 @@ const ItemCardStatusSelect = ({
             />
           </svg>
         </ListboxButton>
-        <ListboxOptions className='absolute z-10 mt-1 w-40 bg-neutral-100 rounded-lg shadow-lg p-2 text-sm ring-1 ring-neutral-950/5'>
+        <ListboxOptions className='absolute z-10 mt-1 w-40 bg-neutral-100 rounded-lg shadow-lg p-2 ring-1 ring-neutral-950/5'>
           {statuses.map(status => (
             <ListboxOption
               key={status.value}
