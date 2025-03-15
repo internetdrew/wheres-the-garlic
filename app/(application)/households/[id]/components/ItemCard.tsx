@@ -5,6 +5,7 @@ import ItemCardStatusSelect from './ItemCardStatusSelect';
 import { Household } from '@/utils/supabase/queries';
 import { updateItemStatus } from '@/app/actions/items';
 import { Enums } from '@/database.types';
+import TrashIcon from '@/app/icons/TrashIcon';
 
 type ItemStatus = Enums<'ITEM_STATUS'>;
 type Item = Household['items'][number];
@@ -56,6 +57,9 @@ const ItemCard = ({ item, householdId }: ItemCardProps) => {
             }
           />
         </div>
+        <button className='p-1 rounded-md cursor-pointer ring-1 ring-neutral-300 group transition-all hover:ring-red-600'>
+          <TrashIcon className='size-4 text-red-600' />
+        </button>
       </header>
 
       <div className='flex mt-auto text-sm text-neutral-600'>
