@@ -31,7 +31,7 @@ const ItemNamePopover = ({ item }: ItemNamePopoverProps) => {
 
   return (
     <Popover className='relative'>
-      <PopoverButton className='text-neutral-600 hover:text-neutral-900'>
+      <PopoverButton className='text-neutral-600 cursor-pointer transition-colors hover:text-neutral-900'>
         <svg
           xmlns='http://www.w3.org/2000/svg'
           fill='none'
@@ -59,7 +59,7 @@ const ItemNamePopover = ({ item }: ItemNamePopoverProps) => {
                 formRef.current?.reset();
               }
             }}
-            className='bg-neutral-100 p-6 rounded-md shadow-lg ring-1 ring-neutral-950/5'
+            className='bg-neutral-100 p-4 rounded-md shadow-lg ring-1 ring-neutral-950/5'
           >
             <div className='flex flex-col gap-2'>
               <label htmlFor='name' className='font-medium'>
