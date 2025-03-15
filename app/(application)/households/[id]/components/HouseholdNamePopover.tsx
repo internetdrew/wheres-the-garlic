@@ -12,7 +12,7 @@ const SubmitButton = () => {
   return (
     <button
       type='submit'
-      className=' bg-neutral-900 text-neutral-50 font-medium cursor-pointer px-4 py-1 rounded-md hover:bg-neutral-800 aria-disabled:opacity-50 aria-disabled:cursor-not-allowed'
+      className=' bg-neutral-900 text-neutral-50 font-medium cursor-pointer px-2 py-1 rounded-md hover:bg-neutral-800 aria-disabled:opacity-50 aria-disabled:cursor-not-allowed'
       aria-disabled={pending}
     >
       Save
@@ -25,7 +25,7 @@ const HouseholdNamePopover = ({ household }: { household: Household }) => {
 
   return (
     <Popover className='relative'>
-      <PopoverButton className='text-neutral-500 hover:text-neutral-400 cursor-pointer'>
+      <PopoverButton className='text-neutral-500 transition-colors hover:text-neutral-400 cursor-pointer'>
         <svg
           xmlns='http://www.w3.org/2000/svg'
           fill='none'
@@ -53,7 +53,7 @@ const HouseholdNamePopover = ({ household }: { household: Household }) => {
                 formRef.current?.reset();
               }
             }}
-            className='bg-neutral-100 p-6 rounded-md text-neutral-900 shadow-lg ring-1 ring-neutral-950/5'
+            className='bg-neutral-100 p-4 rounded-md text-neutral-900 shadow-lg ring-1 ring-neutral-950/5'
           >
             <div className='flex flex-col gap-2'>
               <label htmlFor='household-name' className='font-medium'>
