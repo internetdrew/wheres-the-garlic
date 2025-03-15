@@ -46,7 +46,7 @@ const ItemCardStatusSelect = ({
   return (
     <Listbox value={value} onChange={onChange}>
       <div className='relative'>
-        <ListboxButton className='mt-2 text-neutral-600 flex items-center gap-2 hover:text-neutral-900 transition-colors group'>
+        <ListboxButton className='mt-2 cursor-pointer text-neutral-600 flex items-center gap-2 hover:text-neutral-900 transition-colors group'>
           <span
             className={`inline-block w-2 h-2 rounded-full ${statusColors[value]} ${statusAnimations[value]}`}
           />
@@ -66,7 +66,7 @@ const ItemCardStatusSelect = ({
             />
           </svg>
         </ListboxButton>
-        <ListboxOptions className='absolute z-10 mt-1 w-40 bg-neutral-100 rounded-lg shadow-lg p-2 ring-1 ring-neutral-950/5'>
+        <ListboxOptions className='absolute z-10 mt-1 w-32 bg-neutral-100 rounded-lg shadow-lg p-2 ring-1 ring-neutral-950/5'>
           {statuses.map(status => (
             <ListboxOption
               key={status.value}
