@@ -44,7 +44,6 @@ const ItemList = ({ items, householdId }: ItemListProps) => {
       });
 
       if (result.success) {
-        console.log(result.message);
         // Toast will go here.
       }
     } catch (error) {
@@ -54,7 +53,7 @@ const ItemList = ({ items, householdId }: ItemListProps) => {
 
   return (
     <>
-      <section className='mt-10'>
+      <section className='mt-10 mb-28'>
         <ul className='mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2'>
           {items.map(item => (
             <li

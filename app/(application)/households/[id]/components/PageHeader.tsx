@@ -18,8 +18,6 @@ const PageHeader = ({ household, itemsCount }: PageHeaderProps) => {
     addItemDialogRef.current?.showModal();
   };
 
-  console.log(household);
-
   return (
     <header className='sticky top-12 pt-6 pb-4 z-10 bg-neutral-950'>
       <div className='flex items-center gap-1 text-pink-600 relative w-fit'>
