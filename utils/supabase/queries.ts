@@ -30,10 +30,10 @@ export const getHouseholdByIdQuery = (
             avatar_url
           )
         )
-        `
+      `
     )
     .eq('id', id)
-    .order('last_updated_at', { referencedTable: 'items', ascending: false })
+    .order('id', { referencedTable: 'items', ascending: true })
     .single();
 };
 
