@@ -13,9 +13,10 @@ type Item = Household['items'][number];
 interface ItemCardProps {
   item: Item;
   householdId: string;
+  onDeleteClick: () => void;
 }
 
-const ItemCard = ({ item, householdId }: ItemCardProps) => {
+const ItemCard = ({ item, householdId, onDeleteClick }: ItemCardProps) => {
   const formattedDate = useMemo(() => {
     return formatDistance(new Date(item.last_updated_at), new Date(), {
       addSuffix: true,
@@ -57,7 +58,10 @@ const ItemCard = ({ item, householdId }: ItemCardProps) => {
             }
           />
         </div>
-        <button className='p-1 rounded-md cursor-pointer ring-1 ring-neutral-300 group transition-all hover:ring-red-600'>
+        <button
+          onClick={onDeleteClick}
+          className='p-1 rounded-md cursor-pointer ring-1 ring-neutral-300 group transition-all hover:ring-red-600'
+        >
           <TrashIcon className='size-4 text-red-600' />
         </button>
       </header>
