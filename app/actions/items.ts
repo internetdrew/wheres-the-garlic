@@ -170,3 +170,28 @@ export async function updateItemName(itemId: number, formData: FormData) {
     return { message: 'Failed to update item name', success: false };
   }
 }
+
+export async function deleteItem(itemId: number) {
+  console.log('deleteItem', itemId);
+
+  try {
+    const supabaseAdmin = createAdminClient();
+
+    const { data: item, error } = await supabaseAdmin
+      .from('household_items')
+      .delete()
+      .eq('id', itemId)
+      .select('household_id')
+      .single();
+
+    if (error) throw error;
+
+    revalidatePath(`/households/${item?.household_id}`);
+    revalidatePath('/dashboard');
+
+    return { message: 'Item deleted successfully', success: true };
+  } catch (error) {
+    console.error('Error deleting item:', error);
+    return { message: 'Failed to delete item', success: false };
+  }
+}
