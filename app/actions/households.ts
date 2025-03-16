@@ -112,3 +112,7 @@ export async function updateHouseholdName(
     return { message: 'Failed to update household', success: false };
   }
 }
+
+export async function deleteHousehold(householdId: string, formData: FormData) {
+  console.log('deleteHousehold', householdId, formData);
+}
