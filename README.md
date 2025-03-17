@@ -1,63 +1,60 @@
-# Where's the Garlic?!
+![repo-banner](./public/banner.jpg)
 
-A status-based home grocery inventory app that helps you track what's in your kitchen at a glance—full, halfway, almost done, or out.
+<div align="center"><strong>Where's the Garlic?!</strong></div>
+<div align="center">A Status-Based Home Grocery Inventory App<br />See what's in your kitchen at a glance—full, halfway, almost done, or out.</div>
+<br/>
+<br/>
 
-## Environment Variables
+# Introduction
 
-Create a `.env.local` file in the root directory with the following variables:
+_Where's the Garlic?!_ is a status-based home grocery inventory app that helps you track what's in your kitchen at a glance. Easily know what's full, halfway, almost done, or out.
 
-```env
-# Supabase Configuration
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_AUTH_GOOGLE_CLIENT_ID=your_google_client_id
-SUPABASE_AUTH_GOOGLE_CLIENT_SECRET=your_google_client_secret
-```
+## Why
 
-### Where to get these values:
+Picture this: You're halfway through cooking dinner when you hear the familiar sound of fridge-diving from the kitchen. The milk gets moved. Three different pickle jars are pushed aside. Your partner is now practically inside the refrigerator when the inevitable cry of exasperation rings out:
 
-1. **Supabase Variables**
+"WHERE'S THE GARLIC?!"
 
-   - Go to your Supabase project dashboard
-   - Navigate to Project Settings > API
-   - Copy the "Project URL" for `NEXT_PUBLIC_SUPABASE_URL`
-   - Copy the "anon public" key for `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+(Spoiler: I used the last of it two days ago and, naturally, forgot to mention it.)
 
-2. **Google Credentials**
+While there are plenty of inventory apps out there, they're often loaded with features we don't need—barcode scanners, meal planners, and enough metrics to manage a small grocery store.
 
-## Getting Started
+I don't need all of that. I just wanted a simple way to stop being the villain in the "I thought we had that" story.
 
-First, install the dependencies:
+This app does one thing: it lets everyone in your household know if something is:
 
-```bash
-npm install
-# or
-yarn install
-```
+- 🟢 Full ("We're stocked!")
+- 🟡 Halfway ("Still good!")
+- 🟠 Almost Done ("Buy it soon!")
+- 🔴 Out ("Don't make me sleep on the couch!")
 
-Then, run the development server:
+Sometimes the best way to say "I love you" is making sure your partner knows the garlic is gone before they're elbow-deep in dinner prep.
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+## Built With
 
-## Running Local Dev Environment
+- [Next.js](https://nextjs.org/) - React framework
+- [Supabase](https://supabase.com/) - Backend and Authentication
+- [TypeScript](https://www.typescriptlang.org/) - Type safety
+- [Tailwind CSS](https://tailwindcss.com/) - Styling
 
-Open Docker and run:
+## Features
 
-```bash
- npx supabase start
-```
+- 📊 Simple status tracking: Full, Halfway, Almost Done, or Out
+- 🏠 Household management for shared inventories
+- 🔍 Quick-glance interface without unnecessary complexity
+- 📱 Mobile-friendly design for checking inventory on the go
+- 🔐 Secure Google authentication
 
-To stop all running Docker containers:
+## Screenshots
 
-```bash
-docker stop $(docker ps -q)  # graceful shutdown
-# or
-docker kill $(docker ps -q)  # force shutdown
-```
+![screenshot1](./public/screen1.webp)
+![screenshot2](./public/screen2.webp)
+![screenshot3](./public/screen3.webp)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
-Open [http://localhost:54323](http://localhost:54323) with your browser to see the the local instance.
+## Roadmap
+
+- Push for V1 to allow users to use the base version of the app [#7](https://github.com/internetdrew/wtg-app/pull/7)
+- Add integration tests
+- Allow users to delete households
+- Add account controls for users
+- Implement progressive-web app functionality
