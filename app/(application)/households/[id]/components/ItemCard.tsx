@@ -51,12 +51,18 @@ const ItemCard = ({ item, householdId, onDeleteClick }: ItemCardProps) => {
             <span className='text-lg font-medium'>{item.name}</span>
             <ItemNamePopover item={item} />
           </div>
-          <ItemCardStatusSelect
-            value={item.status}
-            onChange={newStatus =>
-              handleStatusChange(item, newStatus as ItemStatus)
-            }
-          />
+          {item.status ? (
+            <ItemCardStatusSelect
+              value={item.status}
+              onChange={newStatus =>
+                handleStatusChange(item, newStatus as ItemStatus)
+              }
+            />
+          ) : (
+            <div className='flex items-center gap-2'>
+              <span className='text-sm text-neutral-600'>hello</span>
+            </div>
+          )}
         </div>
         <button
           onClick={onDeleteClick}
