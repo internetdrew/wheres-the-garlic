@@ -56,7 +56,7 @@ const ItemCard = ({ item, householdId, onDeleteClick }: ItemCardProps) => {
             <span className='text-lg font-medium'>{item.name}</span>
             <ItemNamePopover item={item} />
           </div>
-          {item.status ? (
+          {item?.status ? (
             <ItemCardStatusSelect
               value={item.status}
               onChange={newStatus =>
