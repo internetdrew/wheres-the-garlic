@@ -57,6 +57,7 @@ Sometimes the best way to say "I love you" is making sure your partner knows the
 ## Roadmap
 
 - Push for V1 to allow users to use the base version of the app [#7](https://github.com/internetdrew/wtg-app/pull/7)
+- Update metadata for SEO purposes [#9](https://github.com/internetdrew/wtg-app/pull/9)
 - Add input validation and rate limiting
 - Add integration tests
 - Allow users to delete households
