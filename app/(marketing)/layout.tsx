@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     title: "Where's the garlic?!",
     description:
       'Know what’s in your kitchen at a glance—full, halfway, almost done, or out.',
-    url: 'https://www.internetdrew.com/',
+    url: 'https://www.wheresthegarlic.com/',
     images: '/banner.webp',
     siteName: "Where's the garlic?!",
     locale: 'en_US',
