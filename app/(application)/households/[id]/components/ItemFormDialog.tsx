@@ -1,9 +1,11 @@
 'use client';
 
-import { useActionState, useRef } from 'react';
+import { useActionState, useRef, useState } from 'react';
 import { addItem } from '@/app/actions/items';
 import { Enums } from '@/database.types';
 import { useFormStatus } from 'react-dom';
+import PlusIcon from '@/app/icons/PlusIcon';
+import MinusIcon from '@/app/icons/MinusIcon';
 
 type ItemStatus = Enums<'ITEM_STATUS'>;
 const DEFAULT_ITEM_STATUS: ItemStatus = 'FULL';
@@ -55,14 +57,17 @@ const SubmitButton = () => {
 };
 
 const ItemFormDialog = ({ householdId, dialogRef }: ItemFormDialogProps) => {
-  const formRef = useRef<HTMLFormElement>(null);
+  const [formTabKey, setFormTabKey] = useState(0);
 
+  const formRef = useRef<HTMLFormElement>(null);
   const [state, formAction] = useActionState(
     async (_state: typeof initialState, formData: FormData) => {
       const result = await addItem(householdId, formData);
 
       if (result?.success) {
         dialogRef.current?.close();
+        formRef.current?.reset();
+        setFormTabKey(prev => prev + 1);
       }
       return result;
     },
@@ -72,6 +77,7 @@ const ItemFormDialog = ({ householdId, dialogRef }: ItemFormDialogProps) => {
   const handleClose = () => {
     dialogRef.current?.close();
     formRef.current?.reset();
+    setFormTabKey(prev => prev + 1);
   };
 
   return (
@@ -133,34 +139,11 @@ const ItemFormDialog = ({ householdId, dialogRef }: ItemFormDialogProps) => {
               maxLength={25}
               required
             />
+            <ItemTypeTabs key={formTabKey} />
             <p aria-live='polite' className='sr-only' role='status'>
               {state?.message}
             </p>
           </div>
-          <fieldset className='mt-8'>
-            <legend className='font-medium'>Current status</legend>
-            <div className='grid grid-cols-2 gap-2 mt-1'>
-              {Object.entries(StatusLabels).map(([value, label]) => (
-                <label
-                  key={value}
-                  className={getStatusClasses(value as ItemStatus)}
-                >
-                  <input
-                    type='radio'
-                    name='status'
-                    value={value}
-                    className='sr-only'
-                    required
-                    defaultChecked={value === DEFAULT_ITEM_STATUS}
-                  />
-                  {label}
-                </label>
-              ))}
-              <p aria-live='polite' className='sr-only' role='status'>
-                {state?.message}
-              </p>
-            </div>
-          </fieldset>
         </div>
         <SubmitButton />
       </form>
@@ -169,3 +152,116 @@ const ItemFormDialog = ({ householdId, dialogRef }: ItemFormDialogProps) => {
 };
 
 export default ItemFormDialog;
+
+const StatusRadioControl = () => {
+  return (
+    <fieldset className='mt-8'>
+      <legend className='font-medium'>Current status</legend>
+      <div className='grid grid-cols-2 gap-2 mt-1'>
+        {Object.entries(StatusLabels).map(([value, label]) => (
+          <label key={value} className={getStatusClasses(value as ItemStatus)}>
+            <input
+              type='radio'
+              name='status'
+              value={value}
+              className='sr-only'
+              required
+              defaultChecked={value === DEFAULT_ITEM_STATUS}
+            />
+            {label}
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  );
+};
+
+const ItemTypeTabs = () => {
+  const [selectedItemType, setSelectedItemType] = useState<
+    'status' | 'quantity'
+  >('status');
+  return (
+    <div className='flex flex-col gap-2 mt-8'>
+      <p className='text-neutral-700'>Track by status or exact quantity</p>
+      <div className='flex items-center gap-1 p-1 bg-neutral-100 rounded-lg'>
+        <button
+          type='button'
+          className={`flex-1 px-4 py-1 rounded-md font-medium transition-colors cursor-pointer ${
+            selectedItemType === 'status'
+              ? 'bg-white shadow-sm'
+              : 'text-neutral-600 hover:text-neutral-900'
+          }`}
+          onClick={() => setSelectedItemType('status')}
+        >
+          Status
+        </button>
+        <button
+          type='button'
+          className={`flex-1 px-4 py-1 rounded-md font-medium transition-colors cursor-pointer ${
+            selectedItemType === 'quantity'
+              ? 'bg-white shadow-sm'
+              : 'text-neutral-600 hover:text-neutral-900'
+          }`}
+          onClick={() => setSelectedItemType('quantity')}
+        >
+          Quantity
+        </button>
+      </div>
+
+      <input type='hidden' name='trackBy' value={selectedItemType} />
+
+      {selectedItemType === 'status' ? (
+        <StatusRadioControl />
+      ) : (
+        <ItemQuantityControl />
+      )}
+    </div>
+  );
+};
+
+const ItemQuantityControl = () => {
+  const [quantity, setQuantity] = useState(0);
+
+  const handleIncrement = () => setQuantity(prev => prev + 1);
+  const handleDecrement = () => setQuantity(prev => Math.max(0, prev - 1));
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value);
+    if (!isNaN(value) && value >= 0) {
+      setQuantity(value);
+    }
+  };
+
+  return (
+    <div className='flex flex-col gap-1 mt-8'>
+      <label className='font-medium' htmlFor='quantity'>
+        Quantity
+      </label>
+      <div className='flex items-center justify-between ring-1 ring-neutral-300 rounded-md'>
+        <button
+          type='button'
+          onClick={handleDecrement}
+          className='px-3 py-2 text-neutral-600 hover:text-neutral-900 transition-colors'
+        >
+          <MinusIcon className='size-4 text-neutral-600 hover:text-neutral-900 transition-colors' />
+        </button>
+        <input
+          id='quantity'
+          type='number'
+          name='quantity'
+          value={quantity}
+          onChange={handleChange}
+          className='w-14 text-center py-2 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
+          min='0'
+          max='100'
+        />
+        <button
+          type='button'
+          onClick={handleIncrement}
+          className='px-4 py-2 text-neutral-600 hover:text-neutral-900 transition-colors cursor-pointer'
+        >
+          <PlusIcon className='size-4 text-neutral-600 hover:text-neutral-900 transition-colors' />
+        </button>
+      </div>
+    </div>
+  );
+};
