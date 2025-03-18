@@ -10,9 +10,25 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
+  generator: 'Next.js',
+  applicationName: "Where's the garlic?!",
+  metadataBase: new URL('https://www.wheresthegarlic.com/'),
   title: "Where's the garlic?!",
   description:
     'Know what’s in your kitchen at a glance—full, halfway, almost done, or out.',
+  keywords: [
+    'app for home grocery inventory',
+    'best home grocery inventory app',
+    'grocery inventory app for home',
+    'home grocery inventory app',
+    'household grocery inventory app',
+  ],
+  authors: [{ name: 'Andrew Rowley', url: 'https://www.internetdrew.com/' }],
+  creator: 'Andrew Rowley',
+  icons: {
+    icon: '/favicon.svg',
+  },
+  referrer: 'strict-origin-when-cross-origin',
 };
 
 export default function RootLayout({
