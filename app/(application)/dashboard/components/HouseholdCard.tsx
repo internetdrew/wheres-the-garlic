@@ -13,7 +13,7 @@ interface HouseholdCardProps {
 
 const HouseholdCard = ({ household }: HouseholdCardProps) => {
   const formattedDate = formatDistance(
-    new Date(household.latest_item[0].last_updated_at),
+    new Date(household.latest_item[0]?.last_updated_at ?? household.created_at),
     new Date(),
     {
       addSuffix: true,
