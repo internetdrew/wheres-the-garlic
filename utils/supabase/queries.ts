@@ -25,6 +25,7 @@ export const getHouseholdByIdQuery = (
           name,
           status,
           notes,
+          quantity,
           last_updated_at,
           last_updated_by(
             full_name,

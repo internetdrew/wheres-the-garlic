@@ -203,3 +203,31 @@ export async function deleteItem(itemId: number) {
     return { message: 'Failed to delete item', success: false };
   }
 }
+
+export async function updateItemQuantity(itemId: number, quantity: number) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error('You must be signed in to update an item');
+  }
+
+  try {
+    const { data: item, error } = await supabase
+      .from('household_items')
+      .update({ quantity })
+      .eq('id', itemId)
+      .select('household_id')
+      .single();
+
+    if (error) throw error;
+
+    revalidatePath(`/households/${item?.household_id}`);
+    return { message: 'Item quantity updated successfully', success: true };
+  } catch (error) {
+    console.error('Error updating item quantity:', error);
+    return { message: 'Failed to update item quantity', success: false };
+  }
+}
