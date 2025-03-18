@@ -21,10 +21,6 @@ export async function addItem(householdId: string, formData: FormData) {
   const quantity = formData.get('quantity') as string;
   const trackBy = formData.get('trackBy') as TrackBy;
 
-  console.log('quantity', quantity);
-  console.log('trackBy', trackBy);
-  console.log('status', status);
-
   const supabase = await createClient();
   const {
     data: { user },
@@ -49,7 +45,6 @@ export async function addItem(householdId: string, formData: FormData) {
     if (error) throw error;
 
     revalidatePath(`/households/${householdId}`);
-
     return { message: 'Item created successfully', success: true };
   } catch (error) {
     console.error('Error creating household:', error);
@@ -217,7 +212,11 @@ export async function updateItemQuantity(itemId: number, quantity: number) {
   try {
     const { data: item, error } = await supabase
       .from('household_items')
-      .update({ quantity })
+      .update({
+        quantity,
+        last_updated_at: new Date().toISOString(),
+        last_updated_by: user.id,
+      })
       .eq('id', itemId)
       .select('household_id')
       .single();
