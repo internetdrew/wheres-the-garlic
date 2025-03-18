@@ -1,4 +1,4 @@
-![repo-banner](./public/banner.jpg)
+![repo-banner](./public/banner.webp)
 
 <div align="center"><strong>Where's the Garlic?!</strong></div>
 <div align="center">A Status-Based Home Grocery Inventory App<br />See what's in your kitchen at a glance—full, halfway, almost done, or out.</div>
