@@ -2,6 +2,7 @@ import { createClient } from '@/utils/supabase/server';
 import { QueryData } from '@supabase/supabase-js';
 
 type SupabaseServerClientType = Awaited<ReturnType<typeof createClient>>;
+export type TrackBy = 'status' | 'quantity';
 
 export const getHouseholdByIdQuery = (
   supabaseClient: SupabaseServerClientType,
@@ -24,6 +25,7 @@ export const getHouseholdByIdQuery = (
           name,
           status,
           notes,
+          quantity,
           last_updated_at,
           last_updated_by(
             full_name,

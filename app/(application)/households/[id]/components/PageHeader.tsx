@@ -74,11 +74,7 @@ const PageHeader = ({ household, itemsCount }: PageHeaderProps) => {
           : 'Add an item to get started.'}
       </p>
 
-      <ItemFormDialog
-        householdId={household.id}
-        dialogRef={addItemDialogRef}
-        mode='create'
-      />
+      <ItemFormDialog householdId={household.id} dialogRef={addItemDialogRef} />
     </header>
   );
 };

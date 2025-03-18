@@ -4,6 +4,7 @@ import { createAdminClient } from '@/utils/supabase/admin';
 import { createClient } from '@/utils/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { Enums } from '@/database.types';
+import { TrackBy } from '@/utils/supabase/queries';
 
 type ItemStatus = Enums<'ITEM_STATUS'>;
 
@@ -17,6 +18,12 @@ export async function addItem(householdId: string, formData: FormData) {
   const name = formData.get('name') as string;
   const notes = formData.get('notes') as string;
   const status = formData.get('status') as ItemStatus;
+  const quantity = formData.get('quantity') as string;
+  const trackBy = formData.get('trackBy') as TrackBy;
+
+  console.log('quantity', quantity);
+  console.log('trackBy', trackBy);
+  console.log('status', status);
 
   const supabase = await createClient();
   const {
@@ -34,7 +41,8 @@ export async function addItem(householdId: string, formData: FormData) {
       household_id: householdId,
       name,
       notes,
-      status,
+      status: trackBy === 'status' ? status : null,
+      quantity: trackBy === 'quantity' ? parseInt(quantity) : null,
       last_updated_by: user.id,
     });
 
@@ -193,5 +201,33 @@ export async function deleteItem(itemId: number) {
   } catch (error) {
     console.error('Error deleting item:', error);
     return { message: 'Failed to delete item', success: false };
+  }
+}
+
+export async function updateItemQuantity(itemId: number, quantity: number) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error('You must be signed in to update an item');
+  }
+
+  try {
+    const { data: item, error } = await supabase
+      .from('household_items')
+      .update({ quantity })
+      .eq('id', itemId)
+      .select('household_id')
+      .single();
+
+    if (error) throw error;
+
+    revalidatePath(`/households/${item?.household_id}`);
+    return { message: 'Item quantity updated successfully', success: true };
+  } catch (error) {
+    console.error('Error updating item quantity:', error);
+    return { message: 'Failed to update item quantity', success: false };
   }
 }

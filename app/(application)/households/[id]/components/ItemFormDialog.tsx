@@ -1,11 +1,14 @@
 'use client';
 
-import { useActionState, useEffect, useRef, useState } from 'react';
-import { addItem, editItem } from '@/app/actions/items';
+import { useActionState, useRef, useState } from 'react';
+import { addItem } from '@/app/actions/items';
 import { Enums } from '@/database.types';
 import { useFormStatus } from 'react-dom';
+import PlusIcon from '@/app/icons/PlusIcon';
+import MinusIcon from '@/app/icons/MinusIcon';
 
 type ItemStatus = Enums<'ITEM_STATUS'>;
+const DEFAULT_ITEM_STATUS: ItemStatus = 'FULL';
 
 const getStatusClasses = (value: ItemStatus) => {
   const baseClasses =
@@ -22,7 +25,7 @@ const getStatusClasses = (value: ItemStatus) => {
   return `${baseClasses} ${colorClasses[value]} hover:bg-neutral-100`;
 };
 
-const statusLabels: Record<ItemStatus, string> = {
+const StatusLabels: Record<ItemStatus, string> = {
   FULL: 'Full',
   HALFWAY: 'Halfway',
   LOW: 'Low',
@@ -32,13 +35,6 @@ const statusLabels: Record<ItemStatus, string> = {
 interface ItemFormDialogProps {
   householdId: string;
   dialogRef: React.RefObject<HTMLDialogElement | null>;
-  mode: 'create' | 'edit';
-  item?: {
-    id: string;
-    name: string;
-    status: ItemStatus;
-    notes?: string | null;
-  };
 }
 
 const initialState = {
@@ -46,7 +42,7 @@ const initialState = {
   success: false,
 };
 
-const SubmitButton = ({ mode }: { mode: 'create' | 'edit' }) => {
+const SubmitButton = () => {
   const { pending } = useFormStatus();
 
   return (
@@ -55,35 +51,23 @@ const SubmitButton = ({ mode }: { mode: 'create' | 'edit' }) => {
       className='bg-neutral-900 text-neutral-200 rounded-md py-2 px-4 font-medium transition-colors cursor-pointer w-fit ml-auto hover:bg-neutral-950 aria-disabled:opacity-50 aria-disabled:cursor-not-allowed'
       aria-disabled={pending}
     >
-      {mode === 'create' ? 'Add' : 'Update'}
+      {pending ? 'Saving...' : 'Save'}
     </button>
   );
 };
 
-const ItemFormDialog = ({
-  householdId,
-  dialogRef,
-  mode,
-  item,
-}: ItemFormDialogProps) => {
+const ItemFormDialog = ({ householdId, dialogRef }: ItemFormDialogProps) => {
+  const [formTabKey, setFormTabKey] = useState(0);
+
   const formRef = useRef<HTMLFormElement>(null);
-  const [selectedStatus, setSelectedStatus] = useState<ItemStatus>(
-    item?.status ?? 'FULL'
-  );
-
-  useEffect(() => {
-    setSelectedStatus(item?.status ?? 'FULL');
-  }, [item]);
-
   const [state, formAction] = useActionState(
     async (_state: typeof initialState, formData: FormData) => {
-      const result =
-        mode === 'create'
-          ? await addItem(householdId, formData)
-          : await editItem(item!.id, formData);
+      const result = await addItem(householdId, formData);
 
       if (result?.success) {
         dialogRef.current?.close();
+        formRef.current?.reset();
+        setFormTabKey(prev => prev + 1);
       }
       return result;
     },
@@ -93,6 +77,7 @@ const ItemFormDialog = ({
   const handleClose = () => {
     dialogRef.current?.close();
     formRef.current?.reset();
+    setFormTabKey(prev => prev + 1);
   };
 
   return (
@@ -135,14 +120,10 @@ const ItemFormDialog = ({
         </header>
 
         <div className='flex justify-between items-center mt-6'>
-          <h2 className='text-lg font-semibold'>
-            {mode === 'create' ? 'Add an item' : 'Edit item'}
-          </h2>
+          <h2 className='text-lg font-semibold'>Add an item</h2>
         </div>
         <p className='text-neutral-700'>
-          {mode === 'create'
-            ? 'You and everyone in your household will be able to see it.'
-            : 'Update your item details below. This will help keep everyone in the know.'}
+          You and everyone in your household will be able to see it.
         </p>
         <div className='flex flex-col my-7 gap-2'>
           <div className='flex flex-col gap-1'>
@@ -157,44 +138,130 @@ const ItemFormDialog = ({
               placeholder='Ex: Toilet paper'
               maxLength={25}
               required
-              defaultValue={item?.name ?? ''}
             />
+            <ItemTypeTabs key={formTabKey} />
             <p aria-live='polite' className='sr-only' role='status'>
               {state?.message}
             </p>
           </div>
-          <fieldset className='mt-8'>
-            <legend className='font-medium'>Current status</legend>
-            <div className='grid grid-cols-2 gap-2 mt-1'>
-              {Object.entries(statusLabels).map(([value, label]) => (
-                <label
-                  key={value}
-                  className={getStatusClasses(value as ItemStatus)}
-                >
-                  <input
-                    type='radio'
-                    name='status'
-                    value={value}
-                    className='sr-only'
-                    required
-                    checked={selectedStatus === value}
-                    onChange={e =>
-                      setSelectedStatus(e.target.value as ItemStatus)
-                    }
-                  />
-                  {label}
-                </label>
-              ))}
-              <p aria-live='polite' className='sr-only' role='status'>
-                {state?.message}
-              </p>
-            </div>
-          </fieldset>
         </div>
-        <SubmitButton mode={mode} />
+        <SubmitButton />
       </form>
     </dialog>
   );
 };
 
 export default ItemFormDialog;
+
+const StatusRadioControl = () => {
+  return (
+    <fieldset className='mt-8'>
+      <legend className='font-medium'>Current status</legend>
+      <div className='grid grid-cols-2 gap-2 mt-1'>
+        {Object.entries(StatusLabels).map(([value, label]) => (
+          <label key={value} className={getStatusClasses(value as ItemStatus)}>
+            <input
+              type='radio'
+              name='status'
+              value={value}
+              className='sr-only'
+              required
+              defaultChecked={value === DEFAULT_ITEM_STATUS}
+            />
+            {label}
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  );
+};
+
+const ItemTypeTabs = () => {
+  const [selectedItemType, setSelectedItemType] = useState<
+    'status' | 'quantity'
+  >('status');
+  return (
+    <div className='flex flex-col gap-2 mt-8'>
+      <p className='text-neutral-700'>Track by status or exact quantity</p>
+      <div className='flex items-center gap-1 p-1 bg-neutral-100 rounded-lg'>
+        <button
+          type='button'
+          className={`flex-1 px-4 py-1 rounded-md font-medium transition-colors cursor-pointer ${
+            selectedItemType === 'status'
+              ? 'bg-white shadow-sm'
+              : 'text-neutral-600 hover:text-neutral-900'
+          }`}
+          onClick={() => setSelectedItemType('status')}
+        >
+          Status
+        </button>
+        <button
+          type='button'
+          className={`flex-1 px-4 py-1 rounded-md font-medium transition-colors cursor-pointer ${
+            selectedItemType === 'quantity'
+              ? 'bg-white shadow-sm'
+              : 'text-neutral-600 hover:text-neutral-900'
+          }`}
+          onClick={() => setSelectedItemType('quantity')}
+        >
+          Quantity
+        </button>
+      </div>
+
+      <input type='hidden' name='trackBy' value={selectedItemType} />
+
+      {selectedItemType === 'status' ? (
+        <StatusRadioControl />
+      ) : (
+        <ItemQuantityControl />
+      )}
+    </div>
+  );
+};
+
+const ItemQuantityControl = () => {
+  const [quantity, setQuantity] = useState(0);
+
+  const handleIncrement = () => setQuantity(prev => prev + 1);
+  const handleDecrement = () => setQuantity(prev => Math.max(0, prev - 1));
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value);
+    if (!isNaN(value) && value >= 0) {
+      setQuantity(value);
+    }
+  };
+
+  return (
+    <div className='flex flex-col gap-1 mt-8'>
+      <label className='font-medium' htmlFor='quantity'>
+        Quantity
+      </label>
+      <div className='flex items-center justify-between ring-1 ring-neutral-300 rounded-md'>
+        <button
+          type='button'
+          onClick={handleDecrement}
+          className='px-4 py-2 text-neutral-600 hover:text-neutral-900 transition-colors cursor-pointer'
+        >
+          <MinusIcon className='size-4 text-neutral-600 hover:text-neutral-900 transition-colors' />
+        </button>
+        <input
+          id='quantity'
+          type='number'
+          name='quantity'
+          value={quantity}
+          onChange={handleChange}
+          className='w-14 text-center py-2 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
+          min='0'
+          max='100'
+        />
+        <button
+          type='button'
+          onClick={handleIncrement}
+          className='px-4 py-2 text-neutral-600 hover:text-neutral-900 transition-colors cursor-pointer'
+        >
+          <PlusIcon className='size-4 text-neutral-600 hover:text-neutral-900 transition-colors' />
+        </button>
+      </div>
+    </div>
+  );
+};
