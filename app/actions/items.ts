@@ -4,6 +4,7 @@ import { createAdminClient } from '@/utils/supabase/admin';
 import { createClient } from '@/utils/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { Enums } from '@/database.types';
+import { TrackBy } from '@/utils/supabase/queries';
 
 type ItemStatus = Enums<'ITEM_STATUS'>;
 
@@ -17,6 +18,12 @@ export async function addItem(householdId: string, formData: FormData) {
   const name = formData.get('name') as string;
   const notes = formData.get('notes') as string;
   const status = formData.get('status') as ItemStatus;
+  const quantity = formData.get('quantity') as string;
+  const trackBy = formData.get('trackBy') as TrackBy;
+
+  console.log('quantity', quantity);
+  console.log('trackBy', trackBy);
+  console.log('status', status);
 
   const supabase = await createClient();
   const {
@@ -34,7 +41,8 @@ export async function addItem(householdId: string, formData: FormData) {
       household_id: householdId,
       name,
       notes,
-      status,
+      status: trackBy === 'status' ? status : null,
+      quantity: trackBy === 'quantity' ? parseInt(quantity) : null,
       last_updated_by: user.id,
     });
 
