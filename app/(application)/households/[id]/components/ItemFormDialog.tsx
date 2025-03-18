@@ -240,7 +240,7 @@ const ItemQuantityControl = () => {
         <button
           type='button'
           onClick={handleDecrement}
-          className='px-3 py-2 text-neutral-600 hover:text-neutral-900 transition-colors'
+          className='px-4 py-2 text-neutral-600 hover:text-neutral-900 transition-colors cursor-pointer'
         >
           <MinusIcon className='size-4 text-neutral-600 hover:text-neutral-900 transition-colors' />
         </button>
