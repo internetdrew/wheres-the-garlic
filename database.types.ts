@@ -43,7 +43,8 @@ export type Database = {
           last_updated_by: string
           name: string
           notes: string | null
-          status: Database["public"]["Enums"]["ITEM_STATUS"]
+          quantity: number | null
+          status: Database["public"]["Enums"]["ITEM_STATUS"] | null
         }
         Insert: {
           created_at?: string
@@ -53,7 +54,8 @@ export type Database = {
           last_updated_by: string
           name: string
           notes?: string | null
-          status: Database["public"]["Enums"]["ITEM_STATUS"]
+          quantity?: number | null
+          status?: Database["public"]["Enums"]["ITEM_STATUS"] | null
         }
         Update: {
           created_at?: string
@@ -63,7 +65,8 @@ export type Database = {
           last_updated_by?: string
           name?: string
           notes?: string | null
-          status?: Database["public"]["Enums"]["ITEM_STATUS"]
+          quantity?: number | null
+          status?: Database["public"]["Enums"]["ITEM_STATUS"] | null
         }
         Relationships: [
           {
