@@ -66,6 +66,7 @@ export const getHouseholdsByUserIdQuery = (
       `
     )
     .eq('member_id', userId)
+    .eq('status', 'APPROVED')
     .order('last_updated_at', {
       referencedTable: 'household.household_items',
       ascending: false,
