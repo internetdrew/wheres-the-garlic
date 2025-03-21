@@ -34,6 +34,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      household_invites: {
+        Row: {
+          accepted_at: string | null
+          created_at: string
+          expires_at: string
+          household_id: string
+          id: string
+          invite_code: string
+          invited_by: string
+          status: Database["public"]["Enums"]["INVITE_STATUS"]
+          updated_at: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          created_at?: string
+          expires_at: string
+          household_id: string
+          id?: string
+          invite_code: string
+          invited_by: string
+          status?: Database["public"]["Enums"]["INVITE_STATUS"]
+          updated_at?: string
+        }
+        Update: {
+          accepted_at?: string | null
+          created_at?: string
+          expires_at?: string
+          household_id?: string
+          id?: string
+          invite_code?: string
+          invited_by?: string
+          status?: Database["public"]["Enums"]["INVITE_STATUS"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "household_invites_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "household_invites_invited_by_fkey"
+            columns: ["invited_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       household_items: {
         Row: {
           created_at: string
@@ -188,6 +239,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      INVITE_STATUS: "PENDING" | "ACCEPTED" | "REJECTED" | "EXPIRED"
       ITEM_STATUS: "FULL" | "HALFWAY" | "LOW" | "OUT"
       MEMBER_ROLE: "CREATOR" | "MEMBER"
     }
