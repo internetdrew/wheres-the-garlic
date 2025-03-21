@@ -142,7 +142,6 @@ export async function requestToJoinHousehold(formData: FormData) {
   const supabaseAdmin = createAdminClient();
 
   try {
-    // First find the household invite
     const { data: invite, error: inviteError } = await supabaseAdmin
       .from('household_invites')
       .select('household_id')
@@ -153,13 +152,12 @@ export async function requestToJoinHousehold(formData: FormData) {
       return { message: 'Invalid invite code', success: false };
     }
 
-    // Check if user is already a member or has a pending request
     const { data: existingMember, error: memberError } = await supabaseAdmin
       .from('household_members')
       .select()
       .eq('household_id', invite.household_id)
       .eq('member_id', user.id)
-      .single();
+      .maybeSingle();
 
     if (existingMember) {
       return {
@@ -170,7 +168,6 @@ export async function requestToJoinHousehold(formData: FormData) {
 
     if (memberError) throw memberError;
 
-    // Create pending membership
     const { error: joinError } = await supabaseAdmin
       .from('household_members')
       .insert({
