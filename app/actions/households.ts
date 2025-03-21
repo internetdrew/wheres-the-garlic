@@ -127,3 +127,68 @@ export async function updateHouseholdName(
 export async function deleteHousehold(householdId: string, formData: FormData) {
   console.log('deleteHousehold', householdId, formData);
 }
+
+export async function requestToJoinHousehold(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error('You must be signed in to join a household');
+  }
+
+  const inviteCode = (formData.get('invite-code') as string).toUpperCase();
+  const supabaseAdmin = createAdminClient();
+
+  try {
+    // First find the household invite
+    const { data: invite, error: inviteError } = await supabaseAdmin
+      .from('household_invites')
+      .select('household_id')
+      .eq('invite_code', inviteCode)
+      .single();
+
+    if (inviteError || !invite) {
+      return { message: 'Invalid invite code', success: false };
+    }
+
+    // Check if user is already a member or has a pending request
+    const { data: existingMember, error: memberError } = await supabaseAdmin
+      .from('household_members')
+      .select()
+      .eq('household_id', invite.household_id)
+      .eq('member_id', user.id)
+      .single();
+
+    if (existingMember) {
+      return {
+        message: 'You are already a member or have a pending request',
+        success: false,
+      };
+    }
+
+    if (memberError) throw memberError;
+
+    // Create pending membership
+    const { error: joinError } = await supabaseAdmin
+      .from('household_members')
+      .insert({
+        household_id: invite.household_id,
+        member_id: user.id,
+        member_role: 'MEMBER',
+        status: 'PENDING',
+      });
+
+    if (joinError) throw joinError;
+
+    revalidatePath('/dashboard');
+    return {
+      message: 'Join request submitted successfully. Waiting for approval.',
+      success: true,
+    };
+  } catch (error) {
+    console.error('Error joining household:', error);
+    return { message: 'Failed to submit join request', success: false };
+  }
+}
