@@ -1,12 +1,48 @@
-import React from 'react';
+import { requestToJoinHousehold } from '@/app/actions/households';
+import React, { useActionState, useRef } from 'react';
+import { useFormStatus } from 'react-dom';
 
 interface JoinHouseholdFormProps {
   dialogRef: React.RefObject<HTMLDialogElement | null>;
 }
 
+const initialState = {
+  message: '',
+  success: false,
+};
+
+const SubmitButton = () => {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      type='submit'
+      className='bg-neutral-900 text-neutral-200 rounded-md py-2 px-4 font-medium transition-colors cursor-pointer w-fit ml-auto hover:bg-neutral-950 aria-disabled:opacity-50 aria-disabled:cursor-not-allowed'
+      aria-disabled={pending}
+    >
+      {pending ? 'Submitting...' : 'Request to join'}
+    </button>
+  );
+};
+
 const JoinHouseholdForm = ({ dialogRef }: JoinHouseholdFormProps) => {
+  const formRef = useRef<HTMLFormElement>(null);
+  const [state, formAction] = useActionState(
+    async (_state: typeof initialState, formData: FormData) => {
+      const result = await requestToJoinHousehold(formData);
+      if (result?.success) {
+        dialogRef.current?.close();
+      } else {
+        console.log('result', result.message);
+      }
+      return result;
+    },
+    initialState
+  );
+
   const handleClose = () => {
     dialogRef.current?.close();
+    formRef.current?.reset();
   };
 
   return (
@@ -14,7 +50,7 @@ const JoinHouseholdForm = ({ dialogRef }: JoinHouseholdFormProps) => {
       ref={dialogRef}
       className='mx-auto my-auto max-w-sm rounded-xl backdrop:bg-black/50 backdrop:opacity-50'
     >
-      <form className='flex flex-col p-6'>
+      <form ref={formRef} action={formAction} className='flex flex-col p-6'>
         <header className='flex justify-between items-center'>
           <svg
             xmlns='http://www.w3.org/2000/svg'
@@ -32,8 +68,8 @@ const JoinHouseholdForm = ({ dialogRef }: JoinHouseholdFormProps) => {
 
           <button
             type='button'
-            className='text-sm text-neutral-700 cursor-pointer'
             onClick={handleClose}
+            className='text-sm text-neutral-700 cursor-pointer'
           >
             <svg
               xmlns='http://www.w3.org/2000/svg'
@@ -60,37 +96,26 @@ const JoinHouseholdForm = ({ dialogRef }: JoinHouseholdFormProps) => {
         </p>
         <div className='flex flex-col gap-4 my-7'>
           <div className='flex flex-col gap-1'>
-            <label htmlFor='household-id' className='font-medium'>
-              Household ID
+            <label htmlFor='invite-code' className='font-medium'>
+              Invite Code
             </label>
             <input
-              name='household-id'
+              name='invite-code'
               type='text'
-              id='household-id'
+              id='invite-code'
               className='block rounded-md p-2 ring-1 ring-neutral-300'
-              placeholder='Ex: 123456'
-            />
-          </div>
-          <div className='flex flex-col gap-1'>
-            <label htmlFor='password' className='font-medium'>
-              Password
-            </label>
-            <input
-              name='password'
-              type='password'
-              id='password'
-              className='block rounded-md p-2 ring-1 ring-neutral-300'
-              placeholder='Ex: 123456'
+              placeholder='Enter code (e.g., ABC123)'
+              maxLength={6}
+              pattern='[A-Za-z0-9]{6}'
+              required
+              autoComplete='off'
             />
           </div>
         </div>
-
-        <button
-          type='submit'
-          className='bg-neutral-900 text-neutral-200 rounded-md py-2 px-4 font-medium transition-colors cursor-pointer w-fit ml-auto hover:bg-neutral-950'
-        >
-          Join
-        </button>
+        <p aria-live='polite' className='sr-only' role='status'>
+          {state?.message}
+        </p>
+        <SubmitButton />
       </form>
     </dialog>
   );
