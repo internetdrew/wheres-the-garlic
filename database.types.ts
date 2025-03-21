@@ -36,37 +36,22 @@ export type Database = {
     Tables: {
       household_invites: {
         Row: {
-          accepted_at: string | null
           created_at: string
-          expires_at: string
           household_id: string
           id: string
           invite_code: string
-          invited_by: string
-          status: Database["public"]["Enums"]["INVITE_STATUS"]
-          updated_at: string
         }
         Insert: {
-          accepted_at?: string | null
           created_at?: string
-          expires_at: string
           household_id: string
           id?: string
           invite_code: string
-          invited_by: string
-          status?: Database["public"]["Enums"]["INVITE_STATUS"]
-          updated_at?: string
         }
         Update: {
-          accepted_at?: string | null
           created_at?: string
-          expires_at?: string
           household_id?: string
           id?: string
           invite_code?: string
-          invited_by?: string
-          status?: Database["public"]["Enums"]["INVITE_STATUS"]
-          updated_at?: string
         }
         Relationships: [
           {
@@ -74,13 +59,6 @@ export type Database = {
             columns: ["household_id"]
             isOneToOne: false
             referencedRelation: "households"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "household_invites_invited_by_fkey"
-            columns: ["invited_by"]
-            isOneToOne: false
-            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -143,6 +121,7 @@ export type Database = {
           joined_at: string
           member_id: string
           member_role: Database["public"]["Enums"]["MEMBER_ROLE"]
+          status: Database["public"]["Enums"]["MEMBER_STATUS"]
         }
         Insert: {
           household_id: string
@@ -150,6 +129,7 @@ export type Database = {
           joined_at?: string
           member_id: string
           member_role: Database["public"]["Enums"]["MEMBER_ROLE"]
+          status?: Database["public"]["Enums"]["MEMBER_STATUS"]
         }
         Update: {
           household_id?: string
@@ -157,6 +137,7 @@ export type Database = {
           joined_at?: string
           member_id?: string
           member_role?: Database["public"]["Enums"]["MEMBER_ROLE"]
+          status?: Database["public"]["Enums"]["MEMBER_STATUS"]
         }
         Relationships: [
           {
@@ -239,9 +220,9 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      INVITE_STATUS: "PENDING" | "ACCEPTED" | "REJECTED" | "EXPIRED"
       ITEM_STATUS: "FULL" | "HALFWAY" | "LOW" | "OUT"
       MEMBER_ROLE: "CREATOR" | "MEMBER"
+      MEMBER_STATUS: "PENDING" | "APPROVED"
     }
     CompositeTypes: {
       [_ in never]: never
