@@ -3,6 +3,7 @@
 import { createAdminClient } from '@/utils/supabase/admin';
 import { createClient } from '@/utils/supabase/server';
 import { revalidatePath } from 'next/cache';
+import { nanoid } from 'nanoid';
 
 export async function createHousehold(formData: FormData) {
   const supabase = await createClient();
@@ -38,6 +39,16 @@ export async function createHousehold(formData: FormData) {
       });
 
     if (memberError) throw memberError;
+
+    const inviteCode = nanoid(6).toUpperCase();
+    const { error: inviteError } = await supabaseAdmin
+      .from('household_invites')
+      .insert({
+        household_id: household.id,
+        invite_code: inviteCode,
+      });
+
+    if (inviteError) throw inviteError;
 
     revalidatePath('/dashboard');
     return { message: 'Household created successfully', success: true };
