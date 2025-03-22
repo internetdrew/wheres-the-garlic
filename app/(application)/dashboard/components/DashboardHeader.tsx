@@ -9,7 +9,7 @@ const UserGreeting = () => {
   const { user, userLoading, userError } = useUser();
 
   if (userLoading) {
-    return <div className='w-48 h-7 bg-neutral-500 animate-pulse'></div>;
+    return <div className='w-48 h-7 bg-neutral-800 animate-pulse'></div>;
   }
 
   if (userError) {
