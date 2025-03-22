@@ -34,16 +34,19 @@ const PendingMemberCard = ({
         height={20}
         className='rounded-full'
       />
-      <div className='flex flex-col gap-4'>
+      <div className='flex flex-col'>
         <p className='select-none'>
           <strong>{membership.member.full_name}</strong> wants to join{' '}
           <strong>{membership.household.title}</strong>
         </p>
-        <div className='flex items-center gap-2 text-xs'>
-          <button className='ring-1 ring-neutral-700 font-medium py-1.5 px-3 rounded-md cursor-pointer'>
+        <p className='select-none text-xs text-neutral-400 mt-1'>
+          {membership.member.email_address}
+        </p>
+        <div className='flex items-center gap-2 text-xs mt-4'>
+          <button className='ring-1 ring-neutral-700 font-medium py-1.5 px-3 rounded-md cursor-pointer hover:bg-neutral-800 transition-colors'>
             Decline
           </button>
-          <button className='bg-neutral-200 text-neutral-950 font-medium py-1.5 px-3 rounded-md cursor-pointer hover:bg-neutral-300'>
+          <button className='bg-neutral-200 text-neutral-950 font-medium py-1.5 px-3 rounded-md cursor-pointer hover:bg-neutral-300 transition-colors'>
             Accept
           </button>
         </div>
