@@ -2,14 +2,21 @@
 import React, { useRef } from 'react';
 import CreateHouseholdFormDialog from './CreateHouseholdFormDialog';
 import JoinHouseholdForm from './JoinHouseholdForm';
+import { useHouseholdMemberships } from '@/app/hooks/useHouseholdMemberships';
 
-type HouseholdFormTriggersProps = {
-  householdCount: number;
+const LoadingButtons = () => {
+  return (
+    <div className='flex items-center gap-4 text-sm mt-4'>
+      <div className='h-9 w-32 bg-neutral-800 rounded-md animate-pulse'></div>
+      <div className='h-9 w-32 bg-neutral-800 rounded-md animate-pulse'></div>
+    </div>
+  );
 };
 
-const HouseholdFormTriggers = ({
-  householdCount,
-}: HouseholdFormTriggersProps) => {
+const HouseholdFormTriggers = () => {
+  const { memberships, membershipsLoading, membershipsError } =
+    useHouseholdMemberships();
+
   const createDialogRef = useRef<HTMLDialogElement>(null);
   const joinDialogRef = useRef<HTMLDialogElement>(null);
 
@@ -21,25 +28,33 @@ const HouseholdFormTriggers = ({
     joinDialogRef.current?.showModal();
   };
 
+  if (membershipsLoading) {
+    return <LoadingButtons />;
+  }
+
+  if (membershipsError) {
+    return <div>Error loading households</div>;
+  }
+
   return (
     <>
       <div className='flex items-center gap-4 text-sm mt-4'>
         <button
           onClick={triggerCreateHouseholdModal}
-          disabled={householdCount >= 3}
+          disabled={memberships?.length >= 3}
           className={`bg-neutral-200 text-neutral-800 rounded-md p-2 font-medium hover:bg-neutral-300 transition-colors ${
-            householdCount >= 3
+            memberships?.length >= 3
               ? 'opacity-50 cursor-not-allowed'
               : 'cursor-pointer'
           }`}
-          aria-disabled={householdCount >= 3}
+          aria-disabled={memberships?.length >= 3}
           aria-label={
-            householdCount >= 3
+            memberships?.length >= 3
               ? 'You have reached the maximum number of households'
               : 'Create a household'
           }
           title={
-            householdCount >= 3
+            memberships?.length >= 3
               ? "You've reached the maximum number of households"
               : 'Create a household'
           }
