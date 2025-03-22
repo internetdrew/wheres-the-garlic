@@ -30,7 +30,7 @@ const HouseholdMembershipsStatus = () => {
     useHouseholdMemberships();
 
   if (membershipsLoading) {
-    return <div className='w-56 h-5 bg-neutral-500 animate-pulse'></div>;
+    return <div className='w-56 h-6 bg-neutral-500 animate-pulse'></div>;
   }
 
   if (membershipsError) {
@@ -39,9 +39,7 @@ const HouseholdMembershipsStatus = () => {
 
   return (
     <div className='text-neutral-500'>
-      {membershipsLoading ? (
-        <div className='w-56 h-5 bg-neutral-500 animate-pulse'></div>
-      ) : memberships?.length === 0 ? (
+      {memberships?.length === 0 ? (
         <p>You&apos;re not part of any households yet!</p>
       ) : (
         <p>You&apos;re part of the following households:</p>
