@@ -41,7 +41,7 @@ export const getHouseholdByIdQuery = (
 
 export type Household = QueryData<ReturnType<typeof getHouseholdByIdQuery>>;
 
-export const getHouseholdsByUserIdQuery = (
+export const getHouseholdMembershipsQuery = (
   supabaseClient: SupabaseServerClientType,
   userId: string
 ) => {
@@ -75,5 +75,5 @@ export const getHouseholdsByUserIdQuery = (
 };
 
 export type HouseholdsByUserId = QueryData<
-  ReturnType<typeof getHouseholdsByUserIdQuery>
+  ReturnType<typeof getHouseholdMembershipsQuery>
 >;
