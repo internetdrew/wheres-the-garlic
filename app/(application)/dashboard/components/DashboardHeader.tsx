@@ -30,7 +30,7 @@ const HouseholdMembershipsStatus = () => {
     useHouseholdMemberships();
 
   if (membershipsLoading) {
-    return <div className='w-56 h-6 bg-neutral-500 animate-pulse'></div>;
+    return <div className='w-56 h-6 bg-neutral-800 animate-pulse'></div>;
   }
 
   if (membershipsError) {
