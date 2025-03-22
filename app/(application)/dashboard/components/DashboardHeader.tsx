@@ -9,14 +9,14 @@ const UserGreeting = () => {
   const { user, userLoading, userError } = useUser();
 
   if (userLoading) {
-    return <div className='w-48 h-6 bg-neutral-500 animate-pulse'></div>;
+    return <div className='w-48 h-7 bg-neutral-500 animate-pulse'></div>;
   }
 
   if (userError) {
     return (
-      <div className='text-lg font-bold'>
+      <h1 className='text-lg font-bold'>
         Error loading user. Please try again.
-      </div>
+      </h1>
     );
   }
 
