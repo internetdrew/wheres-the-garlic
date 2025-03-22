@@ -77,3 +77,34 @@ export const getHouseholdMembershipsQuery = (
 export type HouseholdsByUserId = QueryData<
   ReturnType<typeof getHouseholdMembershipsQuery>
 >;
+
+export const getPendingMembershipsQuery = (
+  supabaseClient: SupabaseServerClientType,
+  userId: string
+) => {
+  return supabaseClient
+    .from('household_members')
+    .select(
+      `
+      id,
+      status,
+      member:member_id(
+        id,
+        full_name,
+        avatar_url,
+        email_address
+      ),
+      household:household_id(
+        id,
+        title,
+        creator_id
+      )
+    `
+    )
+    .eq('status', 'PENDING')
+    .eq('household.creator_id', userId);
+};
+
+export type PendingMemberships = QueryData<
+  ReturnType<typeof getPendingMembershipsQuery>
+>;
