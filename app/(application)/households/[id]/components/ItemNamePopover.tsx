@@ -72,13 +72,13 @@ const ItemNamePopover = ({ item }: ItemNamePopoverProps) => {
                 { revalidate: false }
               );
 
-              close();
-              formRef.current?.reset();
-
               const result = await updateItemName(item.id, formData);
 
               if (!result?.success) {
                 mutateHousehold();
+              } else {
+                close();
+                formRef.current?.reset();
               }
             }}
             className='bg-neutral-100 p-4 rounded-md shadow-lg ring-1 ring-neutral-950/5'
