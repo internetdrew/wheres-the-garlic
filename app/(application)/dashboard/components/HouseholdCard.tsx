@@ -26,12 +26,17 @@ const HouseholdCard = ({ household }: HouseholdCardProps) => {
   return (
     <li
       key={household.id}
-      className='relative bg-neutral-200 text-neutral-900 rounded-xl p-4 hover:bg-neutral-300 transition-colors'
+      className='relative bg-neutral-100 text-neutral-900 rounded-xl p-4 transition-colors'
     >
-      <Link href={`/households/${household.id}`} className='font-medium'>
-        <span className='absolute inset-0' />
-        {household.title}
-      </Link>
+      <div className='flex items-center justify-between'>
+        <Link href={`/households/${household.id}`} className='font-medium'>
+          <span className='absolute inset-0' />
+          {household.title}
+        </Link>
+        <button className='ring-1 z-10 ring-neutral-300 rounded-md p-2 cursor-pointer hover:ring-neutral-400 transition-colors text-sm leading-none font-medium'>
+          Invite
+        </button>
+      </div>
       <p className='text-sm text-neutral-600'>Last updated {formattedDate}</p>
       <p className='text-sm text-neutral-600 mt-8'>Created by:</p>
       <div className='flex items-center gap-2 mt-1'>
