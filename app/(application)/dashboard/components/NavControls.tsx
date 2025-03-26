@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { usePendingMemberships } from '@/app/hooks/usePendingMemberships';
 import { PendingMemberships } from '@/utils/supabase/queries';
 import Image from 'next/image';
+import { acceptMembership, declineMembership } from '@/app/actions/members';
 
 const PendingMembersPing = () => {
   return (
@@ -22,6 +23,25 @@ const PendingMemberCard = ({
 }: {
   membership: PendingMemberships[number];
 }) => {
+  const { mutatePendingMemberships } = usePendingMemberships();
+  const handleDecline = async () => {
+    const result = await declineMembership(membership.id);
+    if (result.success) {
+      mutatePendingMemberships();
+    } else {
+      // Error toast here
+    }
+  };
+
+  const handleAccept = async () => {
+    const result = await acceptMembership(membership.id);
+    if (result.success) {
+      mutatePendingMemberships();
+    } else {
+      // Error toast here
+    }
+  };
+
   return (
     <li
       key={membership.id}
@@ -43,10 +63,16 @@ const PendingMemberCard = ({
           {membership.member.email_address}
         </p>
         <div className='flex items-center gap-2 text-xs mt-4'>
-          <button className='ring-1 ring-neutral-700 font-medium py-1.5 px-3 rounded-md cursor-pointer hover:bg-neutral-800 transition-colors'>
+          <button
+            onClick={handleDecline}
+            className='ring-1 ring-neutral-700 font-medium py-1.5 px-3 rounded-md cursor-pointer hover:bg-neutral-800 transition-colors'
+          >
             Decline
           </button>
-          <button className='bg-neutral-200 text-neutral-950 font-medium py-1.5 px-3 rounded-md cursor-pointer hover:bg-neutral-300 transition-colors'>
+          <button
+            onClick={handleAccept}
+            className='bg-neutral-200 text-neutral-950 font-medium py-1.5 px-3 rounded-md cursor-pointer hover:bg-neutral-300 transition-colors'
+          >
             Accept
           </button>
         </div>
