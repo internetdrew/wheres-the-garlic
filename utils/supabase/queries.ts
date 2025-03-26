@@ -36,7 +36,7 @@ export const getHouseholdByIdQuery = (
     )
     .eq('id', id)
     .order('id', { referencedTable: 'items', ascending: true })
-    .single();
+    .maybeSingle();
 };
 
 export type Household = QueryData<ReturnType<typeof getHouseholdByIdQuery>>;
