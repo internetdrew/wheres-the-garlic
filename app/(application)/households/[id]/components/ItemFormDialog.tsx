@@ -6,6 +6,7 @@ import { Enums } from '@/database.types';
 import { useFormStatus } from 'react-dom';
 import PlusIcon from '@/app/icons/PlusIcon';
 import MinusIcon from '@/app/icons/MinusIcon';
+import { useHousehold } from '@/app/hooks/useHousehold';
 
 type ItemStatus = Enums<'ITEM_STATUS'>;
 const DEFAULT_ITEM_STATUS: ItemStatus = 'FULL';
@@ -58,6 +59,7 @@ const SubmitButton = () => {
 
 const ItemFormDialog = ({ householdId, dialogRef }: ItemFormDialogProps) => {
   const [formTabKey, setFormTabKey] = useState(0);
+  const { mutateHousehold } = useHousehold(householdId);
 
   const formRef = useRef<HTMLFormElement>(null);
   const [state, formAction] = useActionState(
@@ -68,6 +70,7 @@ const ItemFormDialog = ({ householdId, dialogRef }: ItemFormDialogProps) => {
         dialogRef.current?.close();
         formRef.current?.reset();
         setFormTabKey(prev => prev + 1);
+        mutateHousehold();
       }
       return result;
     },
