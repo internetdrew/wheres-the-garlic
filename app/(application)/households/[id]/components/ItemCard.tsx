@@ -11,6 +11,7 @@ import TrashIcon from '@/app/icons/TrashIcon';
 import PlusIcon from '@/app/icons/PlusIcon';
 import MinusIcon from '@/app/icons/MinusIcon';
 import { useDebouncedCallback } from 'use-debounce';
+import { useHousehold } from '@/app/hooks/useHousehold';
 
 type ItemStatus = Enums<'ITEM_STATUS'>;
 type Item = Household['items'][number];
@@ -29,6 +30,8 @@ const ItemCard = ({ item, householdId, onDeleteClick }: ItemCardProps) => {
     });
   }, [item.last_updated_at]);
 
+  const { mutateHousehold } = useHousehold(householdId);
+
   const handleStatusChange = async (item: Item, newStatus: ItemStatus) => {
     try {
       const result = await updateItemStatus({
@@ -39,6 +42,20 @@ const ItemCard = ({ item, householdId, onDeleteClick }: ItemCardProps) => {
 
       if (result.success) {
         // Toast will go here.
+        mutateHousehold(
+          prev => {
+            if (!prev) return prev;
+            return {
+              household: {
+                ...prev.household,
+                items: prev.household.items.map(i =>
+                  i.id === item.id ? { ...i, status: newStatus } : i
+                ),
+              },
+            };
+          },
+          { revalidate: false }
+        );
       }
     } catch (error) {
       console.error('Failed to update status:', error);
