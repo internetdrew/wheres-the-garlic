@@ -26,6 +26,7 @@ export const getHouseholdByIdQuery = (
           status,
           notes,
           quantity,
+          household_id,
           last_updated_at,
           last_updated_by(
             full_name,
@@ -36,12 +37,12 @@ export const getHouseholdByIdQuery = (
     )
     .eq('id', id)
     .order('id', { referencedTable: 'items', ascending: true })
-    .single();
+    .maybeSingle();
 };
 
 export type Household = QueryData<ReturnType<typeof getHouseholdByIdQuery>>;
 
-export const getHouseholdsByUserIdQuery = (
+export const getHouseholdMembershipsQuery = (
   supabaseClient: SupabaseServerClientType,
   userId: string
 ) => {
@@ -60,12 +61,16 @@ export const getHouseholdsByUserIdQuery = (
         created_at,
         latest_item:household_items(
           last_updated_at
+        ),
+        invite:household_invites(
+          invite_code
         )
       ),
       member_role
       `
     )
     .eq('member_id', userId)
+    .eq('status', 'APPROVED')
     .order('last_updated_at', {
       referencedTable: 'household.household_items',
       ascending: false,
@@ -74,5 +79,36 @@ export const getHouseholdsByUserIdQuery = (
 };
 
 export type HouseholdsByUserId = QueryData<
-  ReturnType<typeof getHouseholdsByUserIdQuery>
+  ReturnType<typeof getHouseholdMembershipsQuery>
+>;
+
+export const getPendingMembershipsQuery = (
+  supabaseClient: SupabaseServerClientType,
+  userId: string
+) => {
+  return supabaseClient
+    .from('household_members')
+    .select(
+      `
+      id,
+      status,
+      member:member_id(
+        id,
+        full_name,
+        avatar_url,
+        email_address
+      ),
+      household:household_id(
+        id,
+        title,
+        creator_id
+      )
+    `
+    )
+    .eq('status', 'PENDING')
+    .eq('household.creator_id', userId);
+};
+
+export type PendingMemberships = QueryData<
+  ReturnType<typeof getPendingMembershipsQuery>
 >;

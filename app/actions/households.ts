@@ -3,6 +3,7 @@
 import { createAdminClient } from '@/utils/supabase/admin';
 import { createClient } from '@/utils/supabase/server';
 import { revalidatePath } from 'next/cache';
+import { nanoid } from 'nanoid';
 
 export async function createHousehold(formData: FormData) {
   const supabase = await createClient();
@@ -38,6 +39,16 @@ export async function createHousehold(formData: FormData) {
       });
 
     if (memberError) throw memberError;
+
+    const inviteCode = nanoid(6).toUpperCase();
+    const { error: inviteError } = await supabaseAdmin
+      .from('household_invites')
+      .insert({
+        household_id: household.id,
+        invite_code: inviteCode,
+      });
+
+    if (inviteError) throw inviteError;
 
     revalidatePath('/dashboard');
     return { message: 'Household created successfully', success: true };
@@ -113,6 +124,68 @@ export async function updateHouseholdName(
   }
 }
 
-export async function deleteHousehold(householdId: string, formData: FormData) {
-  console.log('deleteHousehold', householdId, formData);
+// export async function deleteHousehold(householdId: string, formData: FormData) {
+//   console.log('deleteHousehold', householdId, formData);
+// }
+
+export async function requestToJoinHousehold(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error('You must be signed in to join a household');
+  }
+
+  const inviteCode = (formData.get('invite-code') as string).toUpperCase();
+  const supabaseAdmin = createAdminClient();
+
+  try {
+    const { data: invite, error: inviteError } = await supabaseAdmin
+      .from('household_invites')
+      .select('household_id')
+      .eq('invite_code', inviteCode)
+      .single();
+
+    if (inviteError || !invite) {
+      return { message: 'Invalid invite code', success: false };
+    }
+
+    const { data: existingMember, error: memberError } = await supabaseAdmin
+      .from('household_members')
+      .select()
+      .eq('household_id', invite.household_id)
+      .eq('member_id', user.id)
+      .maybeSingle();
+
+    if (existingMember) {
+      return {
+        message: 'You are already a member or have a pending request',
+        success: false,
+      };
+    }
+
+    if (memberError) throw memberError;
+
+    const { error: joinError } = await supabaseAdmin
+      .from('household_members')
+      .insert({
+        household_id: invite.household_id,
+        member_id: user.id,
+        member_role: 'MEMBER',
+        status: 'PENDING',
+      });
+
+    if (joinError) throw joinError;
+
+    revalidatePath('/dashboard');
+    return {
+      message: 'Join request submitted successfully. Waiting for approval.',
+      success: true,
+    };
+  } catch (error) {
+    console.error('Error joining household:', error);
+    return { message: 'Failed to submit join request', success: false };
+  }
 }

@@ -5,8 +5,12 @@ import {
   ListboxOption,
 } from '@headlessui/react';
 import { Enums } from '@/database.types';
+import { useHousehold } from '@/app/hooks/useHousehold';
+import { updateItemStatus } from '@/app/actions/items';
+import { Household } from '@/utils/supabase/queries';
 
 type ItemStatus = Enums<'ITEM_STATUS'>;
+type Item = Household['items'][number];
 
 const statusDisplay: Record<ItemStatus, string> = {
   FULL: 'Full',
@@ -35,22 +39,86 @@ const statuses = Object.entries(statusDisplay).map(([value, label]) => ({
 }));
 
 interface ItemCardStatusSelectProps {
-  value: ItemStatus;
-  onChange: (value: string) => void;
+  status: ItemStatus;
+  item: Item;
+  householdId: string;
 }
 
 const ItemCardStatusSelect = ({
-  value,
-  onChange,
+  status,
+  item,
+  householdId,
 }: ItemCardStatusSelectProps) => {
+  const { mutateHousehold } = useHousehold(householdId);
+
+  const handleStatusChange = async (newStatus: ItemStatus) => {
+    const previousStatus = item.status;
+
+    mutateHousehold(
+      prev => {
+        if (!prev) return prev;
+        return {
+          household: {
+            ...prev.household,
+            items: prev.household.items.map(i =>
+              i.id === item.id ? { ...i, status: newStatus } : i
+            ),
+          },
+        };
+      },
+      { revalidate: false }
+    );
+
+    try {
+      const result = await updateItemStatus({
+        itemId: item.id,
+        status: newStatus,
+        householdId: householdId,
+      });
+
+      if (!result.success) {
+        mutateHousehold(
+          prev => {
+            if (!prev) return prev;
+            return {
+              household: {
+                ...prev.household,
+                items: prev.household.items.map(i =>
+                  i.id === item.id ? { ...i, status: previousStatus } : i
+                ),
+              },
+            };
+          },
+          { revalidate: false }
+        );
+      }
+    } catch (error) {
+      console.error('Failed to update status:', error);
+      mutateHousehold(
+        prev => {
+          if (!prev) return prev;
+          return {
+            household: {
+              ...prev.household,
+              items: prev.household.items.map(i =>
+                i.id === item.id ? { ...i, status: previousStatus } : i
+              ),
+            },
+          };
+        },
+        { revalidate: false }
+      );
+    }
+  };
+
   return (
-    <Listbox value={value} onChange={onChange}>
+    <Listbox value={status} onChange={handleStatusChange}>
       <div className='relative'>
         <ListboxButton className='mt-2 cursor-pointer text-neutral-600 flex items-center gap-2 hover:text-neutral-900 transition-colors group'>
           <span
-            className={`inline-block w-2 h-2 rounded-full ${statusColors[value]} ${statusAnimations[value]}`}
+            className={`inline-block w-2 h-2 rounded-full ${statusColors[status]} ${statusAnimations[status]}`}
           />
-          <span>{statusDisplay[value]}</span>
+          <span>{statusDisplay[status]}</span>
           <svg
             xmlns='http://www.w3.org/2000/svg'
             fill='none'

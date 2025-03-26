@@ -3,6 +3,7 @@
 import React, { useActionState, useRef } from 'react';
 import { useFormStatus } from 'react-dom';
 import { createHousehold } from '@/app/actions/households';
+import { useHouseholdMemberships } from '@/app/hooks/useHouseholdMemberships';
 
 interface HouseholdFormDialogProps {
   dialogRef: React.RefObject<HTMLDialogElement | null>;
@@ -29,12 +30,18 @@ const SubmitButton = () => {
 
 const CreateHouseholdFormDialog = ({ dialogRef }: HouseholdFormDialogProps) => {
   const formRef = useRef<HTMLFormElement>(null);
+  const { mutateMemberships } = useHouseholdMemberships();
+
   const [state, formAction] = useActionState(
     async (_state: typeof initialState, formData: FormData) => {
       const result = await createHousehold(formData);
 
-      if (result?.success) {
+      if (!result.success) {
+        // failure toast goes here
+      } else {
         dialogRef.current?.close();
+        formRef.current?.reset();
+        mutateMemberships();
       }
       return result;
     },

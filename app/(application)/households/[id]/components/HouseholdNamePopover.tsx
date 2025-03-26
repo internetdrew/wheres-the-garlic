@@ -1,10 +1,10 @@
 'use client';
 
 import { useRef } from 'react';
-import { Household } from '@/utils/supabase/queries';
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import { useFormStatus } from 'react-dom';
 import { updateHouseholdName } from '@/app/actions/households';
+import { useHousehold } from '@/app/hooks/useHousehold';
 
 const SubmitButton = () => {
   const { pending } = useFormStatus();
@@ -20,8 +20,15 @@ const SubmitButton = () => {
   );
 };
 
-const HouseholdNamePopover = ({ household }: { household: Household }) => {
+const HouseholdNamePopover = ({
+  householdId,
+  householdTitle,
+}: {
+  householdId: string;
+  householdTitle: string;
+}) => {
   const formRef = useRef<HTMLFormElement>(null);
+  const { mutateHousehold } = useHousehold(householdId);
 
   return (
     <Popover className='relative'>
@@ -47,10 +54,11 @@ const HouseholdNamePopover = ({ household }: { household: Household }) => {
           <form
             ref={formRef}
             action={async formData => {
-              const result = await updateHouseholdName(household.id, formData);
+              const result = await updateHouseholdName(householdId, formData);
               if (result?.success) {
                 close();
                 formRef.current?.reset();
+                mutateHousehold();
               }
             }}
             className='bg-neutral-100 p-4 rounded-md text-neutral-900 shadow-lg ring-1 ring-neutral-950/5'
@@ -62,7 +70,7 @@ const HouseholdNamePopover = ({ household }: { household: Household }) => {
               <input
                 type='text'
                 name='household-name'
-                defaultValue={household.title}
+                defaultValue={householdTitle}
                 className='rounded-sm px-2 py-1 ring-1 ring-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-400'
                 placeholder='Household name'
                 maxLength={25}

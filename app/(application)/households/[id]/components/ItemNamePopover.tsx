@@ -5,6 +5,7 @@ import { updateItemName } from '@/app/actions/items';
 import { Household } from '@/utils/supabase/queries';
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import { useFormStatus } from 'react-dom';
+import { useHousehold } from '@/app/hooks/useHousehold';
 
 type Item = Household['items'][number];
 
@@ -28,6 +29,7 @@ interface ItemNamePopoverProps {
 
 const ItemNamePopover = ({ item }: ItemNamePopoverProps) => {
   const formRef = useRef<HTMLFormElement>(null);
+  const { mutateHousehold } = useHousehold(item.household_id);
 
   return (
     <Popover className='relative'>
@@ -53,8 +55,28 @@ const ItemNamePopover = ({ item }: ItemNamePopoverProps) => {
           <form
             ref={formRef}
             action={async formData => {
+              const newName = formData.get('name') as string;
+
+              mutateHousehold(
+                prev => {
+                  if (!prev) return prev;
+                  return {
+                    household: {
+                      ...prev.household,
+                      items: prev.household.items.map(i =>
+                        i.id === item.id ? { ...i, name: newName } : i
+                      ),
+                    },
+                  };
+                },
+                { revalidate: false }
+              );
+
               const result = await updateItemName(item.id, formData);
-              if (result?.success) {
+
+              if (!result?.success) {
+                mutateHousehold();
+              } else {
                 close();
                 formRef.current?.reset();
               }

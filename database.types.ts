@@ -34,6 +34,35 @@ export type Database = {
   }
   public: {
     Tables: {
+      household_invites: {
+        Row: {
+          created_at: string
+          household_id: string
+          id: string
+          invite_code: string
+        }
+        Insert: {
+          created_at?: string
+          household_id: string
+          id?: string
+          invite_code: string
+        }
+        Update: {
+          created_at?: string
+          household_id?: string
+          id?: string
+          invite_code?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "household_invites_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: true
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       household_items: {
         Row: {
           created_at: string
@@ -92,6 +121,7 @@ export type Database = {
           joined_at: string
           member_id: string
           member_role: Database["public"]["Enums"]["MEMBER_ROLE"]
+          status: Database["public"]["Enums"]["MEMBER_STATUS"]
         }
         Insert: {
           household_id: string
@@ -99,6 +129,7 @@ export type Database = {
           joined_at?: string
           member_id: string
           member_role: Database["public"]["Enums"]["MEMBER_ROLE"]
+          status?: Database["public"]["Enums"]["MEMBER_STATUS"]
         }
         Update: {
           household_id?: string
@@ -106,6 +137,7 @@ export type Database = {
           joined_at?: string
           member_id?: string
           member_role?: Database["public"]["Enums"]["MEMBER_ROLE"]
+          status?: Database["public"]["Enums"]["MEMBER_STATUS"]
         }
         Relationships: [
           {
@@ -190,6 +222,7 @@ export type Database = {
     Enums: {
       ITEM_STATUS: "FULL" | "HALFWAY" | "LOW" | "OUT"
       MEMBER_ROLE: "CREATOR" | "MEMBER"
+      MEMBER_STATUS: "PENDING" | "APPROVED" | "DECLINED"
     }
     CompositeTypes: {
       [_ in never]: never

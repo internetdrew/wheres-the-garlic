@@ -175,11 +175,9 @@ export async function updateItemName(itemId: number, formData: FormData) {
 }
 
 export async function deleteItem(itemId: number) {
-  console.log('deleteItem', itemId);
+  const supabaseAdmin = createAdminClient();
 
   try {
-    const supabaseAdmin = createAdminClient();
-
     const { data: item, error } = await supabaseAdmin
       .from('household_items')
       .delete()
@@ -201,6 +199,8 @@ export async function deleteItem(itemId: number) {
 
 export async function updateItemQuantity(itemId: number, quantity: number) {
   const supabase = await createClient();
+  const supabaseAdmin = createAdminClient();
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -210,7 +210,7 @@ export async function updateItemQuantity(itemId: number, quantity: number) {
   }
 
   try {
-    const { data: item, error } = await supabase
+    const { data: item, error } = await supabaseAdmin
       .from('household_items')
       .update({
         quantity,
