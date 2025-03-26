@@ -222,7 +222,7 @@ export type Database = {
     Enums: {
       ITEM_STATUS: "FULL" | "HALFWAY" | "LOW" | "OUT"
       MEMBER_ROLE: "CREATOR" | "MEMBER"
-      MEMBER_STATUS: "PENDING" | "APPROVED"
+      MEMBER_STATUS: "PENDING" | "APPROVED" | "DECLINED"
     }
     CompositeTypes: {
       [_ in never]: never
