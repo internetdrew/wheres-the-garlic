@@ -55,10 +55,29 @@ const ItemNamePopover = ({ item }: ItemNamePopoverProps) => {
           <form
             ref={formRef}
             action={async formData => {
+              const newName = formData.get('name') as string;
+
+              mutateHousehold(
+                prev => {
+                  if (!prev) return prev;
+                  return {
+                    household: {
+                      ...prev.household,
+                      items: prev.household.items.map(i =>
+                        i.id === item.id ? { ...i, name: newName } : i
+                      ),
+                    },
+                  };
+                },
+                { revalidate: false }
+              );
+
+              close();
+              formRef.current?.reset();
+
               const result = await updateItemName(item.id, formData);
-              if (result?.success) {
-                close();
-                formRef.current?.reset();
+
+              if (!result?.success) {
                 mutateHousehold();
               }
             }}
