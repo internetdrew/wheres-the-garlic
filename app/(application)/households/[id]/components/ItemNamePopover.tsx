@@ -5,6 +5,7 @@ import { updateItemName } from '@/app/actions/items';
 import { Household } from '@/utils/supabase/queries';
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import { useFormStatus } from 'react-dom';
+import { useHousehold } from '@/app/hooks/useHousehold';
 
 type Item = Household['items'][number];
 
@@ -28,6 +29,7 @@ interface ItemNamePopoverProps {
 
 const ItemNamePopover = ({ item }: ItemNamePopoverProps) => {
   const formRef = useRef<HTMLFormElement>(null);
+  const { mutateHousehold } = useHousehold(item.household_id);
 
   return (
     <Popover className='relative'>
@@ -57,6 +59,7 @@ const ItemNamePopover = ({ item }: ItemNamePopoverProps) => {
               if (result?.success) {
                 close();
                 formRef.current?.reset();
+                mutateHousehold();
               }
             }}
             className='bg-neutral-100 p-4 rounded-md shadow-lg ring-1 ring-neutral-950/5'
