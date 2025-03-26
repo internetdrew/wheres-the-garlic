@@ -1,22 +1,15 @@
 'use client';
 
 import React, { useRef } from 'react';
-import Image from 'next/image';
 import ItemFormDialog from './ItemFormDialog';
-import { Household } from '@/utils/supabase/queries';
 import Link from 'next/link';
-import HouseholdNamePopover from './HouseholdNamePopover';
+import ItemPrompt from './ItemPrompt';
+import HouseholdCreatorDetails from './HouseholdCreatorDetails';
+import HouseholdTitle from './HouseholdTitle';
+import AddItemButton from './AddItemButton';
 
-interface PageHeaderProps {
-  household: Household;
-  itemsCount: number;
-}
-
-const PageHeader = ({ household, itemsCount }: PageHeaderProps) => {
+const PageHeader = ({ householdId }: { householdId: string }) => {
   const addItemDialogRef = useRef<HTMLDialogElement>(null);
-  const triggerAddItemFormDialog = () => {
-    addItemDialogRef.current?.showModal();
-  };
 
   return (
     <header className='sticky top-12 pt-6 pb-4 z-10 bg-neutral-950'>
@@ -40,41 +33,13 @@ const PageHeader = ({ household, itemsCount }: PageHeaderProps) => {
       </div>
       <div className='flex items-start justify-between mt-4'>
         <div>
-          <div className='flex items-center gap-2'>
-            <h1 className='text-xl font-bold lg:text-2xl'>
-              {household?.title}
-            </h1>
-            <HouseholdNamePopover household={household} />
-          </div>
-          <div className='flex flex-col mt-1 text-neutral-500 sm:flex-row sm:items-center sm:gap-2'>
-            <span>Created by</span>
-            <span className='flex items-center gap-1'>
-              <Image
-                src={household.creator.avatar_url}
-                alt={household.creator.full_name}
-                width={20}
-                height={20}
-                className='rounded-full'
-              />
-              {household?.creator.full_name}
-            </span>
-          </div>
+          <HouseholdTitle householdId={householdId} />
+          <HouseholdCreatorDetails householdId={householdId} />
         </div>
-
-        <button
-          className='text-sm bg-neutral-200 px-4 py-2 rounded-md font-medium text-neutral-900 cursor-pointer'
-          onClick={triggerAddItemFormDialog}
-        >
-          Add Item
-        </button>
+        <AddItemButton householdId={householdId} dialogRef={addItemDialogRef} />
       </div>
-      <p className='text-neutral-500 mt-4'>
-        {itemsCount > 0
-          ? `There are ${itemsCount} items on this list.`
-          : 'Add an item to get started.'}
-      </p>
-
-      <ItemFormDialog householdId={household.id} dialogRef={addItemDialogRef} />
+      <ItemPrompt householdId={householdId} />
+      <ItemFormDialog householdId={householdId} dialogRef={addItemDialogRef} />
     </header>
   );
 };
