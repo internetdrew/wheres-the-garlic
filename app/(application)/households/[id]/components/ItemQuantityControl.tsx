@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { updateItemQuantity } from '@/app/actions/items';
 import { Household } from '@/utils/supabase/queries';
 import MinusIcon from '@/app/icons/MinusIcon';
@@ -14,82 +14,56 @@ const ItemQuantityControl = ({
 }) => {
   const [quantity, setQuantity] = useState(item?.quantity ?? 0);
   const { mutateHousehold } = useHousehold(item.household_id);
+  const timeoutRef = useRef<NodeJS.Timeout>(null);
 
-  const handleQuantityUpdate = async (newQuantity: number) => {
-    const previousQuantity = quantity;
+  useEffect(() => {
+    setQuantity(item?.quantity ?? 0);
+  }, [item.quantity]);
 
-    // Optimistically update the UI
-    mutateHousehold(
-      prev => {
-        if (!prev) return prev;
-        return {
-          household: {
-            ...prev.household,
-            items: prev.household.items.map(i =>
-              i.id === item.id ? { ...i, quantity: newQuantity } : i
-            ),
-          },
-        };
-      },
-      { revalidate: false }
-    );
+  const handleQuantityUpdate = (newQuantity: number) => {
+    setQuantity(newQuantity);
 
-    try {
-      const result = await updateItemQuantity(item.id, newQuantity);
-
-      if (!result.success) {
-        // Revert on failure
-        mutateHousehold(
-          prev => {
-            if (!prev) return prev;
-            return {
-              household: {
-                ...prev.household,
-                items: prev.household.items.map(i =>
-                  i.id === item.id ? { ...i, quantity: previousQuantity } : i
-                ),
-              },
-            };
-          },
-          { revalidate: false }
-        );
-      }
-    } catch (error) {
-      console.error('Failed to update quantity:', error);
-      // Revert on error
-      mutateHousehold(
-        prev => {
-          if (!prev) return prev;
-          return {
-            household: {
-              ...prev.household,
-              items: prev.household.items.map(i =>
-                i.id === item.id ? { ...i, quantity: previousQuantity } : i
-              ),
-            },
-          };
-        },
-        { revalidate: false }
-      );
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
     }
+
+    timeoutRef.current = setTimeout(async () => {
+      try {
+        const result = await updateItemQuantity(item.id, newQuantity);
+        if (!result.success) {
+          setQuantity(item.quantity ?? 0);
+          console.error('Failed to update quantity');
+        } else {
+          mutateHousehold();
+        }
+      } catch (error) {
+        setQuantity(item.quantity ?? 0);
+        console.error('Failed to update quantity:', error);
+      }
+    }, 1000);
   };
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleIncrement = () => {
     const newQuantity = quantity + 1;
-    setQuantity(newQuantity);
     handleQuantityUpdate(newQuantity);
   };
 
   const handleDecrement = () => {
     const newQuantity = Math.max(0, quantity - 1);
-    setQuantity(newQuantity);
     handleQuantityUpdate(newQuantity);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value);
     if (!isNaN(value) && value >= 0) {
-      setQuantity(value);
       handleQuantityUpdate(value);
     }
   };
