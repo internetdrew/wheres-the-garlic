@@ -3,7 +3,10 @@ import { getHouseholdByIdQuery } from '@/utils/supabase/queries';
 import { createClient } from '@/utils/supabase/server';
 import { NextResponse } from 'next/server';
 
-export async function GET({ params }: { params: Promise<{ id: string }> }) {
+export async function GET(
+  _request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
     const { id } = await params;
     const supabase = await createClient();
