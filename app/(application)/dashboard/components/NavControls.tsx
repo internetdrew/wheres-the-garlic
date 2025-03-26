@@ -89,7 +89,9 @@ const NavControls = () => {
           onClick={() => setShowPendingMembers(!showPendingMembers)}
         >
           <BellIcon className='size-5 lg:size-6' />
-          {pendingMemberships && <PendingMembersPing />}
+          {pendingMemberships && pendingMemberships.length > 0 && (
+            <PendingMembersPing />
+          )}
         </button>
         {showPendingMembers && (
           <ul className='absolute flex flex-col bg-neutral-900 divide-y divide-neutral-700 px-4 rounded-lg top-full translate-y-2 left-1/2 -translate-x-1/2 text-sm lg:left-auto lg:right-0 lg:translate-x-0'>
