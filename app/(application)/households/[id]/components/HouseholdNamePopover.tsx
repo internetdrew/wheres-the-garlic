@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import { useFormStatus } from 'react-dom';
 import { updateHouseholdName } from '@/app/actions/households';
+import { useHousehold } from '@/app/hooks/useHousehold';
 
 const SubmitButton = () => {
   const { pending } = useFormStatus();
@@ -27,6 +28,7 @@ const HouseholdNamePopover = ({
   householdTitle: string;
 }) => {
   const formRef = useRef<HTMLFormElement>(null);
+  const { mutateHousehold } = useHousehold(householdId);
 
   return (
     <Popover className='relative'>
@@ -56,6 +58,7 @@ const HouseholdNamePopover = ({
               if (result?.success) {
                 close();
                 formRef.current?.reset();
+                mutateHousehold();
               }
             }}
             className='bg-neutral-100 p-4 rounded-md text-neutral-900 shadow-lg ring-1 ring-neutral-950/5'
