@@ -8,7 +8,7 @@ interface PendingMembershipsResponse {
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 export function usePendingMemberships() {
-  const { data, error, isLoading } = useSWR<PendingMembershipsResponse>(
+  const { data, error, isLoading, mutate } = useSWR<PendingMembershipsResponse>(
     '/api/households/memberships/pending',
     fetcher
   );
@@ -17,5 +17,6 @@ export function usePendingMemberships() {
     pendingMemberships: data?.pendingMemberships,
     pendingMembershipsLoading: isLoading,
     pendingMembershipsError: error,
+    mutatePendingMemberships: mutate,
   };
 }

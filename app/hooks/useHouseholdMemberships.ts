@@ -8,7 +8,7 @@ interface MembershipsResponse {
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 export function useHouseholdMemberships() {
-  const { data, error, isLoading } = useSWR<MembershipsResponse>(
+  const { data, error, isLoading, mutate } = useSWR<MembershipsResponse>(
     '/api/households/memberships',
     fetcher
   );
@@ -17,5 +17,6 @@ export function useHouseholdMemberships() {
     memberships: data?.memberships || [],
     membershipsLoading: isLoading,
     membershipsError: error,
+    mutateMemberships: mutate,
   };
 }

@@ -8,7 +8,7 @@ interface HouseholdResponse {
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 export function useHousehold(id: string) {
-  const { data, error, isLoading } = useSWR<HouseholdResponse>(
+  const { data, error, isLoading, mutate } = useSWR<HouseholdResponse>(
     `/api/households/${id}`,
     fetcher
   );
@@ -17,5 +17,6 @@ export function useHousehold(id: string) {
     household: data?.household || null,
     householdLoading: isLoading,
     householdError: error,
+    mutateHousehold: mutate,
   };
 }
