@@ -9,9 +9,10 @@ type Household = HouseholdsByUserId[number]['household'];
 
 interface HouseholdCardProps {
   household: Household;
+  onInviteClick: () => void;
 }
 
-const HouseholdCard = ({ household }: HouseholdCardProps) => {
+const HouseholdCard = ({ household, onInviteClick }: HouseholdCardProps) => {
   const formattedDate = formatDistance(
     new Date(
       household.latest_item[0]?.last_updated_at ?? household?.created_at
@@ -33,7 +34,10 @@ const HouseholdCard = ({ household }: HouseholdCardProps) => {
           <span className='absolute inset-0' />
           {household.title}
         </Link>
-        <button className='ring-1 z-10 ring-neutral-300 rounded-md p-2 cursor-pointer hover:ring-neutral-400 transition-colors text-sm leading-none font-medium'>
+        <button
+          onClick={onInviteClick}
+          className='ring-1 z-10 ring-neutral-300 rounded-md p-2 cursor-pointer hover:ring-neutral-400 transition-colors text-sm leading-none font-medium'
+        >
           Invite
         </button>
       </div>
