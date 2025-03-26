@@ -61,6 +61,9 @@ export const getHouseholdMembershipsQuery = (
         created_at,
         latest_item:household_items(
           last_updated_at
+        ),
+        invite:household_invites(
+          invite_code
         )
       ),
       member_role
