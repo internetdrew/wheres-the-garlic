@@ -32,8 +32,9 @@ const JoinHouseholdForm = ({ dialogRef }: JoinHouseholdFormProps) => {
       const result = await requestToJoinHousehold(formData);
       if (result?.success) {
         dialogRef.current?.close();
+        // Success toast
       } else {
-        console.log('result', result.message);
+        // Error toast
       }
       return result;
     },

@@ -175,11 +175,9 @@ export async function updateItemName(itemId: number, formData: FormData) {
 }
 
 export async function deleteItem(itemId: number) {
-  console.log('deleteItem', itemId);
+  const supabaseAdmin = createAdminClient();
 
   try {
-    const supabaseAdmin = createAdminClient();
-
     const { data: item, error } = await supabaseAdmin
       .from('household_items')
       .delete()

@@ -124,9 +124,9 @@ export async function updateHouseholdName(
   }
 }
 
-export async function deleteHousehold(householdId: string, formData: FormData) {
-  console.log('deleteHousehold', householdId, formData);
-}
+// export async function deleteHousehold(householdId: string, formData: FormData) {
+//   console.log('deleteHousehold', householdId, formData);
+// }
 
 export async function requestToJoinHousehold(formData: FormData) {
   const supabase = await createClient();
