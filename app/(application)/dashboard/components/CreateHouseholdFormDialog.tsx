@@ -34,24 +34,16 @@ const CreateHouseholdFormDialog = ({ dialogRef }: HouseholdFormDialogProps) => {
 
   const [state, formAction] = useActionState(
     async (_state: typeof initialState, formData: FormData) => {
-      try {
-        const result = await createHousehold(formData);
+      const result = await createHousehold(formData);
 
-        if (!result?.success) {
-          return {
-            message: result?.message || 'Failed to create household',
-            success: false,
-          };
-        }
-
+      if (!result.success) {
+        // failure toast goes here
+      } else {
         dialogRef.current?.close();
         formRef.current?.reset();
         mutateMemberships();
-        return result;
-      } catch (error) {
-        console.error('Failed to create household:', error);
-        return { message: 'Failed to create household', success: false };
       }
+      return result;
     },
     initialState
   );
