@@ -189,7 +189,6 @@ export async function deleteItem(itemId: number) {
 
     revalidatePath(`/households/${item?.household_id}`);
     revalidatePath('/dashboard');
-
     return { message: 'Item deleted successfully', success: true };
   } catch (error) {
     console.error('Error deleting item:', error);
