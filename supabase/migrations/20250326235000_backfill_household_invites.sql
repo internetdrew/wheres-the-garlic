@@ -1,11 +1,18 @@
--- Enable pgcrypto extension for nanoid
+-- Enable pgcrypto extension for gen_random_uuid
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
--- Function to generate a 6-digit nanoid
+-- Function to generate a 6-character random code
 CREATE OR REPLACE FUNCTION generate_invite_code()
 RETURNS text AS $$
+DECLARE
+    chars text := 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    result text := '';
+    i integer;
 BEGIN
-    RETURN nanoid(6);
+    FOR i IN 1..6 LOOP
+        result := result || substr(chars, floor(random() * length(chars) + 1)::integer, 1);
+    END LOOP;
+    RETURN result;
 END;
 $$ LANGUAGE plpgsql;
 
