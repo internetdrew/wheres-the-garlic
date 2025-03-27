@@ -98,7 +98,7 @@ export const getPendingMembershipsQuery = (
         avatar_url,
         email_address
       ),
-      household:household_id(
+      household:household_id!inner(
         id,
         title,
         creator_id
