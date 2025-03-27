@@ -13,9 +13,9 @@ const geistSans = Geist({
 
 export const metadata: Metadata = {
   generator: 'Next.js',
-  applicationName: "Where's the garlic?!",
+  applicationName: "Where's the Garlic?!",
   metadataBase: new URL('https://www.wheresthegarlic.com/'),
-  title: "Where's the garlic?!",
+  title: "Where's the Garlic?!",
   description:
     'Know what’s in your kitchen at a glance—full, halfway, almost done, or out.',
   keywords: [
@@ -40,12 +40,12 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Where's the garlic?!",
+    title: "Where's the Garlic?!",
     description:
       'Know what’s in your kitchen at a glance—full, halfway, almost done, or out.',
     url: 'https://www.wheresthegarlic.com/',
     images: '/banner.webp',
-    siteName: "Where's the garlic?!",
+    siteName: "Where's the Garlic?!",
     locale: 'en_US',
     type: 'website',
   },
