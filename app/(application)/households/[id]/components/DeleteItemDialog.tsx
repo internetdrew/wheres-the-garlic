@@ -4,6 +4,7 @@ import { useFormStatus } from 'react-dom';
 import { deleteItem } from '@/app/actions/items';
 import TrashIcon from '@/app/icons/TrashIcon';
 import XMarkIcon from '@/app/icons/XMarkIcon';
+import { useHousehold } from '@/app/hooks/useHousehold';
 
 type Item = Household['items'][number];
 
@@ -29,19 +30,21 @@ const SubmitButton = () => {
 
 const DeleteItemDialog = ({ item, onClose, ref }: DeleteItemDialogProps) => {
   const formRef = useRef<HTMLFormElement>(null);
+  const { mutateHousehold } = useHousehold(item.household_id);
+
+  const handleSubmit = async () => {
+    const result = await deleteItem(item.id);
+    if (result.success) {
+      ref.current?.close();
+      onClose();
+      mutateHousehold();
+    }
+  };
 
   const handleClose = () => {
     ref.current?.close();
     formRef.current?.reset();
     onClose();
-  };
-
-  const handleSubmit = async () => {
-    const result = await deleteItem(item.id);
-    if (result?.success) {
-      ref.current?.close();
-      onClose();
-    }
   };
 
   return (
