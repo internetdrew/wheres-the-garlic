@@ -12,7 +12,7 @@ const PageHeader = ({ householdId }: { householdId: string }) => {
   const addItemDialogRef = useRef<HTMLDialogElement>(null);
 
   return (
-    <header className='sticky top-12 pt-6 pb-4 z-0 bg-neutral-950 isolation-auto'>
+    <header className='sticky top-12 pt-6 pb-4 bg-neutral-950 isolation-auto z-20'>
       <div className='flex items-center gap-1 text-pink-600 relative w-fit'>
         <svg
           xmlns='http://www.w3.org/2000/svg'
