@@ -1,10 +1,9 @@
-import { createClient } from '@/utils/supabase/server';
-import SignInButton from './components/SignInButton';
 import Image from 'next/image';
 import screenshot2 from '@/public/wtg-screenshot2.webp';
 import Screen1 from '@/public/screen1.webp';
 import Screen2 from '@/public/screen2.webp';
 import Screen3 from '@/public/screen3.webp';
+import HeaderSignin from './components/HeaderSignin';
 
 const howItWorks = [
   {
@@ -30,12 +29,6 @@ const howItWorks = [
 ];
 
 export default async function Home() {
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
   return (
     <div className='max-w-screen-lg mx-4 lg:mx-auto'>
       <main className='mt-24'>
@@ -47,11 +40,7 @@ export default async function Home() {
             See what’s in your kitchen at a glance—full, halfway, almost done,
             or out.
           </p>
-          {!user && (
-            <div className='mt-6 mx-auto'>
-              <SignInButton />
-            </div>
-          )}
+          <HeaderSignin />
         </header>
         <section className='flex flex-col items-center mt-20 text-center'>
           <div className='rounded-xl ring-1 ring-neutral-500 p-2 mx-1'>
