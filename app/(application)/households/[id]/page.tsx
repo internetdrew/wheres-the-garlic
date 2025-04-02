@@ -1,5 +1,4 @@
-import PageHeader from './components/PageHeader';
-import ItemList from './components/ItemList';
+import HouseholdContent from './components/HouseholdContent';
 
 const HouseholdPage = async ({
   params,
@@ -10,8 +9,7 @@ const HouseholdPage = async ({
 
   return (
     <main className='max-w-screen-md px-4 mt-10 mx-auto md:px-0'>
-      <PageHeader householdId={id} />
-      <ItemList householdId={id} />
+      <HouseholdContent householdId={id} />
     </main>
   );
 };
