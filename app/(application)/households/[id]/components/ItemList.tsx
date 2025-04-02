@@ -5,8 +5,26 @@ import { Household } from '@/utils/supabase/queries';
 import ItemCard from './ItemCard';
 import DeleteItemDialog from './DeleteItemDialog';
 import { useHousehold } from '@/app/hooks/useHousehold';
+import { Enums } from '@/database.types';
 
 type Item = Household['items'][number];
+type ItemStatus = Enums<'ITEM_STATUS'>;
+
+const statusColors: Record<ItemStatus, string> = {
+  FULL: 'bg-emerald-500',
+  HALFWAY: 'bg-amber-500',
+  LOW: 'bg-orange-500',
+  OUT: 'bg-rose-500',
+};
+
+const statusLabels: Record<ItemStatus, string> = {
+  FULL: 'Full',
+  HALFWAY: 'Halfway',
+  LOW: 'Low',
+  OUT: 'Out',
+};
+
+const statusOrder: ItemStatus[] = ['FULL', 'HALFWAY', 'LOW', 'OUT'];
 
 const ItemList = ({
   householdId,
@@ -38,6 +56,18 @@ const ItemList = ({
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const itemsByStatus = filteredItems
+    ?.filter(item => item.status !== null)
+    .reduce((acc, item) => {
+      const status = item.status!;
+      acc[status] = acc[status] || [];
+      acc[status].push(item);
+      return acc;
+    }, {} as Record<ItemStatus, Item[]>);
+
+  const quantityItems =
+    filteredItems?.filter(item => item.quantity !== null) || [];
+
   if (householdLoading) {
     return (
       <section className='mt-10'>
@@ -63,17 +93,59 @@ const ItemList = ({
 
   return (
     <>
-      <section className='mt-10 mb-28'>
-        <ul className='mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2'>
-          {filteredItems?.map(item => (
-            <ItemCard
-              key={item.id}
-              item={item}
-              householdId={householdId}
-              onDeleteClick={() => handleDeleteClick(item)}
-            />
-          ))}
-        </ul>
+      <section className='mt-10 mb-28 space-y-8'>
+        {quantityItems.length > 0 && (
+          <div className='space-y-4'>
+            <div className='flex items-center gap-2'>
+              <div className='w-2 h-2 rounded-full bg-blue-500' />
+              <h2 className='font-medium text-neutral-500'>Quantity Items</h2>
+              <span className='text-sm text-neutral-600'>
+                ({quantityItems.length})
+              </span>
+            </div>
+            <ul className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
+              {quantityItems.map(item => (
+                <ItemCard
+                  key={item.id}
+                  item={item}
+                  householdId={householdId}
+                  onDeleteClick={() => handleDeleteClick(item)}
+                />
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {statusOrder.map(status => {
+          const items = itemsByStatus?.[status] || [];
+          if (items.length === 0) return null;
+
+          return (
+            <div key={status} className='space-y-4'>
+              <div className='flex items-center gap-2'>
+                <div
+                  className={`w-2 h-2 rounded-full ${statusColors[status]}`}
+                />
+                <h2 className='font-medium text-neutral-500'>
+                  {statusLabels[status]}
+                </h2>
+                <span className='text-sm text-neutral-600'>
+                  ({items.length})
+                </span>
+              </div>
+              <ul className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
+                {items.map(item => (
+                  <ItemCard
+                    key={item.id}
+                    item={item}
+                    householdId={householdId}
+                    onDeleteClick={() => handleDeleteClick(item)}
+                  />
+                ))}
+              </ul>
+            </div>
+          );
+        })}
       </section>
 
       {selectedItem && (
