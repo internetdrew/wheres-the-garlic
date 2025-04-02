@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import ItemFormDialog from './ItemFormDialog';
 import Link from 'next/link';
 import ItemPrompt from './ItemPrompt';
 import HouseholdCreatorDetails from './HouseholdCreatorDetails';
 import HouseholdTitle from './HouseholdTitle';
 import AddItemButton from './AddItemButton';
+import XMarkIcon from '@/app/icons/XMarkIcon';
 
 const PageHeader = ({
   householdId,
@@ -16,6 +17,18 @@ const PageHeader = ({
   onSearch: (query: string) => void;
 }) => {
   const addItemDialogRef = useRef<HTMLDialogElement>(null);
+  const [searchValue, setSearchValue] = useState('');
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchValue(value);
+    onSearch(value);
+  };
+
+  const handleClearSearch = () => {
+    setSearchValue('');
+    onSearch('');
+  };
 
   return (
     <header className='sticky top-12 pt-6 pb-4 bg-neutral-950 isolation-auto z-20'>
@@ -48,23 +61,18 @@ const PageHeader = ({
         <input
           type='text'
           placeholder='Search items...'
+          value={searchValue}
           className='w-full px-4 py-2 bg-neutral-900 border border-neutral-800 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-600'
-          onChange={e => onSearch(e.target.value)}
+          onChange={handleSearchChange}
         />
-        <svg
-          xmlns='http://www.w3.org/2000/svg'
-          fill='none'
-          viewBox='0 0 24 24'
-          strokeWidth={1.5}
-          stroke='currentColor'
-          className='size-5 absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500'
-        >
-          <path
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            d='m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z'
-          />
-        </svg>
+        {searchValue && (
+          <button
+            onClick={handleClearSearch}
+            className='absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer'
+          >
+            <XMarkIcon className='size-5' />
+          </button>
+        )}
       </div>
       <ItemPrompt householdId={householdId} />
       <ItemFormDialog householdId={householdId} dialogRef={addItemDialogRef} />
