@@ -5,14 +5,19 @@ import HouseholdCard from './HouseholdCard';
 import { useHouseholdMemberships } from '@/app/hooks/useHouseholdMemberships';
 import { HouseholdsByUserId } from '@/utils/supabase/queries';
 import HouseholdInviteDialog from './HouseholdInviteDialog';
+import DeleteHouseholdDialog from './DeleteHouseholdDialog';
 
 export default function MembershipList() {
-  const [chosenHousehold, setChosenHousehold] = useState<
+  const [chosenForInvite, setChosenForInvite] = useState<
+    HouseholdsByUserId[number]['household'] | null
+  >(null);
+  const [chosenForDelete, setChosenForDelete] = useState<
     HouseholdsByUserId[number]['household'] | null
   >(null);
   const { memberships, membershipsLoading, membershipsError } =
     useHouseholdMemberships();
-  const dialogRef = useRef<HTMLDialogElement>(null);
+  const inviteDialogRef = useRef<HTMLDialogElement>(null);
+  const deleteDialogRef = useRef<HTMLDialogElement>(null);
 
   if (membershipsLoading) {
     return (
@@ -33,8 +38,15 @@ export default function MembershipList() {
   const handleInviteClick = (
     household: HouseholdsByUserId[number]['household']
   ) => {
-    setChosenHousehold(household);
-    dialogRef.current?.showModal();
+    setChosenForInvite(household);
+    inviteDialogRef.current?.showModal();
+  };
+
+  const handleDeleteClick = (
+    household: HouseholdsByUserId[number]['household']
+  ) => {
+    setChosenForDelete(household);
+    deleteDialogRef.current?.showModal();
   };
 
   return (
@@ -51,12 +63,19 @@ export default function MembershipList() {
             key={membership.id}
             household={membership.household}
             onInviteClick={() => handleInviteClick(membership.household)}
+            onDeleteClick={() => handleDeleteClick(membership.household)}
           />
         ))}
       </ul>
+
       <HouseholdInviteDialog
-        dialogRef={dialogRef}
-        chosenHousehold={chosenHousehold}
+        dialogRef={inviteDialogRef}
+        chosenHousehold={chosenForInvite}
+      />
+
+      <DeleteHouseholdDialog
+        dialogRef={deleteDialogRef}
+        chosenHousehold={chosenForDelete}
       />
     </>
   );
