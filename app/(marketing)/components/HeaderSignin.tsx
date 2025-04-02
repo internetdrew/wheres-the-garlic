@@ -23,7 +23,7 @@ const HeaderSignin = () => {
     );
   }
 
-  if (user) {
+  if (!user) {
     return (
       <div className='mt-6 mx-auto'>
         <SignInButton />
