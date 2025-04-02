@@ -124,9 +124,33 @@ export async function updateHouseholdName(
   }
 }
 
-// export async function deleteHousehold(householdId: string, formData: FormData) {
-//   console.log('deleteHousehold', householdId, formData);
-// }
+export async function deleteHousehold(householdId: string) {
+  const supabase = await createClient();
+  const supabaseAdmin = createAdminClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error('You must be signed in to delete a household');
+  }
+
+  try {
+    const { error } = await supabaseAdmin
+      .from('households')
+      .delete()
+      .eq('id', householdId);
+
+    if (error) throw error;
+
+    revalidatePath('/dashboard');
+    return { message: 'Household deleted successfully', success: true };
+  } catch (error) {
+    console.error('Error deleting household:', error);
+    return { message: 'Failed to delete household', success: false };
+  }
+}
 
 export async function requestToJoinHousehold(formData: FormData) {
   const supabase = await createClient();
