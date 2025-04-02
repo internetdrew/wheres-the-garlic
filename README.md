@@ -67,3 +67,4 @@ Sometimes the best way to say "I love you" is making sure your partner knows the
 - Add real-time updates
 - Add initial shopping mode (run feedback loop)
 - Add feedback layer for power users
+- Add alerts to warn of duplicate entries
