@@ -8,7 +8,13 @@ import { useHousehold } from '@/app/hooks/useHousehold';
 
 type Item = Household['items'][number];
 
-const ItemList = ({ householdId }: { householdId: string }) => {
+const ItemList = ({
+  householdId,
+  searchQuery,
+}: {
+  householdId: string;
+  searchQuery: string;
+}) => {
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const deleteItemDialogRef = useRef<HTMLDialogElement>(null);
   const { household, householdLoading, householdError } =
@@ -27,6 +33,10 @@ const ItemList = ({ householdId }: { householdId: string }) => {
   const resetSelectedItem = () => {
     setSelectedItem(null);
   };
+
+  const filteredItems = household?.items.filter(item =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   if (householdLoading) {
     return (
@@ -55,7 +65,7 @@ const ItemList = ({ householdId }: { householdId: string }) => {
     <>
       <section className='mt-10 mb-28'>
         <ul className='mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2'>
-          {household.items.map(item => (
+          {filteredItems?.map(item => (
             <ItemCard
               key={item.id}
               item={item}

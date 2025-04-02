@@ -8,7 +8,13 @@ import HouseholdCreatorDetails from './HouseholdCreatorDetails';
 import HouseholdTitle from './HouseholdTitle';
 import AddItemButton from './AddItemButton';
 
-const PageHeader = ({ householdId }: { householdId: string }) => {
+const PageHeader = ({
+  householdId,
+  onSearch,
+}: {
+  householdId: string;
+  onSearch: (query: string) => void;
+}) => {
   const addItemDialogRef = useRef<HTMLDialogElement>(null);
 
   return (
@@ -37,6 +43,28 @@ const PageHeader = ({ householdId }: { householdId: string }) => {
           <HouseholdCreatorDetails householdId={householdId} />
         </div>
         <AddItemButton householdId={householdId} dialogRef={addItemDialogRef} />
+      </div>
+      <div className='mt-4 relative'>
+        <input
+          type='text'
+          placeholder='Search items...'
+          className='w-full px-4 py-2 bg-neutral-900 border border-neutral-800 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-600'
+          onChange={e => onSearch(e.target.value)}
+        />
+        <svg
+          xmlns='http://www.w3.org/2000/svg'
+          fill='none'
+          viewBox='0 0 24 24'
+          strokeWidth={1.5}
+          stroke='currentColor'
+          className='size-5 absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500'
+        >
+          <path
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            d='m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z'
+          />
+        </svg>
       </div>
       <ItemPrompt householdId={householdId} />
       <ItemFormDialog householdId={householdId} dialogRef={addItemDialogRef} />
