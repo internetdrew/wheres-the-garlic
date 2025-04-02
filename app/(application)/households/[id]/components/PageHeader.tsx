@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { ChangeEvent, useRef, useState } from 'react';
 import ItemFormDialog from './ItemFormDialog';
 import Link from 'next/link';
 import ItemPrompt from './ItemPrompt';
@@ -19,7 +19,7 @@ const PageHeader = ({
   const addItemDialogRef = useRef<HTMLDialogElement>(null);
   const [searchValue, setSearchValue] = useState('');
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchValue(value);
     onSearch(value);
