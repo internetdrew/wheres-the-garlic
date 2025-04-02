@@ -58,9 +58,12 @@ Sometimes the best way to say "I love you" is making sure your partner knows the
 
 - Push for V1 to allow users to use the base version of the app [#7](https://github.com/internetdrew/wtg-app/pull/7)
 - Update metadata for SEO purposes [#9](https://github.com/internetdrew/wtg-app/pull/9)
+- Allow users to delete households
+- Allow users to be able to search items
 - Add input validation and rate limiting
 - Add integration tests
-- Allow users to delete households
-- Allow users to leave feedback
-- Add account controls for users
+- Add sorting by status and quantity
 - Implement progressive-web app functionality
+- Add real-time updates
+- Add initial shopping mode (run feedback loop)
+- Add feedback layer for power users
