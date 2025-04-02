@@ -6,15 +6,9 @@ import Link from 'next/link';
 import { useUser } from '@/app/hooks/useUser';
 
 const NavAction = () => {
-  const { user, userLoading, userError } = useUser();
+  const { user, userLoading } = useUser();
 
   if (userLoading) {
-    return (
-      <div className='w-28 h-9 rounded-full bg-neutral-800 animate-pulse' />
-    );
-  }
-
-  if (userError) {
     return (
       <div className='w-28 h-9 rounded-full bg-neutral-800 animate-pulse' />
     );
