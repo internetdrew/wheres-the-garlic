@@ -4,15 +4,21 @@ import { formatDistance } from 'date-fns';
 import Image from 'next/image';
 import Link from 'next/link';
 import { HouseholdsByUserId } from '@/utils/supabase/queries';
+import HouseholdCardMenu from './HouseholdCardMenu';
 
 type Household = HouseholdsByUserId[number]['household'];
 
 interface HouseholdCardProps {
   household: Household;
   onInviteClick: () => void;
+  onDeleteClick: () => void;
 }
 
-const HouseholdCard = ({ household, onInviteClick }: HouseholdCardProps) => {
+const HouseholdCard = ({
+  household,
+  onInviteClick,
+  onDeleteClick,
+}: HouseholdCardProps) => {
   const formattedDate = formatDistance(
     new Date(
       household.latest_item[0]?.last_updated_at ?? household?.created_at
@@ -34,12 +40,11 @@ const HouseholdCard = ({ household, onInviteClick }: HouseholdCardProps) => {
           <span className='absolute inset-0' />
           {household.title}
         </Link>
-        <button
-          onClick={onInviteClick}
-          className='ring-1 z-10 ring-neutral-300 rounded-md p-2 cursor-pointer hover:ring-neutral-400 transition-colors text-sm leading-none font-medium'
-        >
-          Invite
-        </button>
+
+        <HouseholdCardMenu
+          onInviteClick={onInviteClick}
+          onDeleteClick={onDeleteClick}
+        />
       </div>
       <p className='text-sm text-neutral-600'>Last updated {formattedDate}</p>
       <p className='text-sm text-neutral-600 mt-8'>Created by:</p>
