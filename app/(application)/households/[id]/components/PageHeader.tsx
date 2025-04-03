@@ -57,7 +57,7 @@ const PageHeader = ({
         </div>
         <AddItemButton householdId={householdId} dialogRef={addItemDialogRef} />
       </div>
-      <div className='mt-4 relative'>
+      <div className='mt-4 relative ml-auto w-full sm:w-1/2 md:w-1/3 lg:w-1/4'>
         <input
           type='text'
           placeholder='Search items...'
