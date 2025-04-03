@@ -15,7 +15,7 @@ const SignInButton = ({
 }: SignInButtonProps) => {
   const supabase = createClient();
 
-  const imageSize = size === 'sm' ? 20 : size === 'md' ? 24 : 28;
+  const imageSize = size === 'sm' ? 18 : size === 'md' ? 20 : 24;
 
   const handleSignInWithGoogle = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
@@ -32,9 +32,11 @@ const SignInButton = ({
 
   return (
     <button
-      className={`bg-neutral-200 text-neutral-950 font-medium px-4 py-2 rounded-full flex items-center gap-2 cursor-pointer w-fit  hover:bg-neutral-300 ${
+      className={`ring-1 ring-neutral-400 font-medium px-4 py-2 rounded-md flex items-center gap-2 cursor-pointer w-fit ${
         size === 'sm' && 'text-sm'
-      } ${size === 'md' && 'text-base'} ${size === 'lg' && 'text-lg'}`}
+      } ${size === 'md' && 'text-base'} ${
+        size === 'lg' && 'text-lg'
+      } hover:shadow-md`}
       onClick={handleSignInWithGoogle}
     >
       <span>
