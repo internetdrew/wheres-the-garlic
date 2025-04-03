@@ -7,7 +7,7 @@ const HouseholdTitle = ({ householdId }: { householdId: string }) => {
     useHousehold(householdId);
 
   if (householdLoading) {
-    return <div className='w-48 h-6 bg-neutral-800 animate-pulse' />;
+    return <div className='w-48 h-6 bg-neutral-500 animate-pulse' />;
   }
 
   if (householdError) {

@@ -25,7 +25,7 @@ export default function MembershipList() {
         {Array.from({ length: 3 }).map((_, index) => (
           <li
             key={index}
-            className='my-4 w-full h-36 bg-neutral-800 animate-pulse rounded-md'
+            className='my-4 w-full h-36 bg-neutral-500 animate-pulse rounded-md'
           ></li>
         ))}
       </ul>

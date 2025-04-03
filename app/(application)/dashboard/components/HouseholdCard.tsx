@@ -33,7 +33,7 @@ const HouseholdCard = ({
   return (
     <li
       key={household.id}
-      className='relative bg-neutral-100 text-neutral-900 rounded-xl p-4 transition-colors'
+      className='relative ring-1 ring-neutral-300 rounded-xl p-4 transition-colors'
     >
       <div className='flex items-center justify-between'>
         <Link href={`/households/${household.id}`} className='font-medium'>

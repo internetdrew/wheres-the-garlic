@@ -8,7 +8,7 @@ const HouseholdPage = async ({
   const { id } = await params;
 
   return (
-    <main className='max-w-screen-md px-4 mt-10 mx-auto md:px-0'>
+    <main className='max-w-screen-lg px-4 mt-10 mx-auto lg:px-0'>
       <HouseholdContent householdId={id} />
     </main>
   );

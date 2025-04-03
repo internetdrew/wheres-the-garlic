@@ -65,7 +65,7 @@ const PendingMemberCard = ({
         <div className='flex items-center gap-2 text-xs mt-4'>
           <button
             onClick={handleDecline}
-            className='ring-1 ring-neutral-700 font-medium py-1.5 px-3 rounded-md cursor-pointer hover:bg-neutral-800 transition-colors'
+            className='ring-1 ring-neutral-700 font-medium py-1.5 px-3 rounded-md cursor-pointer hover:bg-neutral-500 transition-colors'
           >
             Decline
           </button>
@@ -114,7 +114,7 @@ const NavControls = () => {
           className='relative cursor-pointer'
           onClick={() => setShowPendingMembers(!showPendingMembers)}
         >
-          <BellIcon className='size-5 lg:size-6' />
+          <BellIcon className='size-5 text-neutral-500 lg:size-6' />
           {pendingMemberships && pendingMemberships.length > 0 && (
             <PendingMembersPing />
           )}
@@ -128,10 +128,10 @@ const NavControls = () => {
         )}
       </div>
       <button
-        className='bg-neutral-200 text-neutral-950 text-sm font-medium px-4 py-2 rounded-full cursor-pointer hover:bg-neutral-300'
+        className='ring-1 ring-neutral-300 text-sm font-medium px-4 py-2 rounded-md cursor-pointer hover:shadow-md'
         onClick={handleSignOut}
       >
-        Sign Out
+        Sign out
       </button>
     </div>
   );

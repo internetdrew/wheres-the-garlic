@@ -31,7 +31,7 @@ const PageHeader = ({
   };
 
   return (
-    <header className='sticky top-12 pt-6 pb-4 bg-neutral-950 isolation-auto z-20'>
+    <header className='sticky top-12 pt-6 pb-4 bg-neutral-100 isolation-auto z-20 w-full'>
       <div className='flex items-center gap-1 text-pink-600 relative w-fit'>
         <svg
           xmlns='http://www.w3.org/2000/svg'
@@ -57,12 +57,12 @@ const PageHeader = ({
         </div>
         <AddItemButton householdId={householdId} dialogRef={addItemDialogRef} />
       </div>
-      <div className='mt-4 relative'>
+      <div className='mt-4 relative ml-auto w-full sm:w-1/2 md:w-1/3 lg:w-1/4'>
         <input
           type='text'
           placeholder='Search items...'
           value={searchValue}
-          className='w-full px-4 py-2 bg-neutral-900 border border-neutral-800 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-600'
+          className='w-full px-4 py-2 ring-1 ring-neutral-300 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-600'
           onChange={handleSearchChange}
         />
         {searchValue && (

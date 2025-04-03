@@ -12,7 +12,7 @@ const SubmitButton = () => {
   return (
     <button
       type='submit'
-      className=' bg-neutral-900 text-neutral-50 font-medium cursor-pointer px-2 py-1 rounded-md hover:bg-neutral-800 aria-disabled:opacity-50 aria-disabled:cursor-not-allowed'
+      className=' bg-neutral-900 text-neutral-50 font-medium cursor-pointer px-2 py-1 rounded-md hover:bg-neutral-500 aria-disabled:opacity-50 aria-disabled:cursor-not-allowed'
       aria-disabled={pending}
     >
       Save

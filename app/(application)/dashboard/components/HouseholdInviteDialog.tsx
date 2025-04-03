@@ -65,7 +65,7 @@ const HouseholdInviteDialog = ({
           </li>
         </ol>
         <button
-          className='bg-neutral-950 text-white px-4 py-2 rounded-md cursor-pointer hover:bg-neutral-800 transition-colors mt-4'
+          className='bg-neutral-950 text-white px-4 py-2 rounded-md cursor-pointer hover:bg-neutral-500 transition-colors mt-4'
           onClick={() => {
             const instructions = `Join ${chosenHousehold?.title} on Where's the Garlic?!
 

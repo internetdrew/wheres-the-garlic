@@ -44,9 +44,7 @@ export default function RootLayout({
           strategy='beforeInteractive'
         />
       </head>
-      <body
-        className={`${geistSans.className} antialiased bg-neutral-950 text-neutral-200`}
-      >
+      <body className={`${geistSans.className} antialiased bg-neutral-100`}>
         <Navbar />
         {children}
       </body>

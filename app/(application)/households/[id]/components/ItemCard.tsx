@@ -27,7 +27,7 @@ const ItemCard = ({ item, householdId, onDeleteClick }: ItemCardProps) => {
   return (
     <li
       key={item.id}
-      className='flex flex-col bg-neutral-100 p-6 rounded-xl text-neutral-900'
+      className='flex flex-col ring-1 ring-neutral-300 p-4 rounded-md text-neutral-900'
     >
       <header className='flex items-start justify-between mb-6'>
         <div>

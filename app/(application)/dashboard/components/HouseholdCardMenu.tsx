@@ -13,7 +13,7 @@ const HouseholdCardMenu = ({
 }: HouseholdCardMenuProps) => {
   return (
     <Menu as='div' className='relative'>
-      <MenuButton className='inline-flex items-center gap-2 p-1.5 text-sm font-medium ring-1 ring-neutral-300 rounded-md cursor-pointer transition-colors'>
+      <MenuButton className='inline-flex items-center gap-2 p-1.5 font-medium ring-1 ring-neutral-300 rounded-md cursor-pointer transition-colors'>
         <EllipsesIcon className='size-5' />
       </MenuButton>
 
@@ -25,7 +25,7 @@ const HouseholdCardMenu = ({
         <MenuItem>
           <button
             onClick={onInviteClick}
-            className='flex items-center gap-1.5 ring-neutral-300 p-1.5 cursor-pointer hover:ring-neutral-400 transition-colors text-sm hover:bg-neutral-200 w-full rounded-sm'
+            className='flex items-center gap-1.5 ring-neutral-300 p-1.5 cursor-pointer hover:ring-neutral-400 transition-colors hover:bg-neutral-200 w-full rounded-sm'
           >
             <svg
               xmlns='http://www.w3.org/2000/svg'
@@ -47,7 +47,7 @@ const HouseholdCardMenu = ({
         <MenuItem>
           <button
             onClick={onDeleteClick}
-            className='flex items-center gap-1.5 ring-neutral-300 p-1.5 cursor-pointer hover:ring-neutral-400 transition-colors text-sm hover:bg-neutral-200 w-full rounded-sm'
+            className='flex items-center gap-1.5 ring-neutral-300 p-1.5 cursor-pointer hover:ring-neutral-400 transition-colors hover:bg-neutral-200 w-full rounded-sm'
           >
             <svg
               xmlns='http://www.w3.org/2000/svg'

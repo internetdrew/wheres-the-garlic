@@ -71,11 +71,11 @@ const ItemList = ({
   if (householdLoading) {
     return (
       <section className='mt-10'>
-        <ul className='mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2'>
+        <ul className='mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'>
           {[...Array(3)].map((_, index) => (
             <div
               key={index}
-              className='w-full h-36 bg-neutral-800 animate-pulse rounded-md'
+              className='w-full h-36 bg-neutral-500 animate-pulse rounded-md'
             />
           ))}
         </ul>
@@ -93,7 +93,7 @@ const ItemList = ({
 
   return (
     <>
-      <section className='mt-10 mb-28 space-y-8'>
+      <section className='mt-10 mb-28 space-y-8 mx-1'>
         {quantityItems.length > 0 && (
           <div className='space-y-4'>
             <div className='flex items-center gap-2'>
@@ -103,7 +103,7 @@ const ItemList = ({
                 ({quantityItems.length})
               </span>
             </div>
-            <ul className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
+            <ul className='grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3'>
               {quantityItems.map(item => (
                 <ItemCard
                   key={item.id}
@@ -133,7 +133,7 @@ const ItemList = ({
                   ({items.length})
                 </span>
               </div>
-              <ul className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
+              <ul className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'>
                 {items.map(item => (
                   <ItemCard
                     key={item.id}
