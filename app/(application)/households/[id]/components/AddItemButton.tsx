@@ -17,7 +17,7 @@ const AddItemButton = ({
 
   if (householdLoading) {
     return (
-      <div className='w-24 h-10 bg-neutral-800 rounded-md animate-pulse' />
+      <div className='w-24 h-10 bg-neutral-500 rounded-md animate-pulse' />
     );
   }
 
@@ -31,7 +31,7 @@ const AddItemButton = ({
 
   return (
     <button
-      className='text-sm bg-neutral-200 px-4 py-2 rounded-md font-medium text-neutral-900 cursor-pointer'
+      className='text-sm ring-1 ring-neutral-300 px-4 py-2 rounded-md font-medium cursor-pointer hover:shadow-md'
       onClick={triggerAddItemFormDialog}
     >
       Add Item

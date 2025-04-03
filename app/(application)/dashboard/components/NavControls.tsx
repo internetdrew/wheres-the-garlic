@@ -65,7 +65,7 @@ const PendingMemberCard = ({
         <div className='flex items-center gap-2 text-xs mt-4'>
           <button
             onClick={handleDecline}
-            className='ring-1 ring-neutral-700 font-medium py-1.5 px-3 rounded-md cursor-pointer hover:bg-neutral-800 transition-colors'
+            className='ring-1 ring-neutral-700 font-medium py-1.5 px-3 rounded-md cursor-pointer hover:bg-neutral-500 transition-colors'
           >
             Decline
           </button>
