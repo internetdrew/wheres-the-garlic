@@ -7,8 +7,12 @@ import { useHouseholdMemberships } from '@/app/hooks/useHouseholdMemberships';
 const LoadingButtons = () => {
   return (
     <div className='flex items-center gap-4 text-sm mt-4'>
-      <div className='h-9 w-32 bg-neutral-800 rounded-md animate-pulse'></div>
-      <div className='h-9 w-32 bg-neutral-800 rounded-md animate-pulse'></div>
+      {Array.from({ length: 2 }).map((_, index) => (
+        <div
+          key={index}
+          className='h-9 w-32 bg-neutral-500 rounded-md animate-pulse'
+        ></div>
+      ))}
     </div>
   );
 };
