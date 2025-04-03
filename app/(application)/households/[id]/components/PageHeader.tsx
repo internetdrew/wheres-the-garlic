@@ -31,7 +31,7 @@ const PageHeader = ({
   };
 
   return (
-    <header className='sticky top-12 pt-6 pb-4 bg-neutral-100 isolation-auto z-20 w-full'>
+    <header className='sticky top-14 pt-6 pb-4 bg-neutral-100 isolation-auto z-20 w-full'>
       <div className='flex items-center gap-1 text-pink-600 relative w-fit'>
         <svg
           xmlns='http://www.w3.org/2000/svg'
