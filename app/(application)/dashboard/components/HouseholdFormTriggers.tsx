@@ -42,7 +42,7 @@ const HouseholdFormTriggers = () => {
         <button
           onClick={triggerCreateHouseholdModal}
           disabled={memberships?.length >= 3}
-          className={`bg-neutral-200 text-neutral-800 rounded-md p-2 font-medium hover:bg-neutral-300 transition-colors ${
+          className={`ring-1 ring-neutral-300 rounded-md p-2 font-medium transition-all hover:shadow-md ${
             memberships?.length >= 3
               ? 'opacity-50 cursor-not-allowed'
               : 'cursor-pointer'
@@ -63,14 +63,14 @@ const HouseholdFormTriggers = () => {
         </button>
         <button
           onClick={triggerJoinHouseholdModal}
-          className='bg-neutral-200 text-neutral-800 rounded-md p-2 font-medium hover:bg-neutral-300 transition-colors cursor-pointer'
+          className='ring-1 ring-neutral-300 rounded-md p-2 font-medium transition-all hover:shadow-md cursor-pointer'
+          aria-label='Join a household'
+          title='Join a household'
         >
           Join a household
         </button>
       </div>
-
       <CreateHouseholdFormDialog dialogRef={createDialogRef} />
-
       <JoinHouseholdForm dialogRef={joinDialogRef} />
     </>
   );
