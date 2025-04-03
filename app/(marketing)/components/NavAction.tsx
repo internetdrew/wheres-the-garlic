@@ -9,9 +9,7 @@ const NavAction = () => {
   const { user, userLoading } = useUser();
 
   if (userLoading) {
-    return (
-      <div className='w-28 h-9 rounded-full bg-neutral-800 animate-pulse' />
-    );
+    return <div className='w-32 h-9 rounded-md bg-neutral-500 animate-pulse' />;
   }
 
   if (!user) {
@@ -23,7 +21,7 @@ const NavAction = () => {
       href='/dashboard'
       className='ring-1 ring-neutral-400 font-medium px-4 py-2 rounded-md cursor-pointer text-sm transition-all hover:shadow-md'
     >
-      Dashboard
+      Go to dashboard
     </Link>
   );
 };
