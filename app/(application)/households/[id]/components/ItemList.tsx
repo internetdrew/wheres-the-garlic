@@ -24,7 +24,7 @@ const statusLabels: Record<ItemStatus, string> = {
   OUT: 'Out',
 };
 
-const statusOrder: ItemStatus[] = ['FULL', 'HALFWAY', 'LOW', 'OUT'];
+const statusOrder: ItemStatus[] = ['OUT', 'LOW', 'HALFWAY', 'FULL'];
 
 const ItemList = ({
   householdId,
