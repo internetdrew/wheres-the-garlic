@@ -65,7 +65,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.className} antialiased bg-neutral-950 text-neutral-200`}
+        className={`${geistSans.className} antialiased bg-neutral-100 text-neutral-900`}
       >
         <Navbar />
         {children}
