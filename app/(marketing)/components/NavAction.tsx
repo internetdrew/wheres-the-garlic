@@ -19,7 +19,7 @@ const NavAction = () => {
   return (
     <Link
       href='/dashboard'
-      className='ring-1 ring-neutral-400 font-medium px-4 py-2 rounded-md cursor-pointer text-sm transition-all hover:shadow-md'
+      className='ring-1 ring-neutral-300 font-medium px-4 py-2 rounded-md cursor-pointer text-sm transition-all hover:shadow-md'
     >
       Go to dashboard
     </Link>
