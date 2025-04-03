@@ -32,7 +32,7 @@ const SignInButton = ({
 
   return (
     <button
-      className={`ring-1 ring-neutral-400 font-medium px-4 py-2 rounded-md flex items-center gap-2 cursor-pointer w-fit transition-all duration-300 ${
+      className={`ring-1 ring-neutral-400 font-medium px-4 py-2 rounded-md flex items-center gap-2 cursor-pointer w-fit transition-all ${
         size === 'sm' && 'text-sm'
       } ${size === 'md' && 'text-base'} ${
         size === 'lg' && 'text-lg'
