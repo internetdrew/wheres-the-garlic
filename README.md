@@ -61,10 +61,10 @@ Sometimes the best way to say "I love you" is making sure your partner knows the
 - Allow users to delete households [#15](https://github.com/internetdrew/wheres-the-garlic/pull/15)
 - Allow users to be able to search items [#16](https://github.com/internetdrew/wheres-the-garlic/pull/16), [#17](https://github.com/internetdrew/wheres-the-garlic/pull/17)
 - Add sorting by status and quantity [#19](https://github.com/internetdrew/wheres-the-garlic/pull/19)
+- Add alerts to warn of duplicate entries
+- Add real-time updates
 - Add input validation and rate limiting
 - Add integration tests
 - Implement progressive-web app functionality
-- Add real-time updates
 - Add initial shopping mode (run feedback loop)
 - Add feedback layer for power users
-- Add alerts to warn of duplicate entries
