@@ -36,7 +36,7 @@ export default async function Home() {
           <p className='text-neutral-500 text-lg max-w-lg'>
             Manage your home grocery inventory with ease.
           </p>
-          <ul className='my-8 grid grid-cols-1 gap-6 text-left md:grid-cols-2'>
+          <ul className='my-8 grid grid-cols-1 gap-4 text-left md:grid-cols-2'>
             {howItWorks.map(item => (
               <li
                 key={item.title}
