@@ -15,13 +15,13 @@ const NavAction = () => {
   }
 
   if (!user) {
-    return <SignInButton size='sm' caption='Sign in' />;
+    return <SignInButton size='sm' />;
   }
 
   return (
     <Link
       href='/dashboard'
-      className='bg-neutral-200 text-sm text-neutral-950 font-medium px-4 py-2 rounded-full cursor-pointer hover:bg-neutral-300 sm:text-sm'
+      className='ring-1 ring-neutral-400 font-medium px-4 py-2 rounded-md cursor-pointer text-sm transition-all duration-300 hover:shadow-md'
     >
       Dashboard
     </Link>
