@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { formatDistance } from 'date-fns';
 import { HouseholdsByUserId } from '@/utils/supabase/queries';
 import HouseholdCardMenu from './HouseholdCardMenu';
+import { useUser } from '@/app/hooks/useUser';
 
 type Household = HouseholdsByUserId[number]['household'];
 
@@ -19,6 +20,8 @@ const HouseholdCard = ({
   onInviteClick,
   onDeleteClick,
 }: HouseholdCardProps) => {
+  const { user } = useUser();
+
   const formattedDate = formatDistance(
     new Date(
       household.latest_item[0]?.last_updated_at ?? household?.created_at
@@ -57,7 +60,11 @@ const HouseholdCard = ({
           height={20}
           className='rounded-full'
         />
-        <span>{household.creator.full_name}</span>
+        <span>
+          {household.creator_id === user?.id
+            ? 'You'
+            : household.creator.full_name}
+        </span>
       </div>
     </li>
   );
