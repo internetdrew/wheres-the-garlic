@@ -50,7 +50,6 @@ const NewItemForm = ({
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
-    // Reset form state when the form is closed
     const handleDialogClose = () => {
       setFormTabKey(prev => prev + 1);
       setItemName('');
