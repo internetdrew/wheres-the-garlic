@@ -1,23 +1,22 @@
-import React from 'react';
+import React, { useActionState, useRef, useState } from 'react';
 import ItemTypeTabs from './new-item-controls/ItemTypeTabs';
 import { useFormStatus } from 'react-dom';
 import { Household } from '@/utils/supabase/queries';
+import { addItem } from '@/app/actions/items';
+import { useHousehold } from '@/app/hooks/useHousehold';
 
 type Item = Household['items'][number];
 
 interface NewItemFormProps {
-  formRef: React.RefObject<HTMLFormElement | null>;
-  formTabKey: number;
-  duplicateItem: Item | null;
+  householdId: string;
   onClose: () => void;
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  itemName: string;
-  handleNameChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  state: {
-    message: string;
-    success: boolean;
-  };
+  onDuplicateFound: (formData: FormData, item: Item) => void;
 }
+
+const initialState = {
+  message: '',
+  success: false,
+};
 
 const SubmitButton = () => {
   const { pending } = useFormStatus();
@@ -34,17 +33,65 @@ const SubmitButton = () => {
 };
 
 const NewItemForm = ({
-  formRef,
-  formTabKey,
-  duplicateItem,
+  householdId,
   onClose,
-  onSubmit,
-  itemName,
-  handleNameChange,
-  state,
+  onDuplicateFound,
 }: NewItemFormProps) => {
+  const [formTabKey, setFormTabKey] = useState(0);
+  const [itemName, setItemName] = useState('');
+  const [duplicateItem, setDuplicateItem] = useState<Item | null>(null);
+  const { mutateHousehold, household } = useHousehold(householdId);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const [state, formAction] = useActionState(
+    async (_state: typeof initialState, formData: FormData) => {
+      const result = await addItem(householdId, formData);
+
+      if (result?.success) {
+        formRef.current?.reset();
+        setFormTabKey(prev => prev + 1);
+        mutateHousehold();
+        setItemName('');
+        setDuplicateItem(null);
+        onClose();
+      }
+      return result;
+    },
+    initialState
+  );
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+
+    if (duplicateItem) {
+      onDuplicateFound(formData, duplicateItem);
+      return;
+    }
+
+    formAction(formData);
+  };
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const name = e.target.value;
+    setItemName(name);
+
+    const duplicate = household?.items.find(
+      item => item.name.toLowerCase() === name.toLowerCase()
+    );
+
+    setDuplicateItem(duplicate || null);
+  };
+
+  const handleDialogClose = () => {
+    formRef.current?.reset();
+    setItemName('');
+    setDuplicateItem(null);
+    onClose();
+  };
+
   return (
-    <form ref={formRef} onSubmit={onSubmit} className='flex flex-col p-6'>
+    <form ref={formRef} onSubmit={handleSubmit} className='flex flex-col p-6'>
       <header className='flex justify-between items-center'>
         <svg
           xmlns='http://www.w3.org/2000/svg'
@@ -59,7 +106,7 @@ const NewItemForm = ({
         <button
           type='button'
           className='text-sm text-neutral-700 cursor-pointer'
-          onClick={onClose}
+          onClick={handleDialogClose}
         >
           <svg
             xmlns='http://www.w3.org/2000/svg'
@@ -107,7 +154,7 @@ const NewItemForm = ({
             </small>
           )}
           <ItemTypeTabs key={formTabKey} />
-          <p aria-live='polite' className='sr-only' role='status'>
+          <p aria-live='polite' role='status'>
             {state?.message}
           </p>
         </div>
