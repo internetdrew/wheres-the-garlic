@@ -44,6 +44,7 @@ const HouseholdCard = ({
         <HouseholdCardMenu
           onInviteClick={onInviteClick}
           onDeleteClick={onDeleteClick}
+          creatorId={household.creator_id}
         />
       </div>
       <p className='text-sm text-neutral-600'>Last updated {formattedDate}</p>
