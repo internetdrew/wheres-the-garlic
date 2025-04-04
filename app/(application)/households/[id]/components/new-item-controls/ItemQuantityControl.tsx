@@ -1,9 +1,17 @@
 import MinusIcon from '@/app/icons/MinusIcon';
 import PlusIcon from '@/app/icons/PlusIcon';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const ItemQuantityControl = () => {
+interface ItemQuantityControlProps {
+  formKey?: number;
+}
+
+const ItemQuantityControl = ({ formKey }: ItemQuantityControlProps) => {
   const [quantity, setQuantity] = useState(0);
+
+  useEffect(() => {
+    setQuantity(0);
+  }, [formKey]);
 
   const handleIncrement = () => setQuantity(prev => prev + 1);
   const handleDecrement = () => setQuantity(prev => Math.max(0, prev - 1));

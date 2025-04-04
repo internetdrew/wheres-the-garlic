@@ -1,11 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import StatusRadioControl from './StatusRadioControl';
 import ItemQuantityControl from './ItemQuantityControl';
 
-const ItemTypeTabs = () => {
+interface ItemTypeTabsProps {
+  formKey: number;
+}
+
+const ItemTypeTabs = ({ formKey }: ItemTypeTabsProps) => {
   const [selectedItemType, setSelectedItemType] = useState<
     'status' | 'quantity'
   >('status');
+
+  useEffect(() => {
+    setSelectedItemType('status');
+  }, [formKey]);
 
   return (
     <div className='flex flex-col gap-2 mt-8'>
@@ -40,7 +48,7 @@ const ItemTypeTabs = () => {
       {selectedItemType === 'status' ? (
         <StatusRadioControl />
       ) : (
-        <ItemQuantityControl />
+        <ItemQuantityControl formKey={formKey} />
       )}
     </div>
   );

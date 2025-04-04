@@ -1,4 +1,10 @@
-import React, { useActionState, useRef, useState } from 'react';
+import React, {
+  useActionState,
+  useRef,
+  useState,
+  startTransition,
+  useEffect,
+} from 'react';
 import ItemTypeTabs from './new-item-controls/ItemTypeTabs';
 import { useFormStatus } from 'react-dom';
 import { Household } from '@/utils/supabase/queries';
@@ -43,6 +49,24 @@ const NewItemForm = ({
   const { mutateHousehold, household } = useHousehold(householdId);
   const formRef = useRef<HTMLFormElement>(null);
 
+  useEffect(() => {
+    // Reset form state when the form is closed
+    const handleDialogClose = () => {
+      setFormTabKey(prev => prev + 1);
+      setItemName('');
+      setDuplicateItem(null);
+      formRef.current?.reset();
+    };
+
+    const dialog = formRef.current?.closest('dialog');
+    if (dialog) {
+      dialog.addEventListener('close', handleDialogClose);
+      return () => {
+        dialog.removeEventListener('close', handleDialogClose);
+      };
+    }
+  }, []);
+
   const [state, formAction] = useActionState(
     async (_state: typeof initialState, formData: FormData) => {
       const result = await addItem(householdId, formData);
@@ -69,7 +93,9 @@ const NewItemForm = ({
       return;
     }
 
-    formAction(formData);
+    startTransition(() => {
+      formAction(formData);
+    });
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -153,8 +179,8 @@ const NewItemForm = ({
               An item with this name already exists
             </small>
           )}
-          <ItemTypeTabs key={formTabKey} />
-          <p aria-live='polite' role='status'>
+          <ItemTypeTabs key={formTabKey} formKey={formTabKey} />
+          <p aria-live='polite' className='sr-only' role='status'>
             {state?.message}
           </p>
         </div>
