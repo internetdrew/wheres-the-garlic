@@ -54,6 +54,7 @@ export const getHouseholdMembershipsQuery = (
       household:household_id(
         id,
         title,
+        creator_id,
         creator:creator_id(
           full_name,
           avatar_url
