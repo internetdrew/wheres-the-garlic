@@ -50,9 +50,7 @@ Sometimes the best way to say "I love you" is making sure your partner knows the
 
 ## Screenshots
 
-![screenshot1](./public/screen1.webp)
-![screenshot2](./public/screen2.webp)
-![screenshot3](./public/screen3.webp)
+New screens coming soon!
 
 ## Roadmap
 
