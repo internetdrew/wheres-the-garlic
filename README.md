@@ -59,7 +59,8 @@ New screens coming soon!
 - Allow users to delete households [#15](https://github.com/internetdrew/wheres-the-garlic/pull/15)
 - Allow users to be able to search items [#16](https://github.com/internetdrew/wheres-the-garlic/pull/16), [#17](https://github.com/internetdrew/wheres-the-garlic/pull/17)
 - Add sorting by status and quantity [#19](https://github.com/internetdrew/wheres-the-garlic/pull/19)
-- Add alerts to warn of duplicate entries
+- Add alerts to warn of duplicate entries [#22](https://github.com/internetdrew/wheres-the-garlic/pull/22)
+- Make household deletion only available to household creators
 - Add real-time updates
 - Add input validation and rate limiting
 - Add integration tests
