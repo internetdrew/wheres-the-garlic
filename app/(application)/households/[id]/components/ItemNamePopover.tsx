@@ -32,7 +32,7 @@ const ItemNamePopover = ({ item }: ItemNamePopoverProps) => {
   const { mutateHousehold } = useHousehold(item.household_id);
 
   return (
-    <Popover className='relative'>
+    <Popover className='relative flex items-center justify-center'>
       <PopoverButton className='text-neutral-600 cursor-pointer transition-colors hover:text-neutral-900'>
         <svg
           xmlns='http://www.w3.org/2000/svg'
