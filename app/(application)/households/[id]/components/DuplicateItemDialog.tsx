@@ -52,7 +52,7 @@ const DuplicateItemDialog = ({
           </header>
 
           <div className='mt-6'>
-            <h2 className='text-lg font-semibold'>Item Already Exists</h2>
+            <h2 className='text-lg font-semibold'>Item already exists</h2>
             <p className='text-neutral-700 mt-2'>
               An item named &quot;{duplicateItem.name}&quot; already exists in
               this household. Would you like to add it anyway?
