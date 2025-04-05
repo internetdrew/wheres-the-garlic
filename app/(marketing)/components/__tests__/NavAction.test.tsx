@@ -3,12 +3,10 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import NavAction from '../NavAction';
 
-// Mock the useUser hook
 vi.mock('@/app/hooks/useUser', () => ({
   useUser: vi.fn(),
 }));
 
-// Mock next/link
 vi.mock('next/link', () => ({
   default: ({
     children,
@@ -19,12 +17,10 @@ vi.mock('next/link', () => ({
   }) => <a href={href}>{children}</a>,
 }));
 
-// Mock SignInButton component
 vi.mock('../SignInButton', () => ({
   default: () => <button>Sign In</button>,
 }));
 
-// Import the mocked useUser to manipulate its return value
 import { useUser } from '@/app/hooks/useUser';
 
 type MockedUseUser = typeof useUser & {
