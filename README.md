@@ -61,7 +61,7 @@ New screens coming soon!
 - Add sorting by status and quantity [#19](https://github.com/internetdrew/wheres-the-garlic/pull/19)
 - Add alerts to warn of duplicate entries [#22](https://github.com/internetdrew/wheres-the-garlic/pull/22)
 - Make household deletion only available to household creators [#23](https://github.com/internetdrew/wheres-the-garlic/pull/23)
-- Add integration tests
+- Add initial tests and GitHub actions for CI checks [#24](https://github.com/internetdrew/wheres-the-garlic/pull/24)
 - Add input validation and rate limiting
 - Add real-time updates
 - Implement progressive-web app functionality
