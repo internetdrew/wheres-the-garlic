@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://www.wheresthegarlic.com/'),
   title: "Where's the garlic?!",
   description:
-    'Know what’s in your kitchen at a glance—full, halfway, almost done, or out.',
+    'Know which groceries are full, halfway, almost done, or out in a glance.',
   keywords: [
     'app for home grocery inventory',
     'best home grocery inventory app',
