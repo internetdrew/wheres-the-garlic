@@ -5,7 +5,6 @@ import NavAction from '../components/NavAction';
 import { useUser } from '@/app/hooks/useUser';
 import { User } from '@supabase/supabase-js';
 
-// Mock the useUser hook with a default return value
 vi.mock('@/app/hooks/useUser', () => ({
   useUser: vi.fn().mockReturnValue({
     user: null,
