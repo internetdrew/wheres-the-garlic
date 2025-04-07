@@ -9,7 +9,13 @@ const NavAction = () => {
   const { user, userLoading } = useUser();
 
   if (userLoading) {
-    return <div className='w-32 h-9 rounded-md bg-neutral-500 animate-pulse' />;
+    return (
+      <div
+        role='status'
+        aria-label='Loading'
+        className='w-32 h-9 rounded-md bg-neutral-500 animate-pulse'
+      />
+    );
   }
 
   if (!user) {

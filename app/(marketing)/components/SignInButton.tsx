@@ -39,14 +39,12 @@ const SignInButton = ({
       } hover:shadow-md`}
       onClick={handleSignInWithGoogle}
     >
-      <span>
-        <Image
-          src='/google.svg'
-          width={imageSize}
-          height={imageSize}
-          alt='Google'
-        />
-      </span>
+      <Image
+        src='/google.svg'
+        width={imageSize}
+        height={imageSize}
+        alt='Google'
+      />
       {caption}
     </button>
   );

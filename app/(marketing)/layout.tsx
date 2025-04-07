@@ -2,9 +2,8 @@ import type { Metadata } from 'next';
 import { Geist } from 'next/font/google';
 import Script from 'next/script';
 import Navbar from './components/Navbar';
-
-import '../globals.css';
 import Footer from './components/Footer';
+import '../globals.css';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -42,7 +41,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Where's the Garlic?!",
     description:
-      'Know what’s in your kitchen at a glance—full, halfway, almost done, or out.',
+      'Know which groceries are full, halfway, almost done, or out in a glance.',
     url: 'https://www.wheresthegarlic.com/',
     images: '/banner.webp',
     siteName: "Where's the Garlic?!",
